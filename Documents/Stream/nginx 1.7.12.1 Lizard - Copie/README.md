@@ -14,17 +14,64 @@ Interface web moderne pour gérer vos streams RTMP vers plusieurs plateformes (F
 
 ## 🚀 Installation
 
-1. **Téléchargez le projet** ou clonez le repository
+1. **Téléchargez le projet** ou clonez le repository :
+   ```bash
+   git clone https://github.com/Lilw3n/Nginx-Stunnel-Stream-Manager.git
+   cd Nginx-Stunnel-Stream-Manager
+   ```
+
 2. **Installez Python** (3.7 ou supérieur)
-3. **Lancez** `start_stream_manager.bat`
-4. **Ouvrez votre navigateur** à l'adresse affichée (généralement `http://localhost:5000`)
+
+3. **Installez les dépendances Python** :
+   ```bash
+   pip install -r requirements.txt
+   ```
+
+4. **Installez Nginx avec module RTMP** (voir section "Installation de Nginx et Stunnel" ci-dessous)
+
+5. **Configurez vos streams** (voir section Configuration)
+
+6. **Lancez** `start_stream_manager.bat`
+
+7. **Ouvrez votre navigateur** à l'adresse affichée (généralement `http://localhost:5000`)
 
 ## 📋 Prérequis
 
 - Python 3.7+
-- Nginx avec module RTMP
-- FFmpeg (pour le mode FFmpeg Proxy)
-- Stunnel (optionnel, pour Facebook/Instagram)
+- **Nginx avec module RTMP** (voir section Installation ci-dessous)
+- FFmpeg (pour le mode FFmpeg Proxy) - optionnel mais recommandé
+- Stunnel (optionnel, pour Facebook/Instagram) - voir section Installation
+
+## 📦 Installation de Nginx et Stunnel
+
+### Nginx avec module RTMP
+
+Le projet nécessite **Nginx avec le module RTMP** compilé pour Windows.
+
+**Option 1 : Utiliser Nginx inclus (si disponible)**
+- Placez `nginx.exe` dans le dossier racine du projet
+- Ou modifiez `stream_manager.py` ligne 687-692 pour pointer vers votre installation Nginx
+
+**Option 2 : Télécharger Nginx RTMP pour Windows**
+- Téléchargez depuis : https://github.com/arut/nginx-rtmp-module/wiki/Installing-via-Builds
+- Ou utilisez une version précompilée avec RTMP
+- Placez `nginx.exe` dans le dossier racine du projet
+
+### Stunnel (optionnel, pour Facebook/Instagram)
+
+**Option 1 : Installation manuelle**
+1. Téléchargez Stunnel pour Windows : https://www.stunnel.org/downloads.html
+2. Installez Stunnel (par exemple dans `C:/stunnel`)
+3. Modifiez `stream_manager.py` lignes 44-47 pour pointer vers votre installation :
+   ```python
+   STUNNEL_DIR = Path("C:/stunnel")
+   STUNNEL_EXE = STUNNEL_DIR / "bin" / "stunnel.exe"
+   STUNNEL_CONF = STUNNEL_DIR / "config" / "stunnel.conf"
+   ```
+
+**Option 2 : Désactiver Stunnel**
+- Si vous n'utilisez pas Facebook/Instagram, vous pouvez ignorer Stunnel
+- Le gestionnaire fonctionnera sans Stunnel pour les autres plateformes
 
 ## ⚙️ Configuration
 

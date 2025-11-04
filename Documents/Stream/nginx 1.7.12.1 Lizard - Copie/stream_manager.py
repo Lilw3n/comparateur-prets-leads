@@ -41,7 +41,9 @@ NGINX_CONF = BASE_DIR / "conf" / "nginx.conf"
 NGINX_RELOAD_COMMAND = "nginx -s reload"
 
 # Chemins Stunnel
-STUNNEL_DIR = Path("C:/Users/Diddy/Documents/Stream/stunnel")
+# ⚠️ MODIFIEZ CES CHEMINS selon votre installation Stunnel
+# Si Stunnel est installé ailleurs, changez STUNNEL_DIR
+STUNNEL_DIR = Path("C:/stunnel")  # Chemin par défaut, à modifier si nécessaire
 STUNNEL_EXE = STUNNEL_DIR / "bin" / "stunnel.exe"
 STUNNEL_CONF = STUNNEL_DIR / "config" / "stunnel.conf"
 STUNNEL_PID_FILE = STUNNEL_DIR / "stunnel.pid"
