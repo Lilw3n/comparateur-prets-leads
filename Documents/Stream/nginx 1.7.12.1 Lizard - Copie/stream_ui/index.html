@@ -71,6 +71,9 @@
                 <div class="stat-info">
                     <div class="stat-header-section">
                         <div class="stat-label">Nginx</div>
+                        <button class="btn-info" onclick="showInfoModal('nginx')" title="En savoir plus sur Nginx">
+                            <i class="fas fa-info-circle"></i>
+                        </button>
                     </div>
                     <div class="stat-buttons-section nginx-buttons">
                         <button class="btn btn-small btn-success" id="nginx-start-btn" onclick="startNginx()" style="display: none;">
@@ -110,6 +113,9 @@
                 <div class="stat-info">
                     <div class="stat-header-section">
                         <div class="stat-label">Stunnel</div>
+                        <button class="btn-info" onclick="showInfoModal('stunnel')" title="En savoir plus sur Stunnel">
+                            <i class="fas fa-info-circle"></i>
+                        </button>
                     </div>
                     <div class="stat-buttons-section stunnel-buttons">
                         <button class="btn btn-small btn-success" id="stunnel-start-btn" onclick="startStunnel()" style="display: none;">
@@ -134,6 +140,9 @@
                 <div class="stat-info">
                     <div class="stat-header-section">
                         <div class="stat-label">Mode</div>
+                        <button class="btn-info" onclick="showInfoModal('mode')" title="En savoir plus sur les modes">
+                            <i class="fas fa-info-circle"></i>
+                        </button>
                     </div>
                     <div class="mode-text-section">
                         <div id="mode-text" style="font-size: 0.85rem; color: var(--text-secondary); line-height: 1.4;">Vérification...</div>
@@ -330,6 +339,22 @@
                         <i class="fas fa-save"></i> Enregistrer
                     </button>
                 </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal d'information -->
+    <div id="info-modal" class="modal">
+        <div class="modal-content" style="max-width: 600px;">
+            <div class="modal-header">
+                <h2 id="info-modal-title">Information</h2>
+                <button class="modal-close" onclick="closeInfoModal()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div id="info-modal-content"></div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" onclick="closeInfoModal()">Fermer</button>
             </div>
         </div>
     </div>
