@@ -1,0 +1,28 @@
+INSTALLATION DE FFMPEG
+======================
+
+FFmpeg n'est pas inclus dans ce ZIP pour reduire la taille.
+
+INSTALLATION RAPIDE:
+-------------------
+
+1. Telechargez FFmpeg:
+   - Site: https://www.gyan.dev/ffmpeg/builds/
+   - Version: ffmpeg-release-essentials.zip
+
+2. Decompressez dans le dossier du projet:
+   - Creez un dossier "ffmpeg"
+   - Placez ffmpeg.exe dans "ffmpeg\bin\ffmpeg.exe"
+
+3. OU configurez le chemin dans l'interface web:
+   - Section "Mode" > "Specifier le chemin FFmpeg"
+   - Entrez le chemin complet vers ffmpeg.exe
+
+ALTERNATIVE:
+------------
+
+Placez simplement ffmpeg.exe dans le dossier du projet.
+Le systeme le detectera automatiquement.
+
+
+

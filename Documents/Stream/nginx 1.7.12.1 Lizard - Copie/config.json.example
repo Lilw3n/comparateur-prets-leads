@@ -1,0 +1,12 @@
+{
+  "use_ffmpeg_proxy": true,
+  "auto_start_streams": true,
+  "ffmpeg_path": "",
+  "obs_websocket": {
+    "enabled": false,
+    "host": "localhost",
+    "port": 4455,
+    "password": ""
+  }
+}
+

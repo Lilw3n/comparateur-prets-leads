@@ -1,0 +1,135 @@
+<svg width="64" height="64" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Gradient definitions -->
+  <defs>
+    <linearGradient id="gearGradient1" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#6366f1;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#8b5cf6;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient id="gearGradient2" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#8b5cf6;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#6366f1;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient id="windowGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#374151;stop-opacity:0.8" />
+      <stop offset="100%" style="stop-color:#1f2937;stop-opacity:0.9" />
+    </linearGradient>
+  </defs>
+  
+  <!-- Background window -->
+  <rect x="8" y="8" width="48" height="48" rx="4" fill="url(#windowGradient)" stroke="#4b5563" stroke-width="1"/>
+  
+  <!-- Window title bar -->
+  <rect x="8" y="8" width="48" height="8" rx="4" fill="#1f2937"/>
+  <circle cx="52" cy="12" r="2" fill="#ef4444" opacity="0.7"/>
+  <circle cx="48" cy="12" r="2" fill="#f59e0b" opacity="0.7"/>
+  <circle cx="44" cy="12" r="2" fill="#10b981" opacity="0.7"/>
+  
+  <!-- Large gear (behind) -->
+  <g transform="translate(32, 32)">
+    <circle cx="0" cy="0" r="14" fill="url(#gearGradient1)" opacity="0.9">
+      <animateTransform
+        attributeName="transform"
+        type="rotate"
+        from="0 0 0"
+        to="360 0 0"
+        dur="10s"
+        repeatCount="indefinite"/>
+    </circle>
+    <!-- Gear teeth -->
+    <rect x="-1" y="-16" width="2" height="4" rx="1" fill="white" opacity="0.3">
+      <animateTransform
+        attributeName="transform"
+        type="rotate"
+        from="0 0 0"
+        to="360 0 0"
+        dur="10s"
+        repeatCount="indefinite"/>
+    </rect>
+    <rect x="-1" y="12" width="2" height="4" rx="1" fill="white" opacity="0.3">
+      <animateTransform
+        attributeName="transform"
+        type="rotate"
+        from="0 0 0"
+        to="360 0 0"
+        dur="10s"
+        repeatCount="indefinite"/>
+    </rect>
+    <rect x="-16" y="-1" width="4" height="2" rx="1" fill="white" opacity="0.3">
+      <animateTransform
+        attributeName="transform"
+        type="rotate"
+        from="0 0 0"
+        to="360 0 0"
+        dur="10s"
+        repeatCount="indefinite"/>
+    </rect>
+    <rect x="12" y="-1" width="4" height="2" rx="1" fill="white" opacity="0.3">
+      <animateTransform
+        attributeName="transform"
+        type="rotate"
+        from="0 0 0"
+        to="360 0 0"
+        dur="10s"
+        repeatCount="indefinite"/>
+    </rect>
+    <!-- Center hole -->
+    <circle cx="0" cy="0" r="4" fill="#1f2937"/>
+  </g>
+  
+  <!-- Small gear (front) -->
+  <g transform="translate(42, 42)">
+    <circle cx="0" cy="0" r="10" fill="url(#gearGradient2)" opacity="0.95">
+      <animateTransform
+        attributeName="transform"
+        type="rotate"
+        from="360 0 0"
+        to="0 0 0"
+        dur="6s"
+        repeatCount="indefinite"/>
+    </circle>
+    <!-- Gear teeth -->
+    <rect x="-1" y="-12" width="1.5" height="3" rx="0.75" fill="white" opacity="0.4">
+      <animateTransform
+        attributeName="transform"
+        type="rotate"
+        from="360 0 0"
+        to="0 0 0"
+        dur="6s"
+        repeatCount="indefinite"/>
+    </rect>
+    <rect x="-1" y="9" width="1.5" height="3" rx="0.75" fill="white" opacity="0.4">
+      <animateTransform
+        attributeName="transform"
+        type="rotate"
+        from="360 0 0"
+        to="0 0 0"
+        dur="6s"
+        repeatCount="indefinite"/>
+    </rect>
+    <rect x="-12" y="-1" width="3" height="1.5" rx="0.75" fill="white" opacity="0.4">
+      <animateTransform
+        attributeName="transform"
+        type="rotate"
+        from="360 0 0"
+        to="0 0 0"
+        dur="6s"
+        repeatCount="indefinite"/>
+    </rect>
+    <rect x="9" y="-1" width="3" height="1.5" rx="0.75" fill="white" opacity="0.4">
+      <animateTransform
+        attributeName="transform"
+        type="rotate"
+        from="360 0 0"
+        to="0 0 0"
+        dur="6s"
+        repeatCount="indefinite"/>
+    </rect>
+    <!-- Center hole -->
+    <circle cx="0" cy="0" r="3" fill="#1f2937"/>
+  </g>
+  
+  <!-- Streaming signal indicator -->
+  <circle cx="54" cy="18" r="3" fill="#10b981" opacity="0.8">
+    <animate attributeName="opacity" values="0.8;0.3;0.8" dur="2s" repeatCount="indefinite"/>
+  </circle>
+</svg>

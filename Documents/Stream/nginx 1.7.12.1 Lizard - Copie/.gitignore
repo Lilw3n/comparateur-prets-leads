@@ -1,0 +1,40 @@
+# Fichiers de configuration avec URLs sensibles
+streams.json
+config.json
+
+# Logs
+logs/*.log
+*.log
+
+# Fichiers temporaires
+temp/
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+
+# Fichiers système
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Fichiers de configuration personnalisés
+*.conf.local
+nginx.conf.local
+
+# Fichiers de backup
+*.bak
+*.backup
+*~
+
+# Fichiers ZIP
+*.zip
+
+# Fichiers de test
+test_*.py
+test_*.bat
+
+# Fichiers de développement
+organize_files.py
+

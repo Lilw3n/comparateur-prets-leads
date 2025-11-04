@@ -1,0 +1,24 @@
+[
+  {
+    "id": "1",
+    "name": "Facebook - Exemple",
+    "url": "rtmp://example.com/rtmp/STREAM_KEY",
+    "enabled": true,
+    "platform": "Facebook"
+  },
+  {
+    "id": "2",
+    "name": "YouTube - Exemple",
+    "url": "rtmp://a.rtmp.youtube.com/live2/YOUR_STREAM_KEY",
+    "enabled": false,
+    "platform": "YouTube"
+  },
+  {
+    "id": "3",
+    "name": "TikTok - Exemple",
+    "url": "rtmp://push-rtmp-f5-tt04.tiktokcdn-eu.com:443/game/YOUR_STREAM_KEY",
+    "enabled": false,
+    "platform": "TikTok"
+  }
+]
+

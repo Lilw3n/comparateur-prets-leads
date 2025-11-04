@@ -1,0 +1,1 @@
+"C:\Users\wendy\Downloads\nginx 1.7.12.1 Lizard\nginx.exe" -s stop
