@@ -38,3 +38,8 @@ test_*.bat
 # Fichiers de développement
 organize_files.py
 
+# Exécutables Nginx (trop volumineux et spécifiques à chaque installation)
+nginx.exe
+nginx_basic.exe
+lua51.dll
+
