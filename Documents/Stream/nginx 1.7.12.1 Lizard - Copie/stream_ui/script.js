@@ -1452,3 +1452,126 @@ async function openProjectFolder() {
     }
 }
 
+// Fonction pour afficher la modal d'information
+function showInfoModal(type) {
+    const modal = document.getElementById('info-modal');
+    const title = document.getElementById('info-modal-title');
+    const content = document.getElementById('info-modal-content');
+    
+    if (!modal || !title || !content) return;
+    
+    const info = {
+        nginx: {
+            title: 'Qu\'est-ce que Nginx ?',
+            content: `
+                <div style="line-height: 1.6;">
+                    <p><strong>Nginx</strong> est un serveur web puissant qui gère vos streams RTMP.</p>
+                    
+                    <h3 style="margin-top: 1.5rem; margin-bottom: 0.5rem; color: var(--primary);">Fonctionnalités :</h3>
+                    <ul style="margin-left: 1.5rem; margin-bottom: 1rem;">
+                        <li>Reçoit le stream RTMP depuis OBS ou votre source</li>
+                        <li>Redirige vers plusieurs plateformes simultanément</li>
+                        <li>Gère la configuration via <code>rtmp_streams.conf</code></li>
+                        <li>Port par défaut : <strong>1935</strong></li>
+                    </ul>
+                    
+                    <h3 style="margin-top: 1.5rem; margin-bottom: 0.5rem; color: var(--primary);">Commandes disponibles :</h3>
+                    <ul style="margin-left: 1.5rem;">
+                        <li><strong>Démarrer</strong> : Lance le serveur Nginx</li>
+                        <li><strong>Arrêter</strong> : Arrête Nginx (coupe tous les streams)</li>
+                        <li><strong>Recharger</strong> : Recharge la config sans couper les connexions actives</li>
+                        <li><strong>Redémarrer</strong> : Arrête puis redémarre (coupe toutes les connexions)</li>
+                    </ul>
+                    
+                    <p style="margin-top: 1rem; padding: 0.75rem; background: var(--bg); border-radius: 6px; border-left: 3px solid var(--info);">
+                        <i class="fas fa-info-circle"></i> <strong>Astuce</strong> : Utilisez "Recharger" plutôt que "Redémarrer" pour éviter de couper les streams actifs.
+                    </p>
+                </div>
+            `
+        },
+        stunnel: {
+            title: 'Qu\'est-ce que Stunnel ?',
+            content: `
+                <div style="line-height: 1.6;">
+                    <p><strong>Stunnel</strong> est un outil de tunneling SSL/TLS qui permet de sécuriser les connexions RTMP.</p>
+                    
+                    <h3 style="margin-top: 1.5rem; margin-bottom: 0.5rem; color: var(--primary);">Utilisation principale :</h3>
+                    <ul style="margin-left: 1.5rem; margin-bottom: 1rem;">
+                        <li><strong>Facebook Live</strong> : Nécessite une connexion sécurisée (TLS)</li>
+                        <li><strong>Instagram Live</strong> : Nécessite également TLS</li>
+                        <li>Crée un tunnel sécurisé entre votre serveur et les plateformes</li>
+                        <li>Port par défaut : <strong>19350</strong></li>
+                    </ul>
+                    
+                    <h3 style="margin-top: 1.5rem; margin-bottom: 0.5rem; color: var(--primary);">Fonctionnement :</h3>
+                    <p style="margin-bottom: 1rem;">
+                        Stunnel écoute sur le port 19350, reçoit les connexions RTMP de Nginx, 
+                        les sécurise avec TLS, puis les envoie vers Facebook/Instagram.
+                    </p>
+                    
+                    <p style="padding: 0.75rem; background: var(--bg); border-radius: 6px; border-left: 3px solid var(--warning);">
+                        <i class="fas fa-exclamation-triangle"></i> <strong>Important</strong> : Stunnel est optionnel. 
+                        Vous pouvez l'ignorer si vous n'utilisez pas Facebook ou Instagram.
+                    </p>
+                </div>
+            `
+        },
+        mode: {
+            title: 'Les modes de fonctionnement',
+            content: `
+                <div style="line-height: 1.6;">
+                    <p>Le gestionnaire supporte <strong>deux modes</strong> de fonctionnement pour contrôler vos streams.</p>
+                    
+                    <h3 style="margin-top: 1.5rem; margin-bottom: 0.5rem; color: var(--success);">Mode FFmpeg Proxy (Recommandé)</h3>
+                    <ul style="margin-left: 1.5rem; margin-bottom: 1.5rem;">
+                        <li>✅ <strong>Contrôle dynamique</strong> : Activez/désactivez sans couper les autres streams</li>
+                        <li>✅ <strong>Activation instantanée</strong> : Pas besoin de recharger Nginx</li>
+                        <li>✅ <strong>Plus flexible</strong> : Gestion individuelle de chaque stream</li>
+                        <li>⚠️ Latence légèrement plus élevée (+0.5 à 1 seconde)</li>
+                        <li>⚠️ Nécessite FFmpeg installé</li>
+                    </ul>
+                    
+                    <h3 style="margin-top: 1.5rem; margin-bottom: 0.5rem; color: var(--primary);">Mode Nginx Direct</h3>
+                    <ul style="margin-left: 1.5rem; margin-bottom: 1.5rem;">
+                        <li>✅ <strong>Latence minimale</strong> : Pas de proxy intermédiaire</li>
+                        <li>✅ <strong>Performance optimale</strong> : Connexion directe Nginx → Plateformes</li>
+                        <li>⚠️ Nécessite un <strong>rechargement Nginx</strong> pour activer/désactiver</li>
+                        <li>⚠️ Le rechargement peut parfois nécessiter un redémarrage complet</li>
+                    </ul>
+                    
+                    <p style="margin-top: 1.5rem; padding: 0.75rem; background: var(--bg); border-radius: 6px; border-left: 3px solid var(--info);">
+                        <i class="fas fa-lightbulb"></i> <strong>Conseil</strong> : Pour la plupart des utilisateurs, 
+                        le mode FFmpeg Proxy est recommandé car il offre plus de flexibilité et de contrôle.
+                    </p>
+                </div>
+            `
+        }
+    };
+    
+    if (info[type]) {
+        title.textContent = info[type].title;
+        content.innerHTML = info[type].content;
+        modal.classList.add('show');
+    }
+}
+
+// Fonction pour fermer la modal d'information
+function closeInfoModal() {
+    const modal = document.getElementById('info-modal');
+    if (modal) {
+        modal.classList.remove('show');
+    }
+}
+
+// Fermer la modal en cliquant en dehors
+document.addEventListener('DOMContentLoaded', function() {
+    const modal = document.getElementById('info-modal');
+    if (modal) {
+        modal.addEventListener('click', function(e) {
+            if (e.target === modal) {
+                closeInfoModal();
+            }
+        });
+    }
+});
+
