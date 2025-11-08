@@ -40,13 +40,41 @@ RTMP_CONFIG_FILE = BASE_DIR / "conf" / "rtmp_streams.conf"
 NGINX_CONF = BASE_DIR / "conf" / "nginx.conf"
 NGINX_RELOAD_COMMAND = "nginx -s reload"
 
-# Chemins Stunnel
-# ⚠️ MODIFIEZ CES CHEMINS selon votre installation Stunnel
-# Si Stunnel est installé ailleurs, changez STUNNEL_DIR
-STUNNEL_DIR = Path("C:/stunnel")  # Chemin par défaut, à modifier si nécessaire
-STUNNEL_EXE = STUNNEL_DIR / "bin" / "stunnel.exe"
-STUNNEL_CONF = STUNNEL_DIR / "config" / "stunnel.conf"
-STUNNEL_PID_FILE = STUNNEL_DIR / "stunnel.pid"
+# Chemins Stunnel (seront chargés depuis config.json)
+STUNNEL_DIR = None  # Sera défini depuis config.json
+STUNNEL_EXE = None  # Sera défini depuis config.json
+STUNNEL_CONF = None  # Sera défini depuis config.json
+STUNNEL_PID_FILE = None  # Sera défini depuis config.json
+
+def load_paths():
+    """Charge les chemins depuis config.json"""
+    global STUNNEL_DIR, STUNNEL_EXE, STUNNEL_CONF, STUNNEL_PID_FILE
+    config = load_config()
+    paths = config.get('paths', {})
+    
+    # Nginx (utiliser le chemin configuré ou par défaut)
+    # nginx_exe sera géré par get_nginx_exe()
+    
+    # Stunnel
+    stunnel_dir_str = paths.get('stunnel_dir', '').strip()
+    if stunnel_dir_str:
+        STUNNEL_DIR = Path(stunnel_dir_str)
+    else:
+        STUNNEL_DIR = Path("C:/stunnel")  # Par défaut
+    
+    stunnel_exe_str = paths.get('stunnel_exe', '').strip()
+    if stunnel_exe_str:
+        STUNNEL_EXE = Path(stunnel_exe_str)
+    else:
+        STUNNEL_EXE = STUNNEL_DIR / "bin" / "stunnel.exe"
+    
+    stunnel_conf_str = paths.get('stunnel_conf', '').strip()
+    if stunnel_conf_str:
+        STUNNEL_CONF = Path(stunnel_conf_str)
+    else:
+        STUNNEL_CONF = STUNNEL_DIR / "config" / "stunnel.conf"
+    
+    STUNNEL_PID_FILE = STUNNEL_DIR / "stunnel.pid"
 
 # Fichier de configuration
 CONFIG_FILE = BASE_DIR / "config.json"
@@ -71,7 +99,24 @@ def load_config():
     if CONFIG_FILE.exists():
         try:
             with open(CONFIG_FILE, 'r', encoding='utf-8') as f:
-                config = json.load(f)
+                content = f.read().strip()
+                try:
+                    config = json.loads(content)
+                except json.JSONDecodeError as e:
+                    print(f"⚠️  Erreur JSON dans config.json: {e}")
+                    print("   Tentative de réparation...")
+                    # Réparations courantes
+                    import re
+                    content = re.sub(r',\s*\}', '}', content)
+                    content = re.sub(r',\s*\]', ']', content)
+                    try:
+                        config = json.loads(content)
+                        save_config(config)
+                        print("   ✓ config.json réparé")
+                    except:
+                        print("   ✗ Impossible de réparer, utilisation de la config par défaut")
+                        config = {}
+                
                 USE_FFMPEG_PROXY = config.get('use_ffmpeg_proxy', True)
                 # Charger la config OBS WebSocket
                 obs_config = config.get('obs_websocket', {})
@@ -80,12 +125,21 @@ def load_config():
                 OBS_WS_PORT = obs_config.get('port', 4455)
                 OBS_WS_PASSWORD = obs_config.get('password', '')
                 return config
-        except:
+        except Exception as e:
+            print(f"⚠️  Erreur lecture config.json: {e}")
             pass
     # Créer le fichier de config par défaut
     default_config = {
         "use_ffmpeg_proxy": True,
         "auto_start_streams": True,
+        "paths": {
+            "nginx_exe": "",
+            "stunnel_dir": "",
+            "stunnel_exe": "",
+            "stunnel_conf": "",
+            "ffmpeg_exe": "",
+            "python_exe": ""
+        },
         "obs_websocket": {
             "enabled": False,
             "host": "localhost",
@@ -101,9 +155,12 @@ def save_config(config=None):
     """Sauvegarde la configuration dans config.json"""
     global USE_FFMPEG_PROXY, OBS_WS_HOST, OBS_WS_PORT, OBS_WS_PASSWORD, OBS_WS_ENABLED
     if config is None:
+        # Charger la config actuelle pour préserver les chemins
+        current_config = load_config()
         config = {
             "use_ffmpeg_proxy": USE_FFMPEG_PROXY,
             "auto_start_streams": True,
+            "paths": current_config.get('paths', {}),
             "obs_websocket": {
                 "enabled": OBS_WS_ENABLED,
                 "host": OBS_WS_HOST,
@@ -111,15 +168,62 @@ def save_config(config=None):
                 "password": OBS_WS_PASSWORD
             }
         }
+    # S'assurer que la section paths existe
+    if 'paths' not in config:
+        config['paths'] = {}
     with open(CONFIG_FILE, 'w', encoding='utf-8') as f:
         json.dump(config, f, indent=2, ensure_ascii=False)
 
 
 def load_streams():
-    """Charge la liste des streams depuis le fichier JSON"""
+    """Charge la liste des streams depuis le fichier JSON avec réparation automatique"""
     if STREAMS_FILE.exists():
-        with open(STREAMS_FILE, 'r', encoding='utf-8') as f:
-            return json.load(f)
+        try:
+            with open(STREAMS_FILE, 'r', encoding='utf-8') as f:
+                content = f.read().strip()
+                # Tenter de charger le JSON
+                try:
+                    return json.loads(content)
+                except json.JSONDecodeError as e:
+                    # Erreur JSON détectée, tenter de réparer
+                    print(f"⚠️  Erreur JSON détectée dans streams.json: {e}")
+                    print("   Tentative de réparation automatique...")
+                    
+                    # Réparations courantes
+                    # 1. Supprimer les doubles crochets fermants
+                    content = content.rstrip()
+                    while content.endswith(']]'):
+                        content = content[:-1]
+                    if not content.endswith(']'):
+                        content += ']'
+                    
+                    # 2. Supprimer les virgules finales avant ]
+                    import re
+                    content = re.sub(r',\s*\]', ']', content)
+                    content = re.sub(r',\s*\}', '}', content)
+                    
+                    # 3. Tenter de charger à nouveau
+                    try:
+                        repaired = json.loads(content)
+                        # Sauvegarder la version réparée
+                        save_streams(repaired)
+                        print("   ✓ Fichier JSON réparé automatiquement")
+                        return repaired
+                    except json.JSONDecodeError as e2:
+                        print(f"   ✗ Impossible de réparer automatiquement: {e2}")
+                        # Créer une sauvegarde du fichier corrompu
+                        backup_file = STREAMS_FILE.with_suffix('.json.broken')
+                        try:
+                            with open(backup_file, 'w', encoding='utf-8') as backup:
+                                backup.write(content)
+                            print(f"   → Fichier corrompu sauvegardé dans: {backup_file}")
+                        except:
+                            pass
+                        # Retourner une liste vide pour éviter de planter
+                        return []
+        except Exception as e:
+            print(f"⚠️  Erreur lors de la lecture de streams.json: {e}")
+            return []
     return []
 
 
@@ -226,23 +330,29 @@ def find_ffmpeg():
     if FFMPEG_EXE:
         return FFMPEG_EXE
     
-    # 0. Vérifier d'abord le dossier local (priorité pour le zippage)
+    # 0. Vérifier d'abord le chemin spécifié dans config.json (nouvelle méthode)
+    config = load_config()
+    paths = config.get('paths', {})
+    ffmpeg_exe_str = paths.get('ffmpeg_exe', '').strip()
+    
+    # Si pas dans paths, vérifier l'ancienne méthode (ffmpeg_path)
+    if not ffmpeg_exe_str:
+        ffmpeg_exe_str = config.get('ffmpeg_path', '').strip()
+    
+    if ffmpeg_exe_str:
+        # Si c'est un chemin relatif, le résoudre par rapport à BASE_DIR
+        custom_ffmpeg = Path(ffmpeg_exe_str)
+        if not custom_ffmpeg.is_absolute():
+            custom_ffmpeg = BASE_DIR / ffmpeg_exe_str
+        if custom_ffmpeg.exists():
+            FFMPEG_EXE = custom_ffmpeg
+            return FFMPEG_EXE
+    
+    # 1. Vérifier le dossier local (priorité pour le zippage)
     local_ffmpeg = BASE_DIR / "ffmpeg" / "bin" / "ffmpeg.exe"
     if local_ffmpeg.exists():
         FFMPEG_EXE = local_ffmpeg
         return FFMPEG_EXE
-    
-    # 1. Vérifier le chemin spécifié dans config.json
-    config = load_config()
-    custom_path = config.get('ffmpeg_path', '').strip()
-    if custom_path:
-        # Si c'est un chemin relatif, le résoudre par rapport à BASE_DIR
-        custom_ffmpeg = Path(custom_path)
-        if not custom_ffmpeg.is_absolute():
-            custom_ffmpeg = BASE_DIR / custom_path
-        if custom_ffmpeg.exists():
-            FFMPEG_EXE = custom_ffmpeg
-            return FFMPEG_EXE
     
     # 2. Chercher ffmpeg dans PATH
     ffmpeg_path = shutil.which('ffmpeg')
@@ -687,11 +797,31 @@ def control_obs_stream(stream_name, enabled):
 
 
 def get_nginx_exe():
-    """Trouve l'exécutable nginx"""
+    """Trouve l'exécutable nginx (utilise le chemin configuré ou par défaut)"""
+    config = load_config()
+    paths = config.get('paths', {})
+    nginx_exe_str = paths.get('nginx_exe', '').strip()
+    
+    if nginx_exe_str:
+        nginx_exe = Path(nginx_exe_str)
+        # Si le chemin est relatif, le résoudre par rapport à BASE_DIR
+        if not nginx_exe.is_absolute():
+            nginx_exe = BASE_DIR / nginx_exe_str
+        if nginx_exe.exists():
+            return nginx_exe
+    
+    # Par défaut, chercher dans le dossier du projet
     nginx_exe = BASE_DIR / "nginx.exe"
-    if not nginx_exe.exists():
-        nginx_exe = BASE_DIR / "nginx_basic.exe"
-    return nginx_exe
+    if nginx_exe.exists():
+        return nginx_exe
+    
+    nginx_exe = BASE_DIR / "nginx_basic.exe"
+    if nginx_exe.exists():
+        return nginx_exe
+    
+    # Si aucun nginx n'est trouvé, retourner quand même le chemin par défaut
+    # pour que l'erreur soit claire dans les messages
+    return BASE_DIR / "nginx.exe"
 
 
 def get_nginx_status():
@@ -911,8 +1041,16 @@ def start_nginx():
     try:
         nginx_exe = get_nginx_exe()
         
-        if not nginx_exe.exists():
-            return False, "nginx.exe introuvable"
+        if not nginx_exe or not nginx_exe.exists():
+            # Fournir un message d'erreur plus détaillé
+            config = load_config()
+            paths = config.get('paths', {})
+            nginx_exe_str = paths.get('nginx_exe', '').strip()
+            
+            if nginx_exe_str:
+                return False, f"nginx.exe introuvable au chemin configuré: {nginx_exe_str} (chemin absolu: {nginx_exe})"
+            else:
+                return False, f"nginx.exe introuvable dans le dossier du projet: {nginx_exe}. Vérifiez que nginx.exe ou nginx_basic.exe existe dans {BASE_DIR}"
         
         # Changer vers le répertoire de base
         os.chdir(BASE_DIR)
@@ -1768,6 +1906,7 @@ def nginx_restart():
 
 def get_stunnel_status():
     """Vérifie si Stunnel est en cours d'exécution"""
+    load_paths()  # S'assurer que les chemins sont chargés
     try:
         # Sur Windows, vérifier directement dans le gestionnaire de tâches
         if sys.platform == 'win32':
@@ -1853,8 +1992,9 @@ def get_stunnel_status():
 
 def start_stunnel():
     """Démarre Stunnel"""
+    load_paths()  # S'assurer que les chemins sont chargés
     try:
-        if not STUNNEL_EXE.exists():
+        if not STUNNEL_EXE or not STUNNEL_EXE.exists():
             return False, f"stunnel.exe introuvable dans {STUNNEL_EXE}"
         
         if not STUNNEL_CONF.exists():
@@ -1891,6 +2031,7 @@ def start_stunnel():
 
 def stop_stunnel():
     """Arrête Stunnel"""
+    load_paths()  # S'assurer que les chemins sont chargés
     try:
         # Vérifier si démarré
         status, _ = get_stunnel_status()
@@ -2061,18 +2202,48 @@ def get_config():
     global USE_FFMPEG_PROXY
     USE_FFMPEG_PROXY = config.get('use_ffmpeg_proxy', True)
     
+    # Charger les chemins actuels
+    load_paths()
+    
     # Vérifier FFmpeg si mode activé
     ffmpeg_available = False
+    ffmpeg_path = None
     if USE_FFMPEG_PROXY:
         ffmpeg_exe = find_ffmpeg()
         ffmpeg_available = ffmpeg_exe is not None
+        ffmpeg_path = str(ffmpeg_exe) if ffmpeg_exe else None
+    
+    # Vérifier Nginx
+    nginx_exe = get_nginx_exe()
+    nginx_path = str(nginx_exe) if nginx_exe.exists() else None
+    
+    # Vérifier Stunnel
+    stunnel_exe_path = str(STUNNEL_EXE) if STUNNEL_EXE and STUNNEL_EXE.exists() else None
+    stunnel_conf_path = str(STUNNEL_CONF) if STUNNEL_CONF and STUNNEL_CONF.exists() else None
+    
+    # Vérifier Python
+    python_exe = sys.executable
+    
+    paths = config.get('paths', {})
     
     return jsonify({
         "use_ffmpeg_proxy": USE_FFMPEG_PROXY,
         "ffmpeg_available": ffmpeg_available,
-        "ffmpeg_path": str(FFMPEG_EXE) if FFMPEG_EXE else None,
-        "ffmpeg_custom_path": config.get('ffmpeg_path', ''),
-        "auto_start_streams": config.get('auto_start_streams', True)
+        "ffmpeg_path": ffmpeg_path,
+        "ffmpeg_custom_path": paths.get('ffmpeg_exe', '') or config.get('ffmpeg_path', ''),
+        "auto_start_streams": config.get('auto_start_streams', True),
+        "paths": {
+            "nginx_exe": paths.get('nginx_exe', ''),
+            "nginx_exe_detected": nginx_path,
+            "stunnel_dir": paths.get('stunnel_dir', ''),
+            "stunnel_exe": paths.get('stunnel_exe', ''),
+            "stunnel_exe_detected": stunnel_exe_path,
+            "stunnel_conf": paths.get('stunnel_conf', ''),
+            "stunnel_conf_detected": stunnel_conf_path,
+            "ffmpeg_exe": paths.get('ffmpeg_exe', ''),
+            "python_exe": paths.get('python_exe', ''),
+            "python_exe_detected": python_exe
+        }
     })
 
 
@@ -2138,10 +2309,53 @@ def update_config():
     if 'auto_start_streams' in data:
         config['auto_start_streams'] = data['auto_start_streams']
     
+    # Mettre à jour les chemins si fournis
+    if 'paths' in data:
+        if 'paths' not in config:
+            config['paths'] = {}
+        
+        paths_data = data.get('paths', {})
+        for key in ['nginx_exe', 'stunnel_dir', 'stunnel_exe', 'stunnel_conf', 'ffmpeg_exe', 'python_exe']:
+            if key in paths_data:
+                path_value = paths_data[key].strip()
+                config['paths'][key] = path_value
+                
+                # Vérifier que le chemin existe (si non vide)
+                if path_value:
+                    test_path = Path(path_value)
+                    if not test_path.is_absolute():
+                        test_path = BASE_DIR / path_value
+                    if not test_path.exists() and key not in ['stunnel_dir', 'python_exe']:
+                        # Pour stunnel_dir, on vérifie seulement si le dossier parent existe
+                        if key == 'stunnel_dir':
+                            parent = test_path.parent
+                            if not parent.exists():
+                                return jsonify({
+                                    "success": False,
+                                    "message": f"Le chemin Stunnel spécifié n'existe pas: {path_value}"
+                                }), 400
+                        else:
+                            return jsonify({
+                                "success": False,
+                                "message": f"Le chemin {key} spécifié n'existe pas: {path_value}"
+                            }), 400
+        
+        # Recharger les chemins après mise à jour
+        load_paths()
+        
+        # Réinitialiser FFMPEG_EXE si le chemin FFmpeg a changé
+        if 'ffmpeg_exe' in paths_data:
+            global FFMPEG_EXE
+            FFMPEG_EXE = None
+    
+    # Compatibilité avec l'ancienne méthode (ffmpeg_path)
     if 'ffmpeg_path' in data:
-        # Mettre à jour le chemin personnalisé FFmpeg
+        # Mettre à jour le chemin personnalisé FFmpeg (ancienne méthode)
         custom_path = data.get('ffmpeg_path', '').strip()
-        config['ffmpeg_path'] = custom_path
+        if 'paths' not in config:
+            config['paths'] = {}
+        config['paths']['ffmpeg_exe'] = custom_path
+        config['ffmpeg_path'] = custom_path  # Garder pour compatibilité
         
         # Si un chemin personnalisé est fourni, réinitialiser FFMPEG_EXE pour forcer la recherche
         if custom_path:
@@ -2149,6 +2363,8 @@ def update_config():
             FFMPEG_EXE = None
             # Tester le chemin
             test_path = Path(custom_path)
+            if not test_path.is_absolute():
+                test_path = BASE_DIR / custom_path
             if not test_path.exists():
                 return jsonify({
                     "success": False,
@@ -2309,6 +2525,9 @@ def get_rtmp_url():
 
 if __name__ == '__main__':
     import socket
+    
+    # Charger les chemins au démarrage
+    load_paths()
     
     # Charger la configuration au démarrage
     config = load_config()
