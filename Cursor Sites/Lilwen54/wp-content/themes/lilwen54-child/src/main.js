@@ -3,7 +3,7 @@
  * Charge les styles et initialise les composants
  */
 
-import '../styles/main.css';
+import './styles/main.css';
 
 // Import conditionnel des composants React/Vue
 if (document.querySelector('[data-react-app]')) {
