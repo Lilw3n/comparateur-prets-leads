@@ -43,6 +43,9 @@
                 <button class="btn btn-secondary" onclick="openProjectFolder()" style="margin-right: 0.5rem;">
                     <i class="fas fa-folder-open"></i> Ouvrir le dossier
                 </button>
+                <button class="btn btn-secondary" onclick="showPathsConfigModal()" style="margin-right: 0.5rem;" title="Configurer les chemins des exécutables">
+                    <i class="fas fa-cog"></i> Chemins
+                </button>
                 <button class="btn btn-primary" onclick="showAddModal()">
                     <i class="fas fa-plus"></i> Ajouter un Stream
                 </button>
@@ -336,6 +339,85 @@
                 <div class="form-actions">
                     <button type="button" class="btn btn-secondary" onclick="closeObsWebsocketDialog()">Annuler</button>
                     <button type="button" class="btn btn-primary" onclick="saveObsWebsocketConfig()">
+                        <i class="fas fa-save"></i> Enregistrer
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Configuration des Chemins -->
+    <div id="paths-config-modal" class="modal">
+        <div class="modal-content" style="max-width: 700px;">
+            <div class="modal-header">
+                <h2><i class="fas fa-folder"></i> Configuration des Chemins</h2>
+                <button class="modal-close" onclick="closePathsConfigModal()">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div style="padding: 1rem;">
+                <p style="margin-bottom: 1.5rem; color: var(--text-secondary);">
+                    Configurez les chemins vers les exécutables nécessaires. Laissez vide pour utiliser les chemins par défaut.
+                </p>
+                
+                <div class="form-group">
+                    <label for="nginx-exe-path">
+                        <i class="fas fa-server"></i> Nginx (nginx.exe)
+                    </label>
+                    <input type="text" id="nginx-exe-path" placeholder="Chemin vers nginx.exe (vide = recherche automatique)">
+                    <small id="nginx-exe-detected" style="color: var(--text-secondary); margin-top: 0.5rem; display: block; font-size: 0.85rem;"></small>
+                </div>
+                
+                <div class="form-group">
+                    <label for="ffmpeg-exe-path">
+                        <i class="fas fa-video"></i> FFmpeg (ffmpeg.exe)
+                    </label>
+                    <input type="text" id="ffmpeg-exe-path" placeholder="Chemin vers ffmpeg.exe (vide = recherche automatique)">
+                    <small id="ffmpeg-exe-detected" style="color: var(--text-secondary); margin-top: 0.5rem; display: block; font-size: 0.85rem;"></small>
+                </div>
+                
+                <div class="form-group">
+                    <label for="stunnel-dir-path">
+                        <i class="fas fa-lock"></i> Stunnel - Dossier d'installation
+                    </label>
+                    <input type="text" id="stunnel-dir-path" placeholder="Chemin vers le dossier Stunnel (ex: C:/stunnel)">
+                    <small id="stunnel-dir-detected" style="color: var(--text-secondary); margin-top: 0.5rem; display: block; font-size: 0.85rem;"></small>
+                </div>
+                
+                <div class="form-group">
+                    <label for="stunnel-exe-path">
+                        <i class="fas fa-lock"></i> Stunnel - Exécutable (stunnel.exe)
+                    </label>
+                    <input type="text" id="stunnel-exe-path" placeholder="Chemin vers stunnel.exe (vide = stunnel_dir/bin/stunnel.exe)">
+                    <small id="stunnel-exe-detected" style="color: var(--text-secondary); margin-top: 0.5rem; display: block; font-size: 0.85rem;"></small>
+                </div>
+                
+                <div class="form-group">
+                    <label for="stunnel-conf-path">
+                        <i class="fas fa-file-code"></i> Stunnel - Configuration (stunnel.conf)
+                    </label>
+                    <input type="text" id="stunnel-conf-path" placeholder="Chemin vers stunnel.conf (vide = stunnel_dir/config/stunnel.conf)">
+                    <small id="stunnel-conf-detected" style="color: var(--text-secondary); margin-top: 0.5rem; display: block; font-size: 0.85rem;"></small>
+                </div>
+                
+                <div class="form-group">
+                    <label for="python-exe-path">
+                        <i class="fab fa-python"></i> Python (python.exe)
+                    </label>
+                    <input type="text" id="python-exe-path" placeholder="Chemin vers python.exe (vide = Python système)">
+                    <small id="python-exe-detected" style="color: var(--text-secondary); margin-top: 0.5rem; display: block; font-size: 0.85rem;"></small>
+                </div>
+                
+                <div style="background: var(--bg); padding: 1rem; border-radius: 8px; margin-top: 1.5rem; border-left: 4px solid var(--info);">
+                    <p style="margin: 0; font-size: 0.85rem; color: var(--text-secondary);">
+                        <i class="fas fa-info-circle"></i> <strong>Astuce :</strong> Les chemins détectés automatiquement sont affichés ci-dessous. 
+                        Vous pouvez les copier ou laisser vide pour utiliser la détection automatique.
+                    </p>
+                </div>
+                
+                <div class="form-actions" style="margin-top: 1.5rem;">
+                    <button type="button" class="btn btn-secondary" onclick="closePathsConfigModal()">Annuler</button>
+                    <button type="button" class="btn btn-primary" onclick="savePathsConfig()">
                         <i class="fas fa-save"></i> Enregistrer
                     </button>
                 </div>

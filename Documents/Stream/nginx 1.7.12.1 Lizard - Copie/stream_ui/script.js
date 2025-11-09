@@ -1563,6 +1563,110 @@ function closeInfoModal() {
     }
 }
 
+// Fonction pour afficher la modal de configuration des chemins
+async function showPathsConfigModal() {
+    const modal = document.getElementById('paths-config-modal');
+    if (!modal) return;
+    
+    try {
+        // Charger la configuration actuelle
+        const response = await fetch(`${API_URL}/config`);
+        const config = await response.json();
+        
+        // Remplir les champs avec les chemins configurés
+        const paths = config.paths || {};
+        
+        document.getElementById('nginx-exe-path').value = paths.nginx_exe || '';
+        document.getElementById('ffmpeg-exe-path').value = paths.ffmpeg_exe || '';
+        document.getElementById('stunnel-dir-path').value = paths.stunnel_dir || '';
+        document.getElementById('stunnel-exe-path').value = paths.stunnel_exe || '';
+        document.getElementById('stunnel-conf-path').value = paths.stunnel_conf || '';
+        document.getElementById('python-exe-path').value = paths.python_exe || '';
+        
+        // Afficher les chemins détectés automatiquement
+        if (paths.nginx_exe_detected) {
+            document.getElementById('nginx-exe-detected').textContent = `Détecté: ${paths.nginx_exe_detected}`;
+        } else {
+            document.getElementById('nginx-exe-detected').textContent = '';
+        }
+        
+        if (paths.ffmpeg_exe_detected || config.ffmpeg_path) {
+            document.getElementById('ffmpeg-exe-detected').textContent = `Détecté: ${paths.ffmpeg_exe_detected || config.ffmpeg_path || 'Non trouvé'}`;
+        } else {
+            document.getElementById('ffmpeg-exe-detected').textContent = '';
+        }
+        
+        if (paths.stunnel_exe_detected) {
+            document.getElementById('stunnel-exe-detected').textContent = `Détecté: ${paths.stunnel_exe_detected}`;
+        } else {
+            document.getElementById('stunnel-exe-detected').textContent = '';
+        }
+        
+        if (paths.stunnel_conf_detected) {
+            document.getElementById('stunnel-conf-detected').textContent = `Détecté: ${paths.stunnel_conf_detected}`;
+        } else {
+            document.getElementById('stunnel-conf-detected').textContent = '';
+        }
+        
+        if (paths.python_exe_detected) {
+            document.getElementById('python-exe-detected').textContent = `Détecté: ${paths.python_exe_detected}`;
+        } else {
+            document.getElementById('python-exe-detected').textContent = '';
+        }
+        
+        // Afficher la modal
+        modal.classList.add('show');
+    } catch (error) {
+        console.error('Erreur lors du chargement de la configuration:', error);
+        showToast('Erreur lors du chargement de la configuration', 'error');
+    }
+}
+
+// Fonction pour fermer la modal de configuration des chemins
+function closePathsConfigModal() {
+    const modal = document.getElementById('paths-config-modal');
+    if (modal) {
+        modal.classList.remove('show');
+    }
+}
+
+// Fonction pour sauvegarder la configuration des chemins
+async function savePathsConfig() {
+    try {
+        const paths = {
+            nginx_exe: document.getElementById('nginx-exe-path').value.trim(),
+            ffmpeg_exe: document.getElementById('ffmpeg-exe-path').value.trim(),
+            stunnel_dir: document.getElementById('stunnel-dir-path').value.trim(),
+            stunnel_exe: document.getElementById('stunnel-exe-path').value.trim(),
+            stunnel_conf: document.getElementById('stunnel-conf-path').value.trim(),
+            python_exe: document.getElementById('python-exe-path').value.trim()
+        };
+        
+        const response = await fetch(`${API_URL}/config`, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json'
+            },
+            body: JSON.stringify({ paths })
+        });
+        
+        const result = await response.json();
+        
+        if (result.success) {
+            showToast('Chemins sauvegardés avec succès', 'success');
+            closePathsConfigModal();
+            // Recharger la configuration pour mettre à jour les détections
+            await checkConfigStatus();
+        } else {
+            showToast(result.message || 'Erreur lors de la sauvegarde', 'error');
+        }
+    } catch (error) {
+        console.error('Erreur lors de la sauvegarde des chemins:', error);
+        showToast('Erreur lors de la sauvegarde des chemins', 'error');
+    }
+}
+
 // Fermer la modal en cliquant en dehors
 document.addEventListener('DOMContentLoaded', function() {
     const modal = document.getElementById('info-modal');
@@ -1570,6 +1674,16 @@ document.addEventListener('DOMContentLoaded', function() {
         modal.addEventListener('click', function(e) {
             if (e.target === modal) {
                 closeInfoModal();
+            }
+        });
+    }
+    
+    // Fermer la modal de configuration des chemins en cliquant en dehors
+    const pathsModal = document.getElementById('paths-config-modal');
+    if (pathsModal) {
+        pathsModal.addEventListener('click', function(e) {
+            if (e.target === pathsModal) {
+                closePathsConfigModal();
             }
         });
     }

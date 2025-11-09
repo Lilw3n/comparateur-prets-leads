@@ -1,0 +1,141 @@
+# Fichiers système Windows
+Thumbs.db
+desktop.ini
+*.lnk
+*.log
+*.tmp
+*.temp
+
+# Fichiers utilisateur Windows
+AppData/
+Local Settings/
+Cookies/
+Recent/
+SendTo/
+Menu Démarrer/
+Voisinage d'impression/
+Voisinage réseau/
+Mes documents/
+Ma musique/
+Mes images/
+Mes vidéos/
+Modèles/
+Application Data/
+
+# Fichiers de configuration système
+NTUSER.DAT*
+ntuser.dat*
+ntuser.ini
+*.regtrans-ms
+*.TM.blf
+*.TMContainer*
+
+# Fichiers de cache et temporaires
+.cache/
+.next/
+node_modules/
+.gradle/
+.javacpp/
+.skiko/
+.mitmproxy/
+.claude/
+.cursor/
+.vscode/
+.redhat/
+.docker/
+.dotnet/
+.android/
+.config/
+.Ld9VirtualBox/
+
+# Fichiers de développement
+.git-credentials
+.gitconfig
+.lesshst
+.emulator_console_auth_token
+
+# Fichiers de projets personnels (à ajuster selon vos besoins)
+Documents/Adobe/
+Documents/Assetto Corsa/
+Documents/Audacity/
+Documents/Battlefield*/
+Documents/BeamNG.drive/
+Documents/Call of Duty/
+Documents/Electronic Arts/
+Documents/FormatFactory/
+Documents/Forward Development/
+Documents/KONAMI/
+Documents/Marvel's Spider-Man*/
+Documents/My Games/
+Documents/Mes documents PaperPort/
+Documents/PowerShell/
+Documents/Release/
+Documents/Rockstar Games/
+Documents/The Last of Us*/
+Documents/Voicemeeter/
+Documents/XuanZhi9/
+Documents/crash_dumps/
+Documents/*.rbxl
+Documents/*.psd
+Documents/*.png
+Documents/*.jpg
+Documents/*.rar
+Documents/Stream.rar
+Documents/Stream/nginx 1.7.12.1 Lizard/
+Documents/Stream/*.data
+Documents/Stream/ffmpeg/
+Documents/Stream/gyiygiy
+Documents/Stream/nginx 1.7.12.1 Lizard - Copie.rar
+Documents/Stream/social_stream-main/
+Documents/Stream/stunnel/
+Documents/Stream/snake97213.data
+Documents/.vsconfig
+Documents/desktop.ini
+Documents/WhatsApp Image*/
+
+# Fichiers multimédias
+*.mp4
+*.jpg
+*.jpeg
+*.png
+*.psd
+Videos/
+VideosConverted/
+Pictures/
+Music/
+Downloads/
+Favorites/
+Links/
+Saved Games/
+Searches/
+
+# Fichiers de sauvegarde
+*.tgz
+*.backup
+Iugdoju-backup-*
+
+# Fichiers de configuration spécifiques
+-1.14-windows.xml
+OUTER.txt
+phpinfo.php
+.htaccess
+package.json
+package-lock.json
+woocommerce-tiktok-connector.php
+
+# Dossiers de projets personnels
+OBS STUDIO CODE DIDDY/
+Wan2.2*/
+my-dashboard/
+source/
+site equestre/
+"Site ultra poussé/"
+dwhelper/
+_/
+5555/
+OneDrive/
+Muse Hub/
+
+# Fichiers d'erreur
+java_error_in_studio.hprof
+
