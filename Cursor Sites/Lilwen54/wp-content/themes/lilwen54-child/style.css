@@ -1,0 +1,24 @@
+/*
+Theme Name: Lilwen54 Child
+Theme URI: https://lilwen54.fr
+Description: Thème enfant de Twenty Twenty-Five pour le site Lilwen54. Ce thème enfant permet de personnaliser le site sans perdre les modifications lors des mises à jour du thème parent.
+Author: Lilwen54
+Author URI: https://lilwen54.fr
+Template: twentytwentyfive
+Version: 1.0.0
+License: GNU General Public License v2 or later
+License URI: http://www.gnu.org/licenses/gpl-2.0.html
+Text Domain: lilwen54-child
+Tags: child-theme, twentytwentyfive, custom
+*/
+
+/* 
+ * IMPORTANT: Les styles du thème parent sont chargés automatiquement via functions.php
+ * Ajoutez vos styles personnalisés ci-dessous
+ */
+
+/* Styles personnalisés pour Lilwen54 */
+body {
+    /* Ajoutez vos styles personnalisés ici */
+}
+
