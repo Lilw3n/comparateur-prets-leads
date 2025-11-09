@@ -1,0 +1,112 @@
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: Notification for WooCommerce Premium\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2024-06-06 07:13+0000\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: \n"
+"Language: \n"
+"Plural-Forms: nplurals=INTEGER; plural=EXPRESSION;\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Loco https://localise.biz/"
+
+#: E:/villatheme-2024/FREE-VERSION/woo-notification/woo-notification/frontend/notify.php:863
+#: E:/villatheme-2024/FREE-VERSION/woo-notification/woo-notification/frontend/notify.php:1075
+msgid "a few seconds"
+msgstr ""
+
+#: E:/villatheme-2024/FREE-VERSION/woo-notification/woo-notification/frontend/notify.php:964
+#: E:/villatheme-2024/FREE-VERSION/woo-notification/woo-notification/frontend/notify.php:1066
+msgid "About"
+msgstr ""
+
+#: E:/villatheme-2024/FREE-VERSION/woo-notification/woo-notification/frontend/notify.php:964
+#: E:/villatheme-2024/FREE-VERSION/woo-notification/woo-notification/frontend/notify.php:1067
+msgid "ago"
+msgstr ""
+
+#. Author of the plugin
+msgid "Andy Ha (villatheme.com)"
+msgstr ""
+
+#: E:/villatheme-2024/FREE-VERSION/woo-notification/woo-notification/frontend/notify.php:840
+#: E:/villatheme-2024/FREE-VERSION/woo-notification/woo-notification/frontend/notify.php:1068
+msgid "day"
+msgstr ""
+
+#: E:/villatheme-2024/FREE-VERSION/woo-notification/woo-notification/frontend/notify.php:838
+#: E:/villatheme-2024/FREE-VERSION/woo-notification/woo-notification/frontend/notify.php:1069
+msgid "days"
+msgstr ""
+
+#. Description of the plugin
+msgid ""
+"Display recent orders as popup notifications, boosting conversion rates by "
+"showing real-time purchase, creating urgency, and showcasing new products."
+msgstr ""
+
+#: E:/villatheme-2024/FREE-VERSION/woo-notification/woo-notification/frontend/notify.php:849
+#: E:/villatheme-2024/FREE-VERSION/woo-notification/woo-notification/frontend/notify.php:1070
+msgid "hour"
+msgstr ""
+
+#: E:/villatheme-2024/FREE-VERSION/woo-notification/woo-notification/frontend/notify.php:847
+#: E:/villatheme-2024/FREE-VERSION/woo-notification/woo-notification/frontend/notify.php:1071
+msgid "hours"
+msgstr ""
+
+#. Author URI of the plugin
+msgid "http://villatheme.com"
+msgstr ""
+
+#. URI of the plugin
+msgid "https://villatheme.com/extensions/woocommerce-notification-boost-sales/"
+msgstr ""
+
+#: E:/villatheme-2024/FREE-VERSION/woo-notification/woo-notification/frontend/notify.php:858
+#: E:/villatheme-2024/FREE-VERSION/woo-notification/woo-notification/frontend/notify.php:1072
+msgid "minute"
+msgstr ""
+
+#: E:/villatheme-2024/FREE-VERSION/woo-notification/woo-notification/frontend/notify.php:856
+#: E:/villatheme-2024/FREE-VERSION/woo-notification/woo-notification/frontend/notify.php:1073
+msgid "minutes"
+msgstr ""
+
+#. Name of the plugin
+#: E:/villatheme-2024/FREE-VERSION/woo-notification/woo-notification/admin/admin.php:200
+msgid "Notification for WooCommerce"
+msgstr ""
+
+#: E:/villatheme-2024/FREE-VERSION/woo-notification/woo-notification/admin/report.php:23
+msgid "Notification for WooCommerce Reporting"
+msgstr ""
+
+#: E:/villatheme-2024/FREE-VERSION/woo-notification/woo-notification/admin/report.php:33
+#: E:/villatheme-2024/FREE-VERSION/woo-notification/woo-notification/admin/report.php:34
+msgid "Report"
+msgstr ""
+
+#: E:/villatheme-2024/FREE-VERSION/woo-notification/woo-notification/frontend/notify.php:861
+msgid "seconds"
+msgstr ""
+
+#: E:/villatheme-2024/FREE-VERSION/woo-notification/woo-notification/frontend/notify.php:1074
+msgid "secs"
+msgstr ""
+
+#: E:/villatheme-2024/FREE-VERSION/woo-notification/woo-notification/admin/admin.php:151
+msgid "Settings"
+msgstr ""
+
+#: E:/villatheme-2024/FREE-VERSION/woo-notification/woo-notification/admin/report.php:24
+msgid "Update This Feature"
+msgstr ""
+
+#: E:/villatheme-2024/FREE-VERSION/woo-notification/woo-notification/admin/admin.php:200
+msgid "Woo Notification"
+msgstr ""

@@ -1,0 +1,766 @@
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: FEWC - Extra Checkout Fields For WooCommerce\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2025-09-18 04:58+0000\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: \n"
+"Language: \n"
+"Plural-Forms: nplurals=INTEGER; plural=EXPRESSION;\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Loco https://localise.biz/\n"
+"X-Loco-Version: 2.6.2; wp-6.1\n"
+"X-Domain: fewc-extra-checkout-fields-for-woocommerce"
+
+#: D:/git/free-version/fewc-extra-checkout-fields-for-woocommerce/fewc-extra-checkout-fields-for-woocommerce/includes/frontend/frontend.php:362
+#: D:/git/free-version/fewc-extra-checkout-fields-for-woocommerce/fewc-extra-checkout-fields-for-woocommerce/includes/frontend/frontend.php:369
+msgid " Week"
+msgstr ""
+
+#: D:/git/free-version/fewc-extra-checkout-fields-for-woocommerce/fewc-extra-checkout-fields-for-woocommerce/compatible/tmds.php:150
+msgid "\" target=\"_blank\">FEWC</a>"
+msgstr ""
+
+#. 1: field label. 2: minvalue
+#: D:/git/free-version/fewc-extra-checkout-fields-for-woocommerce/fewc-extra-checkout-fields-for-woocommerce/includes/frontend/frontend.php:360
+#, php-format
+msgid "%1$s must be greater than or equal to %2$s %3$s."
+msgstr ""
+
+#. 1: field label. 2: minvalue
+#: D:/git/free-version/fewc-extra-checkout-fields-for-woocommerce/fewc-extra-checkout-fields-for-woocommerce/includes/frontend/frontend.php:327
+#, php-format
+msgid "%1$s must be greater than or equal to %2$s."
+msgstr ""
+
+#. 1: field label. 2: maxvalue
+#: D:/git/free-version/fewc-extra-checkout-fields-for-woocommerce/fewc-extra-checkout-fields-for-woocommerce/includes/frontend/frontend.php:367
+#, php-format
+msgid "%1$s must be less than or equal to %2$s %3$s."
+msgstr ""
+
+#. 1: field label. 2: maxvalue
+#: D:/git/free-version/fewc-extra-checkout-fields-for-woocommerce/fewc-extra-checkout-fields-for-woocommerce/includes/frontend/frontend.php:332
+#, php-format
+msgid "%1$s must be less than or equal to %2$s."
+msgstr ""
+
+#. %1s: Method name
+#: D:/git/free-version/fewc-extra-checkout-fields-for-woocommerce/fewc-extra-checkout-fields-for-woocommerce/includes/frontend/frontend.php:284
+#, php-format
+msgid "%1s is a required field."
+msgstr ""
+
+#. %1s: Method name
+#: D:/git/free-version/fewc-extra-checkout-fields-for-woocommerce/fewc-extra-checkout-fields-for-woocommerce/includes/frontend/frontend.php:293
+#, php-format
+msgid "%1s is not a valid number."
+msgstr ""
+
+#. %1s: Method name
+#: D:/git/free-version/fewc-extra-checkout-fields-for-woocommerce/fewc-extra-checkout-fields-for-woocommerce/includes/frontend/frontend.php:299
+#, php-format
+msgid "%1s is not a valid url."
+msgstr ""
+
+#: D:/git/free-version/fewc-extra-checkout-fields-for-woocommerce/fewc-extra-checkout-fields-for-woocommerce/includes/admin/classic-checkout.php:92
+msgid "Action"
+msgstr ""
+
+#: D:/git/free-version/fewc-extra-checkout-fields-for-woocommerce/fewc-extra-checkout-fields-for-woocommerce/includes/customize-controls.php:56
+#: D:/git/free-version/fewc-extra-checkout-fields-for-woocommerce/fewc-extra-checkout-fields-for-woocommerce/includes/admin/classic-checkout.php:70
+msgid "Add New Field"
+msgstr ""
+
+#: D:/git/free-version/fewc-extra-checkout-fields-for-woocommerce/fewc-extra-checkout-fields-for-woocommerce/includes/admin/classic-checkout.php:56
+msgid "Add New Section"
+msgstr ""
+
+#: D:/git/free-version/fewc-extra-checkout-fields-for-woocommerce/fewc-extra-checkout-fields-for-woocommerce/includes/customize-controls.php:74
+msgid "Add new section"
+msgstr ""
+
+#: D:/git/free-version/fewc-extra-checkout-fields-for-woocommerce/fewc-extra-checkout-fields-for-woocommerce/includes/data.php:300
+msgid "Add section"
+msgstr ""
+
+#: D:/git/free-version/fewc-extra-checkout-fields-for-woocommerce/fewc-extra-checkout-fields-for-woocommerce/includes/data.php:186
+msgid "Additional Information"
+msgstr ""
+
+#: D:/git/free-version/fewc-extra-checkout-fields-for-woocommerce/fewc-extra-checkout-fields-for-woocommerce/includes/admin/classic-checkout.php:136
+msgid "Admin email"
+msgstr ""
+
+#: D:/git/free-version/fewc-extra-checkout-fields-for-woocommerce/fewc-extra-checkout-fields-for-woocommerce/includes/data.php:222
+msgid "After billing form fields"
+msgstr ""
+
+#: D:/git/free-version/fewc-extra-checkout-fields-for-woocommerce/fewc-extra-checkout-fields-for-woocommerce/includes/data.php:232
+msgid "After cart contents"
+msgstr ""
+
+#: D:/git/free-version/fewc-extra-checkout-fields-for-woocommerce/fewc-extra-checkout-fields-for-woocommerce/includes/data.php:220
+msgid "After customer details"
+msgstr ""
+
+#: D:/git/free-version/fewc-extra-checkout-fields-for-woocommerce/fewc-extra-checkout-fields-for-woocommerce/includes/data.php:228
+msgid "After order notes"
+msgstr ""
+
+#: D:/git/free-version/fewc-extra-checkout-fields-for-woocommerce/fewc-extra-checkout-fields-for-woocommerce/includes/data.php:230
+msgid "After order review"
+msgstr ""
+
+#: D:/git/free-version/fewc-extra-checkout-fields-for-woocommerce/fewc-extra-checkout-fields-for-woocommerce/includes/data.php:234
+msgid "After order total"
+msgstr ""
+
+#: D:/git/free-version/fewc-extra-checkout-fields-for-woocommerce/fewc-extra-checkout-fields-for-woocommerce/includes/data.php:238
+msgid "After place order button"
+msgstr ""
+
+#: D:/git/free-version/fewc-extra-checkout-fields-for-woocommerce/fewc-extra-checkout-fields-for-woocommerce/includes/data.php:224
+msgid "After registration form fields"
+msgstr ""
+
+#: D:/git/free-version/fewc-extra-checkout-fields-for-woocommerce/fewc-extra-checkout-fields-for-woocommerce/includes/data.php:226
+msgid "After shipping form fields"
+msgstr ""
+
+#: D:/git/free-version/fewc-extra-checkout-fields-for-woocommerce/fewc-extra-checkout-fields-for-woocommerce/includes/data.php:236
+msgid "After terms and conditions"
+msgstr ""
+
+#. %1s: Method name
+#: D:/git/free-version/fewc-extra-checkout-fields-for-woocommerce/fewc-extra-checkout-fields-for-woocommerce/includes/admin/design.php:193
+#, php-format
+msgid ""
+"All features are not working on your site unless the customize. Please turn "
+"on the option <a class=\"vifewc-warning\" target=\"_blank\" href=\"%1s\">"
+"Enable</a> to use that."
+msgstr ""
+
+#: D:/git/free-version/fewc-extra-checkout-fields-for-woocommerce/fewc-extra-checkout-fields-for-woocommerce/includes/data.php:303
+msgid "Apply"
+msgstr ""
+
+#: D:/git/free-version/fewc-extra-checkout-fields-for-woocommerce/fewc-extra-checkout-fields-for-woocommerce/includes/data.php:290
+msgid "Are you sure to remove this field?"
+msgstr ""
+
+#: D:/git/free-version/fewc-extra-checkout-fields-for-woocommerce/fewc-extra-checkout-fields-for-woocommerce/includes/data.php:287
+msgid "Are you sure to remove this option?"
+msgstr ""
+
+#: D:/git/free-version/fewc-extra-checkout-fields-for-woocommerce/fewc-extra-checkout-fields-for-woocommerce/includes/data.php:257
+msgid "Are you sure to remove this section?"
+msgstr ""
+
+#: D:/git/free-version/fewc-extra-checkout-fields-for-woocommerce/fewc-extra-checkout-fields-for-woocommerce/includes/admin/settings.php:355
+msgid "Are you sure to reset settings?"
+msgstr ""
+
+#: D:/git/free-version/fewc-extra-checkout-fields-for-woocommerce/fewc-extra-checkout-fields-for-woocommerce/includes/data.php:221
+msgid "Before billing form fields"
+msgstr ""
+
+#: D:/git/free-version/fewc-extra-checkout-fields-for-woocommerce/fewc-extra-checkout-fields-for-woocommerce/includes/data.php:231
+msgid "Before cart contents"
+msgstr ""
+
+#: D:/git/free-version/fewc-extra-checkout-fields-for-woocommerce/fewc-extra-checkout-fields-for-woocommerce/includes/data.php:219
+msgid "Before customer details"
+msgstr ""
+
+#: D:/git/free-version/fewc-extra-checkout-fields-for-woocommerce/fewc-extra-checkout-fields-for-woocommerce/includes/data.php:227
+msgid "Before order notes"
+msgstr ""
+
+#: D:/git/free-version/fewc-extra-checkout-fields-for-woocommerce/fewc-extra-checkout-fields-for-woocommerce/includes/data.php:229
+msgid "Before order review"
+msgstr ""
+
+#: D:/git/free-version/fewc-extra-checkout-fields-for-woocommerce/fewc-extra-checkout-fields-for-woocommerce/includes/data.php:233
+msgid "Before order total"
+msgstr ""
+
+#: D:/git/free-version/fewc-extra-checkout-fields-for-woocommerce/fewc-extra-checkout-fields-for-woocommerce/includes/data.php:237
+msgid "Before place order button"
+msgstr ""
+
+#: D:/git/free-version/fewc-extra-checkout-fields-for-woocommerce/fewc-extra-checkout-fields-for-woocommerce/includes/data.php:223
+msgid "Before registration form fields"
+msgstr ""
+
+#: D:/git/free-version/fewc-extra-checkout-fields-for-woocommerce/fewc-extra-checkout-fields-for-woocommerce/includes/data.php:225
+msgid "Before shipping form fields"
+msgstr ""
+
+#: D:/git/free-version/fewc-extra-checkout-fields-for-woocommerce/fewc-extra-checkout-fields-for-woocommerce/includes/data.php:235
+msgid "Before terms and conditions"
+msgstr ""
+
+#: D:/git/free-version/fewc-extra-checkout-fields-for-woocommerce/fewc-extra-checkout-fields-for-woocommerce/includes/data.php:180
+msgid "Billing"
+msgstr ""
+
+#. %s: field name
+#: D:/git/free-version/fewc-extra-checkout-fields-for-woocommerce/fewc-extra-checkout-fields-for-woocommerce/includes/frontend/frontend.php:171
+#, php-format
+msgid "Billing %s"
+msgstr ""
+
+#: D:/git/free-version/fewc-extra-checkout-fields-for-woocommerce/fewc-extra-checkout-fields-for-woocommerce/includes/admin/settings.php:71
+msgid "Can not import settings now. Please reload and try again."
+msgstr ""
+
+#: D:/git/free-version/fewc-extra-checkout-fields-for-woocommerce/fewc-extra-checkout-fields-for-woocommerce/includes/admin/classic-checkout.php:147
+msgid "Checkbox"
+msgstr ""
+
+#: D:/git/free-version/fewc-extra-checkout-fields-for-woocommerce/fewc-extra-checkout-fields-for-woocommerce/includes/admin/classic-checkout.php:148
+msgid "Checkbox Group"
+msgstr ""
+
+#: D:/git/free-version/fewc-extra-checkout-fields-for-woocommerce/fewc-extra-checkout-fields-for-woocommerce/includes/admin/settings.php:192
+#: D:/git/free-version/fewc-extra-checkout-fields-for-woocommerce/fewc-extra-checkout-fields-for-woocommerce/includes/admin/settings.php:193
+msgid "Checkout fields"
+msgstr ""
+
+#: D:/git/free-version/fewc-extra-checkout-fields-for-woocommerce/fewc-extra-checkout-fields-for-woocommerce/includes/admin/design.php:54
+msgid "Checkout Section"
+msgstr ""
+
+#: D:/git/free-version/fewc-extra-checkout-fields-for-woocommerce/fewc-extra-checkout-fields-for-woocommerce/includes/admin/classic-checkout.php:124
+msgid "Choose a option"
+msgstr ""
+
+#: D:/git/free-version/fewc-extra-checkout-fields-for-woocommerce/fewc-extra-checkout-fields-for-woocommerce/includes/data.php:267
+msgid "Class"
+msgstr ""
+
+#: D:/git/free-version/fewc-extra-checkout-fields-for-woocommerce/fewc-extra-checkout-fields-for-woocommerce/includes/admin/settings.php:354
+msgid "Click OK to import settings."
+msgstr ""
+
+#: D:/git/free-version/fewc-extra-checkout-fields-for-woocommerce/fewc-extra-checkout-fields-for-woocommerce/includes/admin/design.php:146
+msgid "Click to edit fields for each section."
+msgstr ""
+
+#: D:/git/free-version/fewc-extra-checkout-fields-for-woocommerce/fewc-extra-checkout-fields-for-woocommerce/includes/data.php:305
+msgid "Clone"
+msgstr ""
+
+#: D:/git/free-version/fewc-extra-checkout-fields-for-woocommerce/fewc-extra-checkout-fields-for-woocommerce/includes/data.php:288
+msgid "Content"
+msgstr ""
+
+#: D:/git/free-version/fewc-extra-checkout-fields-for-woocommerce/fewc-extra-checkout-fields-for-woocommerce/includes/admin/settings.php:208
+msgid "Create and Edit Fields"
+msgstr ""
+
+#: D:/git/free-version/fewc-extra-checkout-fields-for-woocommerce/fewc-extra-checkout-fields-for-woocommerce/includes/admin/settings.php:318
+msgid "Custom Checkout Section"
+msgstr ""
+
+#: D:/git/free-version/fewc-extra-checkout-fields-for-woocommerce/fewc-extra-checkout-fields-for-woocommerce/includes/admin/classic-checkout.php:137
+msgid "Customer email"
+msgstr ""
+
+#: D:/git/free-version/fewc-extra-checkout-fields-for-woocommerce/fewc-extra-checkout-fields-for-woocommerce/includes/admin/settings.php:209
+msgid "Customize"
+msgstr ""
+
+#: D:/git/free-version/fewc-extra-checkout-fields-for-woocommerce/fewc-extra-checkout-fields-for-woocommerce/includes/admin/classic-checkout.php:160
+msgid "Date"
+msgstr ""
+
+#: D:/git/free-version/fewc-extra-checkout-fields-for-woocommerce/fewc-extra-checkout-fields-for-woocommerce/includes/admin/classic-checkout.php:151
+msgid "Datetime"
+msgstr ""
+
+#: D:/git/free-version/fewc-extra-checkout-fields-for-woocommerce/fewc-extra-checkout-fields-for-woocommerce/includes/admin/classic-checkout.php:158
+msgid "Datetime local"
+msgstr ""
+
+#: D:/git/free-version/fewc-extra-checkout-fields-for-woocommerce/fewc-extra-checkout-fields-for-woocommerce/includes/data.php:275
+msgid "Default Value"
+msgstr ""
+
+#: D:/git/free-version/fewc-extra-checkout-fields-for-woocommerce/fewc-extra-checkout-fields-for-woocommerce/includes/data.php:273
+msgid "Description"
+msgstr ""
+
+#: D:/git/free-version/fewc-extra-checkout-fields-for-woocommerce/fewc-extra-checkout-fields-for-woocommerce/includes/data.php:261
+msgid "Design"
+msgstr ""
+
+#: D:/git/free-version/fewc-extra-checkout-fields-for-woocommerce/fewc-extra-checkout-fields-for-woocommerce/includes/data.php:302
+msgid "Disable"
+msgstr ""
+
+#: D:/git/free-version/fewc-extra-checkout-fields-for-woocommerce/fewc-extra-checkout-fields-for-woocommerce/includes/data.php:272
+msgid "Display In"
+msgstr ""
+
+#: D:/git/free-version/fewc-extra-checkout-fields-for-woocommerce/fewc-extra-checkout-fields-for-woocommerce/includes/admin/classic-checkout.php:186
+msgid "div"
+msgstr ""
+
+#. Description of the plugin
+msgid ""
+"Easily customize your checkout page: add custom fields, enable/disable "
+"fields, rearrange their positions, and preview changes in the WP Customizer."
+msgstr ""
+
+#: D:/git/free-version/fewc-extra-checkout-fields-for-woocommerce/fewc-extra-checkout-fields-for-woocommerce/includes/data.php:304
+msgid "Edit"
+msgstr ""
+
+#: D:/git/free-version/fewc-extra-checkout-fields-for-woocommerce/fewc-extra-checkout-fields-for-woocommerce/includes/admin/classic-checkout.php:125
+#: D:/git/free-version/fewc-extra-checkout-fields-for-woocommerce/fewc-extra-checkout-fields-for-woocommerce/includes/admin/classic-checkout.php:143
+msgid "Email"
+msgstr ""
+
+#: D:/git/free-version/fewc-extra-checkout-fields-for-woocommerce/fewc-extra-checkout-fields-for-woocommerce/includes/data.php:263
+#: D:/git/free-version/fewc-extra-checkout-fields-for-woocommerce/fewc-extra-checkout-fields-for-woocommerce/includes/data.php:301
+msgid "Enable"
+msgstr ""
+
+#: D:/git/free-version/fewc-extra-checkout-fields-for-woocommerce/fewc-extra-checkout-fields-for-woocommerce/includes/admin/settings.php:29
+msgid "Error check nonce."
+msgstr ""
+
+#: D:/git/free-version/fewc-extra-checkout-fields-for-woocommerce/fewc-extra-checkout-fields-for-woocommerce/includes/admin/settings.php:62
+msgid "error check nonce."
+msgstr ""
+
+#: D:/git/free-version/fewc-extra-checkout-fields-for-woocommerce/fewc-extra-checkout-fields-for-woocommerce/includes/admin/settings.php:183
+#: D:/git/free-version/fewc-extra-checkout-fields-for-woocommerce/fewc-extra-checkout-fields-for-woocommerce/includes/admin/settings.php:184
+msgid "FEWC"
+msgstr ""
+
+#. Name of the plugin
+#: D:/git/free-version/fewc-extra-checkout-fields-for-woocommerce/fewc-extra-checkout-fields-for-woocommerce/includes/admin/design.php:78
+msgid "FEWC - Extra Checkout Fields For WooCommerce"
+msgstr ""
+
+#: D:/git/free-version/fewc-extra-checkout-fields-for-woocommerce/fewc-extra-checkout-fields-for-woocommerce/includes/admin/classic-checkout.php:17
+msgid "FEWC - WooCommerce Extra Checkout Fields"
+msgstr ""
+
+#: D:/git/free-version/fewc-extra-checkout-fields-for-woocommerce/fewc-extra-checkout-fields-for-woocommerce/includes/admin/settings.php:222
+msgid "FEWC - WooCommerce Extra Checkout Fields Settings"
+msgstr ""
+
+#: D:/git/free-version/fewc-extra-checkout-fields-for-woocommerce/fewc-extra-checkout-fields-for-woocommerce/includes/data.php:259
+msgid "Field Detail"
+msgstr ""
+
+#: D:/git/free-version/fewc-extra-checkout-fields-for-woocommerce/fewc-extra-checkout-fields-for-woocommerce/includes/data.php:250
+#: D:/git/free-version/fewc-extra-checkout-fields-for-woocommerce/fewc-extra-checkout-fields-for-woocommerce/includes/data.php:260
+msgid "General"
+msgstr ""
+
+#: D:/git/free-version/fewc-extra-checkout-fields-for-woocommerce/fewc-extra-checkout-fields-for-woocommerce/includes/admin/classic-checkout.php:172
+msgid "H1"
+msgstr ""
+
+#: D:/git/free-version/fewc-extra-checkout-fields-for-woocommerce/fewc-extra-checkout-fields-for-woocommerce/includes/admin/classic-checkout.php:173
+msgid "H2"
+msgstr ""
+
+#: D:/git/free-version/fewc-extra-checkout-fields-for-woocommerce/fewc-extra-checkout-fields-for-woocommerce/includes/admin/classic-checkout.php:174
+msgid "H3"
+msgstr ""
+
+#: D:/git/free-version/fewc-extra-checkout-fields-for-woocommerce/fewc-extra-checkout-fields-for-woocommerce/includes/admin/classic-checkout.php:175
+msgid "H4"
+msgstr ""
+
+#: D:/git/free-version/fewc-extra-checkout-fields-for-woocommerce/fewc-extra-checkout-fields-for-woocommerce/includes/admin/classic-checkout.php:176
+msgid "H5"
+msgstr ""
+
+#: D:/git/free-version/fewc-extra-checkout-fields-for-woocommerce/fewc-extra-checkout-fields-for-woocommerce/includes/admin/classic-checkout.php:177
+msgid "H6"
+msgstr ""
+
+#: D:/git/free-version/fewc-extra-checkout-fields-for-woocommerce/fewc-extra-checkout-fields-for-woocommerce/includes/admin/classic-checkout.php:170
+msgid "Heading"
+msgstr ""
+
+#: D:/git/free-version/fewc-extra-checkout-fields-for-woocommerce/fewc-extra-checkout-fields-for-woocommerce/includes/admin/classic-checkout.php:153
+msgid "Hidden"
+msgstr ""
+
+#: D:/git/free-version/fewc-extra-checkout-fields-for-woocommerce/fewc-extra-checkout-fields-for-woocommerce/includes/admin/classic-checkout.php:166
+msgid "Horizontal"
+msgstr ""
+
+#: D:/git/free-version/fewc-extra-checkout-fields-for-woocommerce/fewc-extra-checkout-fields-for-woocommerce/includes/admin/classic-checkout.php:155
+msgid "Html/ Paragraph"
+msgstr ""
+
+#. Author URI of the plugin
+msgid "https://villatheme.com"
+msgstr ""
+
+#. URI of the plugin
+msgid "https://villatheme.com/extensions/"
+msgstr ""
+
+#: D:/git/free-version/fewc-extra-checkout-fields-for-woocommerce/fewc-extra-checkout-fields-for-woocommerce/includes/admin/classic-checkout.php:89
+msgid "ID"
+msgstr ""
+
+#: D:/git/free-version/fewc-extra-checkout-fields-for-woocommerce/fewc-extra-checkout-fields-for-woocommerce/includes/admin/settings.php:262
+msgid "Import settings"
+msgstr ""
+
+#: D:/git/free-version/fewc-extra-checkout-fields-for-woocommerce/fewc-extra-checkout-fields-for-woocommerce/includes/admin/settings.php:241
+msgid "Import/Export Settings"
+msgstr ""
+
+#: D:/git/free-version/fewc-extra-checkout-fields-for-woocommerce/fewc-extra-checkout-fields-for-woocommerce/includes/data.php:269
+msgid "Input Class"
+msgstr ""
+
+#: D:/git/free-version/fewc-extra-checkout-fields-for-woocommerce/fewc-extra-checkout-fields-for-woocommerce/includes/data.php:282
+msgid "Is the default selected value"
+msgstr ""
+
+#: D:/git/free-version/fewc-extra-checkout-fields-for-woocommerce/fewc-extra-checkout-fields-for-woocommerce/includes/data.php:265
+#: D:/git/free-version/fewc-extra-checkout-fields-for-woocommerce/fewc-extra-checkout-fields-for-woocommerce/includes/admin/classic-checkout.php:90
+#: D:/git/free-version/fewc-extra-checkout-fields-for-woocommerce/fewc-extra-checkout-fields-for-woocommerce/includes/admin/classic-checkout.php:183
+msgid "Label"
+msgstr ""
+
+#: D:/git/free-version/fewc-extra-checkout-fields-for-woocommerce/fewc-extra-checkout-fields-for-woocommerce/includes/data.php:268
+msgid "Label Class"
+msgstr ""
+
+#: D:/git/free-version/fewc-extra-checkout-fields-for-woocommerce/fewc-extra-checkout-fields-for-woocommerce/includes/data.php:255
+msgid "Manage Section fields"
+msgstr ""
+
+#. 1: field label. 2: maxlength
+#: D:/git/free-version/fewc-extra-checkout-fields-for-woocommerce/fewc-extra-checkout-fields-for-woocommerce/includes/frontend/frontend.php:318
+#, php-format
+msgid "Maximum %1$s length is %2$s."
+msgstr ""
+
+#: D:/git/free-version/fewc-extra-checkout-fields-for-woocommerce/fewc-extra-checkout-fields-for-woocommerce/includes/data.php:280
+msgid "Maximum Value"
+msgstr ""
+
+#: D:/git/free-version/fewc-extra-checkout-fields-for-woocommerce/fewc-extra-checkout-fields-for-woocommerce/includes/data.php:277
+msgid "Maximum Value Length"
+msgstr ""
+
+#: D:/git/free-version/fewc-extra-checkout-fields-for-woocommerce/fewc-extra-checkout-fields-for-woocommerce/includes/data.php:262
+msgid "Meta Data"
+msgstr ""
+
+#: D:/git/free-version/fewc-extra-checkout-fields-for-woocommerce/fewc-extra-checkout-fields-for-woocommerce/includes/data.php:271
+msgid "Meta Key Name"
+msgstr ""
+
+#. 1: field label. 2: minlength
+#: D:/git/free-version/fewc-extra-checkout-fields-for-woocommerce/fewc-extra-checkout-fields-for-woocommerce/includes/frontend/frontend.php:314
+#, php-format
+msgid "Minimum %1$s length is %2$s."
+msgstr ""
+
+#: D:/git/free-version/fewc-extra-checkout-fields-for-woocommerce/fewc-extra-checkout-fields-for-woocommerce/includes/data.php:279
+msgid "Minimum Value"
+msgstr ""
+
+#: D:/git/free-version/fewc-extra-checkout-fields-for-woocommerce/fewc-extra-checkout-fields-for-woocommerce/includes/data.php:276
+msgid "Minimum Value Length"
+msgstr ""
+
+#: D:/git/free-version/fewc-extra-checkout-fields-for-woocommerce/fewc-extra-checkout-fields-for-woocommerce/includes/admin/classic-checkout.php:162
+msgid "month"
+msgstr ""
+
+#: D:/git/free-version/fewc-extra-checkout-fields-for-woocommerce/fewc-extra-checkout-fields-for-woocommerce/includes/data.php:251
+msgid "Name"
+msgstr ""
+
+#: D:/git/free-version/fewc-extra-checkout-fields-for-woocommerce/fewc-extra-checkout-fields-for-woocommerce/includes/data.php:297
+msgid "Name can not be empty!"
+msgstr ""
+
+#: D:/git/free-version/fewc-extra-checkout-fields-for-woocommerce/fewc-extra-checkout-fields-for-woocommerce/includes/data.php:298
+msgid "Name must be unique!"
+msgstr ""
+
+#: D:/git/free-version/fewc-extra-checkout-fields-for-woocommerce/fewc-extra-checkout-fields-for-woocommerce/includes/data.php:201
+msgid "Notes about your order, e.g. special notes for delivery."
+msgstr ""
+
+#: D:/git/free-version/fewc-extra-checkout-fields-for-woocommerce/fewc-extra-checkout-fields-for-woocommerce/includes/admin/classic-checkout.php:127
+#: D:/git/free-version/fewc-extra-checkout-fields-for-woocommerce/fewc-extra-checkout-fields-for-woocommerce/includes/admin/classic-checkout.php:145
+msgid "Number"
+msgstr ""
+
+#: D:/git/free-version/fewc-extra-checkout-fields-for-woocommerce/fewc-extra-checkout-fields-for-woocommerce/includes/data.php:286
+msgid "Option label(*)"
+msgstr ""
+
+#: D:/git/free-version/fewc-extra-checkout-fields-for-woocommerce/fewc-extra-checkout-fields-for-woocommerce/includes/data.php:285
+msgid "Option value(*)"
+msgstr ""
+
+#: D:/git/free-version/fewc-extra-checkout-fields-for-woocommerce/fewc-extra-checkout-fields-for-woocommerce/includes/frontend/frontend.php:538
+msgid "optional"
+msgstr ""
+
+#: D:/git/free-version/fewc-extra-checkout-fields-for-woocommerce/fewc-extra-checkout-fields-for-woocommerce/includes/data.php:284
+msgid "Options"
+msgstr ""
+
+#: D:/git/free-version/fewc-extra-checkout-fields-for-woocommerce/fewc-extra-checkout-fields-for-woocommerce/includes/admin/classic-checkout.php:138
+msgid "Order detail page"
+msgstr ""
+
+#: D:/git/free-version/fewc-extra-checkout-fields-for-woocommerce/fewc-extra-checkout-fields-for-woocommerce/includes/admin/classic-checkout.php:132
+msgid "Order meta data"
+msgstr ""
+
+#: D:/git/free-version/fewc-extra-checkout-fields-for-woocommerce/fewc-extra-checkout-fields-for-woocommerce/includes/data.php:200
+msgid "Order notes"
+msgstr ""
+
+#: D:/git/free-version/fewc-extra-checkout-fields-for-woocommerce/fewc-extra-checkout-fields-for-woocommerce/includes/admin/classic-checkout.php:185
+msgid "P"
+msgstr ""
+
+#: D:/git/free-version/fewc-extra-checkout-fields-for-woocommerce/fewc-extra-checkout-fields-for-woocommerce/includes/admin/classic-checkout.php:181
+msgid "Paragraph"
+msgstr ""
+
+#: D:/git/free-version/fewc-extra-checkout-fields-for-woocommerce/fewc-extra-checkout-fields-for-woocommerce/includes/admin/classic-checkout.php:152
+msgid "Password"
+msgstr ""
+
+#: D:/git/free-version/fewc-extra-checkout-fields-for-woocommerce/fewc-extra-checkout-fields-for-woocommerce/includes/admin/classic-checkout.php:126
+#: D:/git/free-version/fewc-extra-checkout-fields-for-woocommerce/fewc-extra-checkout-fields-for-woocommerce/includes/admin/classic-checkout.php:144
+msgid "Phone"
+msgstr ""
+
+#: D:/git/free-version/fewc-extra-checkout-fields-for-woocommerce/fewc-extra-checkout-fields-for-woocommerce/includes/data.php:274
+msgid "Placeholder"
+msgstr ""
+
+#: D:/git/free-version/fewc-extra-checkout-fields-for-woocommerce/fewc-extra-checkout-fields-for-woocommerce/includes/data.php:248
+msgid ""
+"Please enter some text, or some class by \",\" separating value. You can use "
+"one of these class: form-row-first, form-row-last, form-row-wide"
+msgstr ""
+
+#: D:/git/free-version/fewc-extra-checkout-fields-for-woocommerce/fewc-extra-checkout-fields-for-woocommerce/includes/admin/settings.php:97
+#: D:/git/free-version/fewc-extra-checkout-fields-for-woocommerce/fewc-extra-checkout-fields-for-woocommerce/includes/admin/settings.php:353
+msgid "Please enter the setting's value."
+msgstr ""
+
+#: D:/git/free-version/fewc-extra-checkout-fields-for-woocommerce/fewc-extra-checkout-fields-for-woocommerce/includes/data.php:254
+msgid "Position"
+msgstr ""
+
+#: D:/git/free-version/fewc-extra-checkout-fields-for-woocommerce/fewc-extra-checkout-fields-for-woocommerce/includes/admin/classic-checkout.php:128
+msgid "Postcode"
+msgstr ""
+
+#: D:/git/free-version/fewc-extra-checkout-fields-for-woocommerce/fewc-extra-checkout-fields-for-woocommerce/includes/admin/classic-checkout.php:150
+msgid "Radio"
+msgstr ""
+
+#: D:/git/free-version/fewc-extra-checkout-fields-for-woocommerce/fewc-extra-checkout-fields-for-woocommerce/includes/data.php:306
+msgid "Remove"
+msgstr ""
+
+#: D:/git/free-version/fewc-extra-checkout-fields-for-woocommerce/fewc-extra-checkout-fields-for-woocommerce/includes/data.php:256
+msgid "Remove This Section"
+msgstr ""
+
+#: D:/git/free-version/fewc-extra-checkout-fields-for-woocommerce/fewc-extra-checkout-fields-for-woocommerce/includes/data.php:264
+msgid "Required"
+msgstr ""
+
+#: D:/git/free-version/fewc-extra-checkout-fields-for-woocommerce/fewc-extra-checkout-fields-for-woocommerce/includes/frontend/frontend.php:536
+msgid "required"
+msgstr ""
+
+#: D:/git/free-version/fewc-extra-checkout-fields-for-woocommerce/fewc-extra-checkout-fields-for-woocommerce/includes/data.php:258
+#: D:/git/free-version/fewc-extra-checkout-fields-for-woocommerce/fewc-extra-checkout-fields-for-woocommerce/includes/admin/classic-checkout.php:74
+msgid "Reset Default"
+msgstr ""
+
+#: D:/git/free-version/fewc-extra-checkout-fields-for-woocommerce/fewc-extra-checkout-fields-for-woocommerce/includes/admin/settings.php:265
+msgid "Reset settings"
+msgstr ""
+
+#: D:/git/free-version/fewc-extra-checkout-fields-for-woocommerce/fewc-extra-checkout-fields-for-woocommerce/includes/data.php:270
+msgid "Save As"
+msgstr ""
+
+#: D:/git/free-version/fewc-extra-checkout-fields-for-woocommerce/fewc-extra-checkout-fields-for-woocommerce/includes/admin/classic-checkout.php:79
+msgid "Save changes"
+msgstr ""
+
+#: D:/git/free-version/fewc-extra-checkout-fields-for-woocommerce/fewc-extra-checkout-fields-for-woocommerce/includes/data.php:299
+msgid "Save section"
+msgstr ""
+
+#: D:/git/free-version/fewc-extra-checkout-fields-for-woocommerce/fewc-extra-checkout-fields-for-woocommerce/includes/admin/settings.php:53
+msgid "Save successful."
+msgstr ""
+
+#: D:/git/free-version/fewc-extra-checkout-fields-for-woocommerce/fewc-extra-checkout-fields-for-woocommerce/includes/admin/design.php:145
+msgid "Sections"
+msgstr ""
+
+#: D:/git/free-version/fewc-extra-checkout-fields-for-woocommerce/fewc-extra-checkout-fields-for-woocommerce/includes/admin/classic-checkout.php:149
+msgid "Select"
+msgstr ""
+
+#: D:/git/free-version/fewc-extra-checkout-fields-for-woocommerce/fewc-extra-checkout-fields-for-woocommerce/includes/data.php:281
+msgid "Set checkbox state \"checked\" as default"
+msgstr ""
+
+#: D:/git/free-version/fewc-extra-checkout-fields-for-woocommerce/fewc-extra-checkout-fields-for-woocommerce/includes/admin/admin.php:19
+#: D:/git/free-version/fewc-extra-checkout-fields-for-woocommerce/fewc-extra-checkout-fields-for-woocommerce/includes/admin/admin.php:20
+msgid "Settings"
+msgstr ""
+
+#: D:/git/free-version/fewc-extra-checkout-fields-for-woocommerce/fewc-extra-checkout-fields-for-woocommerce/includes/data.php:183
+msgid "Shipping"
+msgstr ""
+
+#. %s: field name
+#: D:/git/free-version/fewc-extra-checkout-fields-for-woocommerce/fewc-extra-checkout-fields-for-woocommerce/includes/frontend/frontend.php:163
+#, php-format
+msgid "Shipping %s"
+msgstr ""
+
+#: D:/git/free-version/fewc-extra-checkout-fields-for-woocommerce/fewc-extra-checkout-fields-for-woocommerce/includes/admin/classic-checkout.php:184
+msgid "Span"
+msgstr ""
+
+#: D:/git/free-version/fewc-extra-checkout-fields-for-woocommerce/fewc-extra-checkout-fields-for-woocommerce/includes/data.php:278
+msgid "Step"
+msgstr ""
+
+#: D:/git/free-version/fewc-extra-checkout-fields-for-woocommerce/fewc-extra-checkout-fields-for-woocommerce/includes/data.php:283
+msgid "Style"
+msgstr ""
+
+#: D:/git/free-version/fewc-extra-checkout-fields-for-woocommerce/fewc-extra-checkout-fields-for-woocommerce/includes/admin/classic-checkout.php:142
+msgid "Text"
+msgstr ""
+
+#: D:/git/free-version/fewc-extra-checkout-fields-for-woocommerce/fewc-extra-checkout-fields-for-woocommerce/includes/admin/classic-checkout.php:146
+msgid "Textarea"
+msgstr ""
+
+#: D:/git/free-version/fewc-extra-checkout-fields-for-woocommerce/fewc-extra-checkout-fields-for-woocommerce/includes/admin/classic-checkout.php:139
+msgid "Thank you page"
+msgstr ""
+
+#: D:/git/free-version/fewc-extra-checkout-fields-for-woocommerce/fewc-extra-checkout-fields-for-woocommerce/includes/data.php:296
+msgid "The option label can not be empty!"
+msgstr ""
+
+#: D:/git/free-version/fewc-extra-checkout-fields-for-woocommerce/fewc-extra-checkout-fields-for-woocommerce/includes/data.php:295
+msgid "The option value can not be empty!"
+msgstr ""
+
+#: D:/git/free-version/fewc-extra-checkout-fields-for-woocommerce/fewc-extra-checkout-fields-for-woocommerce/includes/data.php:293
+msgid "The option value is invalid"
+msgstr ""
+
+#: D:/git/free-version/fewc-extra-checkout-fields-for-woocommerce/fewc-extra-checkout-fields-for-woocommerce/includes/data.php:294
+msgid "The option value must be unique!"
+msgstr ""
+
+#: D:/git/free-version/fewc-extra-checkout-fields-for-woocommerce/fewc-extra-checkout-fields-for-woocommerce/includes/admin/classic-checkout.php:159
+msgid "Time"
+msgstr ""
+
+#: D:/git/free-version/fewc-extra-checkout-fields-for-woocommerce/fewc-extra-checkout-fields-for-woocommerce/includes/data.php:252
+msgid "Title"
+msgstr ""
+
+#: D:/git/free-version/fewc-extra-checkout-fields-for-woocommerce/fewc-extra-checkout-fields-for-woocommerce/includes/data.php:253
+msgid "Title Color"
+msgstr ""
+
+#: D:/git/free-version/fewc-extra-checkout-fields-for-woocommerce/fewc-extra-checkout-fields-for-woocommerce/includes/admin/settings.php:200
+#: D:/git/free-version/fewc-extra-checkout-fields-for-woocommerce/fewc-extra-checkout-fields-for-woocommerce/includes/admin/settings.php:201
+msgid "Transfer Settings"
+msgstr ""
+
+#: D:/git/free-version/fewc-extra-checkout-fields-for-woocommerce/fewc-extra-checkout-fields-for-woocommerce/includes/data.php:266
+#: D:/git/free-version/fewc-extra-checkout-fields-for-woocommerce/fewc-extra-checkout-fields-for-woocommerce/includes/admin/classic-checkout.php:91
+msgid "Type"
+msgstr ""
+
+#: D:/git/free-version/fewc-extra-checkout-fields-for-woocommerce/fewc-extra-checkout-fields-for-woocommerce/includes/admin/classic-checkout.php:129
+#: D:/git/free-version/fewc-extra-checkout-fields-for-woocommerce/fewc-extra-checkout-fields-for-woocommerce/includes/admin/classic-checkout.php:154
+msgid "Url"
+msgstr ""
+
+#: D:/git/free-version/fewc-extra-checkout-fields-for-woocommerce/fewc-extra-checkout-fields-for-woocommerce/includes/admin/classic-checkout.php:133
+msgid "User meta data"
+msgstr ""
+
+#: D:/git/free-version/fewc-extra-checkout-fields-for-woocommerce/fewc-extra-checkout-fields-for-woocommerce/includes/data.php:289
+msgid "Validations"
+msgstr ""
+
+#: D:/git/free-version/fewc-extra-checkout-fields-for-woocommerce/fewc-extra-checkout-fields-for-woocommerce/includes/admin/classic-checkout.php:165
+msgid "Vertical"
+msgstr ""
+
+#. Author of the plugin
+msgid "VillaTheme"
+msgstr ""
+
+#: D:/git/free-version/fewc-extra-checkout-fields-for-woocommerce/fewc-extra-checkout-fields-for-woocommerce/includes/admin/classic-checkout.php:161
+msgid "Week"
+msgstr ""
+
+#: D:/git/free-version/fewc-extra-checkout-fields-for-woocommerce/fewc-extra-checkout-fields-for-woocommerce/includes/data.php:292
+msgid "You can not remove the last item."
+msgstr ""
+
+#: D:/git/free-version/fewc-extra-checkout-fields-for-woocommerce/fewc-extra-checkout-fields-for-woocommerce/includes/data.php:291
+msgid "You can not remove this field"
+msgstr ""
+
+#: D:/git/free-version/fewc-extra-checkout-fields-for-woocommerce/fewc-extra-checkout-fields-for-woocommerce/includes/admin/settings.php:256
+msgid ""
+"You can transfer the saved settings data between different installs by "
+"copying the text inside the text box. To import data from another install, "
+"replace the data in the text box with the one from another install and click "
+"\"Import Settings\"."
+msgstr ""
+
+#: D:/git/free-version/fewc-extra-checkout-fields-for-woocommerce/fewc-extra-checkout-fields-for-woocommerce/includes/admin/settings.php:66
+msgid "You miss permission to import settings."
+msgstr ""
+
+#: D:/git/free-version/fewc-extra-checkout-fields-for-woocommerce/fewc-extra-checkout-fields-for-woocommerce/includes/admin/settings.php:33
+msgid "You miss permission to save settings."
+msgstr ""
+
+#: D:/git/free-version/fewc-extra-checkout-fields-for-woocommerce/fewc-extra-checkout-fields-for-woocommerce/includes/admin/design.php:30
+msgid "{checkout_fields} Section"
+msgstr ""

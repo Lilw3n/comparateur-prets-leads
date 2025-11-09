@@ -1,0 +1,39 @@
+.vi-wad-single-product-shipping-wrap {
+    position: relative;
+    margin: 10px 0;
+    clear: both;
+}
+
+.vi-wad-single-product-shipping-overlay {
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    z-index: 1;
+    background: rgba(255, 255, 255, .5);
+}
+
+.ald-single-product-shipto-field {
+    display: block;
+    margin-bottom: 10px;
+    /*align-items: center;*/
+    /*gap: 10px;*/
+}
+
+.ald-single-product-shipto-field .select2-container {
+    vertical-align: unset;
+}
+
+.ald-single-product-shipto-select2 {
+    line-height: 1;
+    /*max-width: 250px;*/
+}
+
+.woocommerce .select2-container--default .select2-selection--single .select2-selection__rendered {
+    line-height: 1;
+}
+
+.ald-single-product-shipto-label {
+    flex-grow: 1;
+}

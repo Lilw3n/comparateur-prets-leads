@@ -1,0 +1,71 @@
+#ald-search-form-section select {
+  max-width: unset;
+  line-height: 1.5;
+  min-height: unset;
+}
+#ald-search-form-section .vi-ui.fluid.card {
+  min-width: unset;
+}
+#ald-search-form-section .vi-ui.grid > .column:not(.row) {
+  padding-left: 0.5rem;
+  padding-right: 0.5rem;
+}
+#ald-search-form-section .vi-ui.grid {
+  padding: 0 0.5rem 0 0.5rem;
+}
+#ald-search-form-section .ald-product-title {
+  font-size: 14px;
+}
+#ald-search-form-section .vi-ui.form {
+  padding-right: 20px;
+}
+#ald-search-form-section .vi-ui.form input, #ald-search-form-section .vi-ui.form select {
+  margin: 0;
+}
+#ald-search-form-section .vi-ui.pagination.menu {
+  padding-top: 0;
+}
+#ald-search-form-section .vi-ui.pagination.menu .item {
+  min-width: 28px;
+  display: block;
+}
+#ald-search-form-section .ald-product-prices {
+  padding-top: 10px;
+  font-weight: 500;
+}
+#ald-search-form-section .ald-product-prices del {
+  opacity: 0.7;
+}
+#ald-search-form-section .ald-product-title {
+  text-decoration: none;
+  color: #212121;
+}
+#ald-search-form-section .ald-message-box {
+  position: fixed;
+  bottom: 40px;
+  left: 20px;
+  z-index: 9999;
+  min-width: 300px;
+}
+#ald-search-form-section .vi-ui.dropdown {
+  min-height: unset;
+}
+#ald-search-form-section .vi-ui.dropdown input.search {
+  width: 100%;
+}
+#ald-search-form-section .vi-ui.card .image {
+  overflow: hidden;
+  padding: 50%;
+  position: relative;
+}
+#ald-search-form-section .vi-ui.card .image img {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+#ald-search-form-section .ald-pagination {
+  text-align: center;
+}
+
+/*# sourceMappingURL=find-product.css.map */

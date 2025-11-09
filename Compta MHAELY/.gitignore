@@ -1,0 +1,29 @@
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+*.egg-info/
+.env
+.venv/
+venv/
+
+# Logs & DB
+*.log
+*.sqlite
+*.db
+
+# OS/Editors
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+
+# Node
+node_modules/
+
+# Large external dirs not part of this project
+Android TV Protocole/
+
+# Odoo
+server/odoo/addons/*/__pycache__/

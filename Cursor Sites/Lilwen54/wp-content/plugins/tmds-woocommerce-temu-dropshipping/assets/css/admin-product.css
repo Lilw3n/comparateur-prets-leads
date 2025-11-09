@@ -1,0 +1,6 @@
+#tmds_product_info .tmds-video-shortcode,
+#tmds_product_info .tmds-view-original-product-button a{
+    width: 100%;
+    text-align: center;
+    cursor: pointer;
+}

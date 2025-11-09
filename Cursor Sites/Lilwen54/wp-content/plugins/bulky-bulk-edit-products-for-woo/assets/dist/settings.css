@@ -1,0 +1,38 @@
+#villatheme-support, .vi-wbe-settings-page {
+    margin-right: 20px;
+}
+
+.villatheme-get-auto-update-key{
+    display: flex;
+}
+.viweb-preview-pro-feature-wrap {
+    position: relative;
+}
+.viweb-preview-pro-feature-wrap img{
+    max-width: 100%;
+    opacity: .85;
+}
+.viweb-preview-pro-button .button,
+.viweb-preview-pro-button{
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    left: 0;
+    top: 0;
+    border: none;
+    z-index: 10;
+}
+.viweb-preview-pro-button .button:hover{
+    background: transparent;
+    font-size: 20px;
+    color: #37935e;
+}
+.viweb-preview-pro-button .button{
+    display: flex;
+    font-size: 0;
+    background: transparent;
+    justify-content: center;
+    align-items: center;
+    text-transform: uppercase;
+    font-weight: bold;
+}

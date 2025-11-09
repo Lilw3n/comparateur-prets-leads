@@ -1,0 +1,62 @@
+# WordPress
+wp-config.php
+wp-config-sample.php
+.htaccess
+
+# Uploads
+wp-content/uploads/
+wp-content/upgrade/
+wp-content/backup-db/
+wp-content/advanced-cache.php
+wp-content/wp-cache-config.php
+wp-content/cache/
+wp-content/blogs.dir/
+wp-content/upgrade/
+wp-content/backups/
+
+# Plugins et thèmes (optionnel - à ajuster selon vos besoins)
+# wp-content/plugins/
+# wp-content/themes/
+
+# Fichiers de cache
+*.log
+*.cache
+*.tmp
+*.temp
+
+# Fichiers système
+.DS_Store
+Thumbs.db
+desktop.ini
+*.swp
+*.swo
+*~
+
+# Fichiers d'éditeur
+.vscode/
+.idea/
+*.sublime-project
+*.sublime-workspace
+
+# Node modules (si présents)
+node_modules/
+npm-debug.log
+package-lock.json
+
+# Fichiers de sauvegarde
+*.bak
+*.backup
+*.old
+*.orig
+
+# Fichiers sensibles
+*.pem
+*.key
+*.crt
+*.env
+.env.local
+
+# Fichiers de développement
+.git/
+.svn/
+.hg/

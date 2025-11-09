@@ -1,0 +1,6 @@
+<?php
+
+defined( 'ABSPATH' ) || exit;
+//region_id=96
+//{a : region_id, b : parent_region_id,c : region_name,d : region_short_name,e : postcode_list, f : postcode}
+return '{"96":[{"c":"CARLOW","a":96000000000047},{"c":"CAVAN","a":96000000000082},{"c":"CLARE","a":96000000000029},{"c":"CORK","a":96000000000003},{"c":"DONEGAL","a":96000000000072},{"c":"DUBLIN","a":96000000000001},{"c":"GALWAY","a":96000000000008},{"c":"KERRY","a":96000000000031},{"c":"KILDARE","a":96000000000020},{"c":"KILKENNY","a":96000000000159},{"c":"LAOIS","a":96000000000125},{"c":"LEITRIM","a":96000000000084},{"c":"LIMERICK","a":96000000000050},{"c":"LONGFORD","a":96000000000167},{"c":"LOUTH","a":96000000000037},{"c":"MAYO","a":96000000000058},{"c":"MEATH","a":96000000000024},{"c":"MONAGHAN","a":96000000000022},{"c":"OFFALY","a":96000000000119},{"c":"ROSCOMMON","a":96000000000107},{"c":"SLIGO","a":96000000000121},{"c":"TIPPERARY","a":96000000000006},{"c":"WATERFORD","a":96000000000033},{"c":"WESTMEATH","a":96000000000027},{"c":"WEXFORD","a":96000000000088},{"c":"WICKLOW","a":96000000000017}]}';

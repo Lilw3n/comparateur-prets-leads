@@ -1,0 +1,90 @@
+#ald-search-form-section {
+  select {
+    max-width: unset;
+    line-height: 1.5;
+    min-height: unset;
+  }
+
+  .vi-ui.fluid.card {
+    min-width: unset;
+  }
+
+  .vi-ui.grid > .column:not(.row) {
+    padding-left: 0.5rem;
+    padding-right: 0.5rem;
+  }
+
+  .vi-ui.grid {
+    padding: 0 0.5rem 0 0.5rem;
+  }
+
+  .ald-product-title {
+    font-size: 14px;
+  }
+
+  .vi-ui.form {
+    padding-right: 20px;
+  }
+
+  .vi-ui.form input, .vi-ui.form select {
+    margin: 0;
+  }
+
+  .vi-ui.pagination.menu {
+    padding-top: 0;
+  }
+
+  .vi-ui.pagination.menu .item {
+    min-width: 28px;
+    display: block;
+  }
+
+  .ald-product-prices {
+    padding-top: 10px;
+    font-weight: 500;
+  }
+
+  .ald-product-prices del {
+    opacity: 0.7;
+  }
+
+  .ald-product-title {
+    text-decoration: none;
+    color: #212121;
+  }
+
+  .ald-message-box {
+    position: fixed;
+    bottom: 40px;
+    left: 20px;
+    z-index: 9999;
+    min-width: 300px;
+  }
+
+  .vi-ui.dropdown {
+    min-height: unset;
+
+    input.search {
+      width: 100%;
+    }
+  }
+
+  .vi-ui.card {
+    .image {
+      overflow: hidden;
+      padding: 50%;
+      position: relative;
+
+      img {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+      }
+    }
+  }
+
+  .ald-pagination {
+    text-align: center;
+  }
+}

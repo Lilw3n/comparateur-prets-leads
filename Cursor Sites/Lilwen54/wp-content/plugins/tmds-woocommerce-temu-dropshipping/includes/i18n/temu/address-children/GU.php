@@ -1,0 +1,6 @@
+<?php
+
+defined( 'ABSPATH' ) || exit;
+//region_id=83
+//{a : region_id, b : parent_region_id,c : region_name,d : region_short_name,e : postcode_list, f : postcode}
+return '{"83":[{"c":"Agana Heights","a":211000000032322},{"c":"Agat","a":211000000032341},{"c":"Asan","a":211000000032323},{"c":"Barrigada","a":211000000032331},{"c":"Chalan Pago","a":211000000032324},{"c":"Dededo","a":211000000032330},{"c":"Hagatna","a":211000000032325},{"c":"Inarajan","a":211000000032334},{"c":"Maite","a":211000000032326},{"c":"Mangilao","a":211000000032332},{"c":"Merizo","a":211000000032335},{"c":"Mongmong","a":211000000032327},{"c":"New Inarajan","a":211000000033299},{"c":"Ordot","a":211000000032328},{"c":"Piti","a":211000000032336},{"c":"Santa Rita","a":211000000032337},{"c":"Sinajana","a":211000000032329},{"c":"Talofofo","a":211000000032338},{"c":"Tamuning","a":211000000032333},{"c":"Toto","a":211000000037369},{"c":"Umatac","a":211000000032339},{"c":"Yigo","a":211000000032342},{"c":"Yona","a":211000000032340}]}';

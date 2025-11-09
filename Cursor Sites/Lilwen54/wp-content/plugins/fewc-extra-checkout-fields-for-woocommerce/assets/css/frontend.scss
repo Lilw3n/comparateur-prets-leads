@@ -1,0 +1,30 @@
+.vifewc-hidden,.vifewc-field-hidden{
+  display: none !important;
+}
+.vifewc-field{
+  &.vifewc-group-options-wrap{
+    display: inline-flex;
+    flex-direction: column;
+    &.vifewc-group-options-wrap-vertical{
+      .vifewc-options-wrap{
+        display: inline-flex;
+        flex-direction: column;
+      }
+    }
+    &.vifewc-group-options-wrap-horizontal{
+      .vifewc-options-wrap{
+        display: inline-flex;
+        flex-wrap: wrap;
+        gap: 15px;
+      }
+    }
+    .woocommerce-input-wrapper{
+      display: inline-flex;
+      flex-direction: column;
+    }
+    label{
+      display: inline-flex;
+      gap: 5px;
+    }
+  }
+}
