@@ -72,10 +72,18 @@ function Sync-Item {
     $relativePath = $item.FullName.Substring($basePath.Length + 1)
     $remotePath = "$remoteBasePath/$relativePath".Replace('\', '/')
     
-    # Ignorer certains fichiers
-    $ignorePatterns = @('.git', '.gitignore', 'node_modules', '.vscode', '.idea', '*.log', '*.tmp', '*.cache')
+    # Ignorer certains fichiers et extensions
+    $ignorePatterns = @('.git', '.gitignore', 'node_modules', '.vscode', '.idea', '*.log', '*.tmp', '*.cache', '*.md', 'README', 'ACTIVATION')
+    $ignoreExtensions = @('.md', '.gitignore', '.log', '.tmp', '.cache')
+    
     foreach ($pattern in $ignorePatterns) {
         if ($relativePath -like "*$pattern*") {
+            return
+        }
+    }
+    
+    foreach ($ext in $ignoreExtensions) {
+        if ($relativePath -like "*$ext") {
             return
         }
     }
@@ -136,11 +144,31 @@ if ($filesToSync.Count -eq 0) {
     $themePath = Join-Path $basePath "wp-content\themes\lilwen54-child"
     if (Test-Path $themePath) {
         Write-Info "Synchronisation du thème enfant..."
-        $themeItem = Get-Item $themePath
-        Sync-Item -item $themeItem -basePath $basePath
+        # Synchroniser uniquement les fichiers essentiels
+        $essentialFiles = @("style.css", "functions.php")
+        foreach ($fileName in $essentialFiles) {
+            $filePath = Join-Path $themePath $fileName
+            if (Test-Path $filePath) {
+                $file = Get-Item $filePath
+                Sync-Item -item $file -basePath $basePath
+            }
+        }
+        # Synchroniser aussi les autres fichiers PHP et CSS
+        $otherFiles = Get-ChildItem -Path $themePath -File | Where-Object {
+            $_.Extension -in @('.php', '.css', '.js') -and 
+            $_.Name -notlike "*.md" -and 
+            $_.Name -notlike "*README*" -and
+            $_.Name -notlike "*ACTIVATION*"
+        }
+        foreach ($file in $otherFiles) {
+            Sync-Item -item $file -basePath $basePath
+        }
     } else {
         Write-Info "Synchronisation de tous les fichiers..."
-        $items = Get-ChildItem -Path $basePath -File
+        $items = Get-ChildItem -Path $basePath -File | Where-Object {
+            $_.Extension -in @('.php', '.css', '.js') -and 
+            $_.Name -notlike "*.md"
+        }
         foreach ($item in $items) {
             Sync-Item -item $item -basePath $basePath
         }
@@ -148,7 +176,10 @@ if ($filesToSync.Count -eq 0) {
 } else {
     Write-Info "Synchronisation des fichiers modifiés..."
     foreach ($file in $filesToSync) {
-        Sync-Item -item $file -basePath $basePath
+        # Filtrer uniquement les fichiers essentiels
+        if ($file.Extension -in @('.php', '.css', '.js') -and $file.Name -notlike "*.md") {
+            Sync-Item -item $file -basePath $basePath
+        }
     }
 }
 
