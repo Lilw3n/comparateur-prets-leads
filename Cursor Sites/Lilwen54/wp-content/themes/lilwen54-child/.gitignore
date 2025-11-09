@@ -1,20 +1,34 @@
-# Fichiers temporaires
-*.log
-*.tmp
-*.cache
+# Dependencies
+node_modules/
+package-lock.json
+yarn.lock
 
-# Fichiers de l'éditeur
+# Build outputs
+dist/
+build/
+*.map
+
+# Environment
+.env
+.env.local
+
+# IDE
 .vscode/
 .idea/
 *.sublime-project
 *.sublime-workspace
 
-# Fichiers système
+# OS
 .DS_Store
 Thumbs.db
 desktop.ini
 
-# Node modules (si vous utilisez des outils de build)
-node_modules/
-package-lock.json
+# Logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
 
+# Cache
+.cache/
+.parcel-cache/
