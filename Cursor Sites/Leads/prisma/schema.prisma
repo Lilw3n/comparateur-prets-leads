@@ -1,0 +1,126 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model Lead {
+  id                String   @id @default(uuid())
+  nom               String
+  prenom            String
+  email             String
+  telephone         String?
+  secteur           String   // IMMOBILIER, ASSURANCE, BANQUE_PRET, MARCHE_FINANCIER
+  statut            String   @default("NOUVEAU") // NOUVEAU, CONTACTE, CONVERTI, PERDU
+  source            String?
+  notes             String?
+  entreprise        String?
+  
+  // Champs spécifiques par secteur
+  budget            Float?   // Pour immobilier
+  typeBien          String?  // Pour immobilier (appartement, maison, etc.)
+  typeCredit        String?  // Pour banque (immobilier, consommation, professionnel)
+  montantCredit     Float?   // Pour banque
+  typeAssurance     String?  // Pour assurance (vie, habitation, auto)
+  produitFinancier  String?  // Pour marché financier
+  
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+
+  @@index([secteur])
+  @@index([statut])
+  @@index([email])
+}
+
+model ComparateurPret {
+  id                String   @id @default(uuid())
+  nom               String   // Nom du comparateur (Pretto, Meilleur Taux, etc.)
+  type              String   // INTERNE, PRETTO, MEILLEUR_TAUX, MEILLEUR_AGENTS, AUTRE
+  url               String?  // URL de l'API ou du site
+  apiKey            String?  // Clé API si nécessaire
+  actif             Boolean  @default(true)
+  description       String?
+  
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+
+  offres            OffrePret[]
+
+  @@index([type])
+  @@index([actif])
+}
+
+model OffrePret {
+  id                String   @id @default(uuid())
+  comparateurId     String
+  comparateur       ComparateurPret @relation(fields: [comparateurId], references: [id], onDelete: Cascade)
+  
+  // Informations de l'offre
+  nomBanque         String
+  nomProduit        String
+  typeCredit        String   // immobilier, consommation, professionnel
+  
+  // Caractéristiques du prêt
+  montantMin        Float
+  montantMax        Float
+  dureeMin          Int      // En mois
+  dureeMax          Int      // En mois
+  tauxNominal       Float    // Taux nominal annuel (%)
+  tauxEffectif      Float    // TAEG (%)
+  apportMin         Float?   // Apport minimum requis (%)
+  
+  // Frais
+  fraisDossier      Float?   // Frais de dossier
+  fraisGarantie     Float?   // Frais de garantie
+  assuranceObli     Boolean  @default(false)
+  montantAssurance  Float?   // Montant mensuel assurance
+  
+  // Conditions
+  conditions        String?  // Conditions particulières
+  avantages         String?  // Avantages de l'offre
+  delaiTraitement   Int?     // Délai de traitement en jours
+  
+  // Statut
+  disponible        Boolean  @default(true)
+  dateExpiration    DateTime?
+  
+  // Métadonnées
+  score             Float?   // Score de qualité (0-100)
+  nombreDemandes    Int      @default(0)
+  tauxAcceptation   Float?   // Taux d'acceptation (%)
+  
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+
+  @@index([comparateurId])
+  @@index([typeCredit])
+  @@index([disponible])
+  @@index([tauxEffectif])
+}
+
+model ComparaisonPret {
+  id                String   @id @default(uuid())
+  leadId            String?  // Lien vers un lead si applicable
+  
+  // Critères de recherche
+  montant           Float
+  duree             Int      // En mois
+  typeCredit        String
+  apport            Float?    // Apport (%)
+  revenus           Float?   // Revenus mensuels
+  
+  // Résultats
+  offresIds         String   // JSON array des IDs d'offres comparées
+  meilleureOffreId  String?  // ID de la meilleure offre
+  
+  createdAt         DateTime @default(now())
+
+  @@index([leadId])
+  @@index([typeCredit])
+}
