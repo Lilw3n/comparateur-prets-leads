@@ -4,6 +4,11 @@
   "outputDirectory": "frontend/dist",
   "installCommand": "npm run install:all",
   "framework": null,
+  "functions": {
+    "backend/src/server.ts": {
+      "runtime": "nodejs18.x"
+    }
+  },
   "rewrites": [
     {
       "source": "/api/(.*)",

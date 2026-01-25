@@ -1,0 +1,99 @@
+// Schema Prisma pour PostgreSQL (Production)
+// Copiez ce fichier vers schema.prisma avant de déployer sur Vercel
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Lead {
+  id                String   @id @default(uuid())
+  nom               String
+  prenom            String
+  email             String
+  telephone         String?
+  secteur           String   // IMMOBILIER, ASSURANCE, BANQUE_PRET, MARCHE_FINANCIER
+  statut            String   @default("NOUVEAU") // NOUVEAU, CONTACTE, CONVERTI, PERDU
+  source            String?
+  notes             String?
+  entreprise        String?
+  budget            Float?
+  typeBien          String?
+  typeCredit        String?
+  montantCredit     Float?
+  typeAssurance     String?
+  produitFinancier  String?
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+  @@index([secteur])
+  @@index([statut])
+  @@index([email])
+}
+
+model ComparateurPret {
+  id                String   @id @default(uuid())
+  nom               String
+  type              String   // INTERNE, PRETTO, MEILLEUR_TAUX, MEILLEUR_AGENTS, AUTRE
+  url               String?
+  apiKey            String?
+  actif             Boolean  @default(true)
+  description       String?
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+  offres            OffrePret[]
+  @@index([type])
+  @@index([actif])
+}
+
+model OffrePret {
+  id                String   @id @default(uuid())
+  comparateurId     String
+  comparateur       ComparateurPret @relation(fields: [comparateurId], references: [id], onDelete: Cascade)
+  nomBanque         String
+  nomProduit        String
+  typeCredit        String
+  montantMin        Float
+  montantMax        Float
+  dureeMin          Int
+  dureeMax          Int
+  tauxNominal       Float
+  tauxEffectif      Float
+  apportMin         Float?
+  fraisDossier      Float?
+  fraisGarantie     Float?
+  assuranceObli     Boolean  @default(false)
+  montantAssurance  Float?
+  conditions        String?
+  avantages         String?
+  delaiTraitement   Int?
+  disponible        Boolean  @default(true)
+  dateExpiration    DateTime?
+  score             Float?
+  nombreDemandes    Int      @default(0)
+  tauxAcceptation   Float?
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+  @@index([comparateurId])
+  @@index([typeCredit])
+  @@index([disponible])
+  @@index([tauxEffectif])
+}
+
+model ComparaisonPret {
+  id                String   @id @default(uuid())
+  leadId            String?
+  montant           Float
+  duree             Int
+  typeCredit        String
+  apport            Float?
+  revenus           Float?
+  offresIds         String
+  meilleureOffreId  String?
+  createdAt         DateTime @default(now())
+  @@index([leadId])
+  @@index([typeCredit])
+}
