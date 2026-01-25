@@ -4,15 +4,10 @@
   "outputDirectory": "frontend/dist",
   "installCommand": "npm run install:all",
   "framework": null,
-  "functions": {
-    "backend/src/server.ts": {
-      "runtime": "nodejs18.x"
-    }
-  },
   "rewrites": [
     {
       "source": "/api/(.*)",
-      "destination": "/api/$1"
+      "destination": "/api/index.js"
     }
   ],
   "headers": [
@@ -33,8 +28,5 @@
         }
       ]
     }
-  ],
-  "env": {
-    "NODE_ENV": "production"
-  }
+  ]
 }
