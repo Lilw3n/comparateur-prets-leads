@@ -1,8 +1,8 @@
 import { useEffect, useState } from 'react';
 import { StatsResponse } from '../types';
 import { leadsApi } from '../services/api';
-import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, PieChart, Pie, Cell, LineChart, Line, AreaChart, Area } from 'recharts';
-import { Users, TrendingUp, CheckCircle, AlertCircle, DollarSign, Target, Clock, ArrowUp, ArrowDown } from 'lucide-react';
+import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, PieChart, Pie, Cell, AreaChart, Area } from 'recharts';
+import { Users, TrendingUp, CheckCircle, Target, Clock, ArrowUp, ArrowDown } from 'lucide-react';
 
 const COLORS = ['#3B82F6', '#10B981', '#F59E0B', '#EF4444', '#8B5CF6'];
 
@@ -204,7 +204,7 @@ export default function Dashboard() {
                 }} 
               />
               <Bar dataKey="count" radius={[8, 8, 0, 0]}>
-                {secteurData.map((entry, index) => (
+                {secteurData.map((_, index) => (
                   <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
                 ))}
               </Bar>
@@ -232,7 +232,7 @@ export default function Dashboard() {
                 fill="#8884d8"
                 dataKey="count"
               >
-                {statutData.map((entry, index) => (
+                {statutData.map((_, index) => (
                   <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
                 ))}
               </Pie>

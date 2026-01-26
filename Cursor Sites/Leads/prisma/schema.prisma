@@ -16,7 +16,7 @@ model Lead {
   prenom            String
   email             String
   telephone         String?
-  secteur           String   // IMMOBILIER, ASSURANCE, BANQUE_PRET, MARCHE_FINANCIER
+  secteur           String   // IMMOBILIER, ASSURANCE, BANQUE_PRET, MARCHE_FINANCIER, GESTION_PATRIMOINE, INVESTISSEMENT_FINANCIER, COURTAGE_ASSURANCE, CONSEIL_FINANCIER, CREDIT_CONSOMMATION, CREDIT_IMMOBILIER, CREDIT_PROFESSIONNEL, ASSURANCE_VIE, ASSURANCE_HABITATION, ASSURANCE_AUTO, ASSURANCE_SANTE, SCPI, PERP, PEA, ASSURANCE_VL, INVESTISSEMENT_LOCATIF, DEFISCALISATION, RETRAITE, EPARGNE, TRADING, CRYPTO, ENTREPRENEURIAT, FORMATION_FINANCIERE, CONSEIL_EN_PATRIMOINE, MANDAT_MANAGEMENT, FISCALITE, SUCCESSION, DONATION, SCI, LMNP, PINEL, DEFICIT_FONCIER, AUTRE
   statut            String   @default("NOUVEAU") // NOUVEAU, CONTACTE, CONVERTI, PERDU
   source            String?
   notes             String?
@@ -32,6 +32,8 @@ model Lead {
   
   createdAt         DateTime @default(now())
   updatedAt         DateTime @updatedAt
+
+  articlesGeneres   Article[]
 
   @@index([secteur])
   @@index([statut])
@@ -123,4 +125,50 @@ model ComparaisonPret {
 
   @@index([leadId])
   @@index([typeCredit])
+}
+
+model Article {
+  id                String   @id @default(uuid())
+  titre             String
+  slug              String   @unique
+  contenu           String   // Contenu HTML/Markdown
+  resume            String   // Résumé pour les listes
+  categorie         String   // CREDIT_IMMOBILIER, ASSURANCE, etc.
+  tags              String   // JSON array de tags
+  auteur            String?  // Nom de l'auteur ou "Système"
+  source            String   // AUTO_GENERATED, MANUAL, USER_DATA
+  sourceData        String?  // JSON avec données source (leadId, comparaisonId, etc.)
+  imageUrl          String?
+  vue               Int      @default(0)
+  likes             Int      @default(0)
+  published         Boolean  @default(true)
+  publishedAt       DateTime?
+  seoTitle          String?
+  seoDescription    String?
+  keywords          String?  // Mots-clés SEO
+  leadId            String?  // Lien vers le lead qui a généré l'article
+  lead              Lead?   @relation(fields: [leadId], references: [id], onDelete: SetNull)
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+
+  @@index([categorie])
+  @@index([source])
+  @@index([published])
+  @@index([slug])
+  @@index([leadId])
+}
+
+model AvisBanque {
+  id          String   @id @default(uuid())
+  banque      String
+  note        Int      // 1-5
+  commentaire String?
+  auteur      String?
+  email       String?
+  verified    Boolean  @default(false)
+  createdAt   DateTime @default(now())
+
+  @@index([banque])
+  @@index([note])
+  @@index([verified])
 }

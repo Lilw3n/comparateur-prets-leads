@@ -6,8 +6,8 @@ import { useNavigate } from 'react-router-dom';
 import { 
   TrendingUp, Shield, Users, Award, ArrowRight, Home, CreditCard, 
   Building2, RefreshCw, Calculator, FileText, Star, CheckCircle,
-  Heart, Briefcase, Zap, DollarSign, BookOpen, Bell, Clock, 
-  Sparkles, Target, Lock, ThumbsUp, ArrowDown, Play
+  Briefcase, Zap, DollarSign, BookOpen, Clock, 
+  Sparkles, Target, Lock, ThumbsUp
 } from 'lucide-react';
 import AlerteTaux from '../components/AlerteTaux';
 
@@ -47,6 +47,17 @@ export default function AccueilComparateur() {
       badgeText: 'Taux moyen sur 15 ans',
       link: '/comparateur-prets?type=immobilier',
       highlight: true
+    },
+    {
+      id: 'recherche-biens',
+      label: 'Recherche de biens',
+      description: 'Trouvez votre bien immobilier idéal',
+      icon: Home,
+      color: 'from-purple-500 to-pink-600',
+      badge: '10+',
+      badgeText: 'Biens disponibles',
+      link: '/recherche-biens',
+      highlight: false
     },
     {
       id: 'assurance',
@@ -194,6 +205,13 @@ export default function AccueilComparateur() {
               className="px-8 py-4 bg-white/10 backdrop-blur-sm border-2 border-white/30 text-white rounded-xl hover:bg-white/20 font-semibold text-lg transition-all"
             >
               Calculer ma capacité d'emprunt
+            </button>
+            <button
+              onClick={() => navigate('/recherche-biens')}
+              className="px-8 py-4 bg-purple-500 text-white rounded-xl hover:bg-purple-600 font-semibold text-lg shadow-lg hover:shadow-xl transition-all flex items-center justify-center"
+            >
+              <Home className="w-5 h-5 mr-2" />
+              Rechercher un bien
             </button>
           </div>
           

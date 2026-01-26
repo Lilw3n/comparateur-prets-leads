@@ -241,10 +241,57 @@ export default function LeadForm({ lead, onSave, onCancel }: LeadFormProps) {
                 onChange={handleChange}
                 className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
               >
-                <option value={Secteur.IMMOBILIER}>Immobilier</option>
-                <option value={Secteur.ASSURANCE}>Assurance</option>
-                <option value={Secteur.BANQUE_PRET}>Banque - Prêts</option>
-                <option value={Secteur.MARCHE_FINANCIER}>Marché financier</option>
+                <optgroup label="Secteurs principaux">
+                  <option value={Secteur.IMMOBILIER}>Immobilier</option>
+                  <option value={Secteur.ASSURANCE}>Assurance</option>
+                  <option value={Secteur.BANQUE_PRET}>Banque - Prêts</option>
+                  <option value={Secteur.MARCHE_FINANCIER}>Marché financier</option>
+                  <option value={Secteur.GESTION_PATRIMOINE}>Gestion de patrimoine</option>
+                  <option value={Secteur.INVESTISSEMENT_FINANCIER}>Investissement financier</option>
+                  <option value={Secteur.COURTAGE_ASSURANCE}>Courtage assurance</option>
+                  <option value={Secteur.CONSEIL_FINANCIER}>Conseil financier</option>
+                </optgroup>
+                <optgroup label="Prêts">
+                  <option value={Secteur.CREDIT_CONSOMMATION}>Crédit consommation</option>
+                  <option value={Secteur.CREDIT_IMMOBILIER}>Crédit immobilier</option>
+                  <option value={Secteur.CREDIT_PROFESSIONNEL}>Crédit professionnel</option>
+                </optgroup>
+                <optgroup label="Assurances">
+                  <option value={Secteur.ASSURANCE_VIE}>Assurance vie</option>
+                  <option value={Secteur.ASSURANCE_HABITATION}>Assurance habitation</option>
+                  <option value={Secteur.ASSURANCE_AUTO}>Assurance auto</option>
+                  <option value={Secteur.ASSURANCE_SANTE}>Assurance santé</option>
+                  <option value={Secteur.ASSURANCE_VL}>Assurance VL</option>
+                </optgroup>
+                <optgroup label="Investissements">
+                  <option value={Secteur.SCPI}>SCPI</option>
+                  <option value={Secteur.PERP}>PERP</option>
+                  <option value={Secteur.PEA}>PEA</option>
+                  <option value={Secteur.INVESTISSEMENT_LOCATIF}>Investissement locatif</option>
+                </optgroup>
+                <optgroup label="Fiscalité">
+                  <option value={Secteur.DEFISCALISATION}>Défiscalisation</option>
+                  <option value={Secteur.FISCALITE}>Fiscalité</option>
+                  <option value={Secteur.SUCCESSION}>Succession</option>
+                  <option value={Secteur.DONATION}>Donation</option>
+                </optgroup>
+                <optgroup label="Immobilier détaillé">
+                  <option value={Secteur.LMNP}>LMNP</option>
+                  <option value={Secteur.PINEL}>Pinel</option>
+                  <option value={Secteur.DEFICIT_FONCIER}>Déficit foncier</option>
+                  <option value={Secteur.SCI}>SCI</option>
+                </optgroup>
+                <optgroup label="Autres">
+                  <option value={Secteur.RETRAITE}>Retraite</option>
+                  <option value={Secteur.EPARGNE}>Épargne</option>
+                  <option value={Secteur.TRADING}>Trading</option>
+                  <option value={Secteur.CRYPTO}>Crypto</option>
+                  <option value={Secteur.ENTREPRENEURIAT}>Entrepreneuriat</option>
+                  <option value={Secteur.FORMATION_FINANCIERE}>Formation financière</option>
+                  <option value={Secteur.CONSEIL_EN_PATRIMOINE}>Conseil en patrimoine</option>
+                  <option value={Secteur.MANDAT_MANAGEMENT}>Mandat management</option>
+                  <option value={Secteur.AUTRE}>Autre</option>
+                </optgroup>
               </select>
             </div>
             <div>

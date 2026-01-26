@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Building2, CheckCircle, AlertCircle, Loader, Shield, TrendingUp } from 'lucide-react';
+import { Building2, CheckCircle, AlertCircle, Loader, Shield } from 'lucide-react';
 import { bankingApiService } from '../services/bankingApi';
 
 interface BankingConnectionProps {

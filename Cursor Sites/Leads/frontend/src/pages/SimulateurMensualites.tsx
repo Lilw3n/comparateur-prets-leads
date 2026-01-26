@@ -1,5 +1,8 @@
 import { useState } from 'react';
-import { Calculator, TrendingUp, DollarSign, Calendar } from 'lucide-react';
+import { Calculator, TrendingUp, DollarSign } from 'lucide-react';
+import LeadCaptureForm from '../components/LeadCaptureForm';
+import LeadCaptureService from '../services/leadCapture';
+import { Secteur } from '../types';
 
 interface Echeance {
   mois: number;
@@ -76,6 +79,34 @@ export default function SimulateurMensualites() {
   const coutTotal = mensualite * duree * 12;
   const coutCredit = coutTotal - montantEmprunte;
   const tableau = showTableau ? calculerTableauAmortissement() : [];
+  const [showCaptureForm, setShowCaptureForm] = useState(false);
+
+  const handleCaptureLead = async (data: {
+    nom?: string;
+    prenom?: string;
+    email: string;
+    telephone?: string;
+  }) => {
+    await LeadCaptureService.captureFromSimulator(data.email, {
+      nom: data.nom,
+      prenom: data.prenom,
+      telephone: data.telephone,
+      secteur: Secteur.CREDIT_IMMOBILIER,
+      simulatorType: 'mensualites',
+      simulatorData: {
+        montant,
+        apport,
+        tauxPret,
+        duree,
+        assurance,
+        mensualite,
+        montantEmprunte,
+        coutTotal,
+        coutCredit,
+      },
+      source: 'Simulateur mensualités',
+    });
+  };
 
   return (
     <div className="max-w-6xl mx-auto space-y-8">
@@ -219,8 +250,15 @@ export default function SimulateurMensualites() {
               </div>
 
               <button
-                onClick={() => setShowTableau(!showTableau)}
+                onClick={() => setShowCaptureForm(true)}
                 className="w-full bg-white text-green-600 font-semibold py-3 rounded-lg hover:bg-green-50 transition-all mt-6"
+              >
+                Recevoir mes résultats par email
+              </button>
+
+              <button
+                onClick={() => setShowTableau(!showTableau)}
+                className="w-full bg-green-100 text-green-700 font-semibold py-3 rounded-lg hover:bg-green-200 transition-all"
               >
                 {showTableau ? 'Masquer' : 'Voir'} le tableau d'amortissement
               </button>
@@ -235,6 +273,18 @@ export default function SimulateurMensualites() {
           </div>
         </div>
       </div>
+
+      {/* Formulaire de capture */}
+      {showCaptureForm && (
+        <div className="max-w-md mx-auto">
+          <LeadCaptureForm
+            onCapture={handleCaptureLead}
+            onClose={() => setShowCaptureForm(false)}
+            title="Recevez vos mensualités par email"
+            description="Laissez-nous vos coordonnées pour recevoir vos résultats détaillés et être contacté par un conseiller."
+          />
+        </div>
+      )}
 
       {/* Tableau d'amortissement */}
       {showTableau && tableau.length > 0 && (

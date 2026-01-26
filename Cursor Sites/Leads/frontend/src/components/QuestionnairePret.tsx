@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { QuestionnairePret as QuestionnairePretType, EtapeQuestionnaire, ChampQuestionnaire } from '../types/questionnaire';
+import { QuestionnairePret as QuestionnairePretType, ChampQuestionnaire } from '../types/questionnaire';
 import { etapesQuestionnaire } from '../data/questionnaireSteps';
 import { ChevronLeft, ChevronRight, CheckCircle, Circle } from 'lucide-react';
 
@@ -105,7 +105,7 @@ export default function QuestionnairePret({ onComplete, initialData }: Questionn
 
   const renderChamp = (champ: ChampQuestionnaire) => {
     if (champ.dependsOn) {
-      const valeurDependante = formData[champ.dependsOn.field];
+      const valeurDependante = (formData as any)[champ.dependsOn.field];
       if (Array.isArray(champ.dependsOn.value)) {
         if (!champ.dependsOn.value.includes(valeurDependante)) {
           return null;
@@ -165,7 +165,7 @@ export default function QuestionnairePret({ onComplete, initialData }: Questionn
             }`}
           >
             <option value="">Sélectionner...</option>
-            {champ.options?.map(opt => (
+            {champ.options?.map((opt: { value: string; label: string }) => (
               <option key={opt.value} value={opt.value}>
                 {opt.label}
               </option>

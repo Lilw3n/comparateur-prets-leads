@@ -3,13 +3,15 @@ import { Lead } from '../types';
 import { leadsApi } from '../services/api';
 import LeadList from '../components/LeadList';
 import LeadForm from '../components/LeadForm';
-import { Plus } from 'lucide-react';
+import LeadGenerator from '../components/LeadGenerator';
+import { Plus, Zap } from 'lucide-react';
 
 export default function Leads() {
   const [leads, setLeads] = useState<Lead[]>([]);
   const [loading, setLoading] = useState(true);
   const [showForm, setShowForm] = useState(false);
   const [editingLead, setEditingLead] = useState<Lead | null>(null);
+  const [showGenerator, setShowGenerator] = useState(false);
   const [pagination, setPagination] = useState({
     page: 1,
     limit: 50,
@@ -91,14 +93,27 @@ export default function Leads() {
     <div className="space-y-4">
       <div className="flex justify-between items-center">
         <h1 className="text-3xl font-bold text-gray-900">Gestion des Leads</h1>
-        <button
-          onClick={handleCreate}
-          className="inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700"
-        >
-          <Plus className="w-5 h-5 mr-2" />
-          Nouveau Lead
-        </button>
+        <div className="flex space-x-3">
+          <button
+            onClick={() => setShowGenerator(!showGenerator)}
+            className="inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-green-600 hover:bg-green-700"
+          >
+            <Zap className="w-5 h-5 mr-2" />
+            {showGenerator ? 'Masquer Générateur' : 'Générer des Leads'}
+          </button>
+          <button
+            onClick={handleCreate}
+            className="inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700"
+          >
+            <Plus className="w-5 h-5 mr-2" />
+            Nouveau Lead
+          </button>
+        </div>
       </div>
+
+      {showGenerator && (
+        <LeadGenerator onLeadsGenerated={loadLeads} />
+      )}
 
       <LeadList
         leads={leads}

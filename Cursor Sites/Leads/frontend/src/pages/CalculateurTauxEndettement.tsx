@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Calculator, TrendingUp, AlertCircle, CheckCircle } from 'lucide-react';
+import { Calculator, AlertCircle, CheckCircle } from 'lucide-react';
 
 export default function CalculateurTauxEndettement() {
   const [revenus, setRevenus] = useState<number>(3000);

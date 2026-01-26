@@ -1,6 +1,5 @@
 import { useState } from 'react';
-import { Bell, Mail, X, CheckCircle } from 'lucide-react';
-import { comparateursApi } from '../services/comparateursApi';
+import { Bell, Mail, CheckCircle } from 'lucide-react';
 
 interface AlerteTauxProps {
   typeCredit?: string;

@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Calculator, FileText, Info } from 'lucide-react';
+import { Calculator, Info } from 'lucide-react';
 
 export default function CalculateurFraisNotaire() {
   const [prixBien, setPrixBien] = useState<number>(200000);

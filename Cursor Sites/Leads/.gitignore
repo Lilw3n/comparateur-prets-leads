@@ -64,3 +64,10 @@ frontend/build/
 # Logs
 logs/
 *.log
+
+# Scripts avec tokens/secrets
+create-github-repo.ps1
+*secret*.ps1
+*token*.ps1
+
+.vercel

@@ -9,7 +9,7 @@ export const validateLead = [
   body('nom').trim().notEmpty().withMessage('Le nom est requis'),
   body('prenom').trim().notEmpty().withMessage('Le prénom est requis'),
   body('email').isEmail().withMessage('Email invalide'),
-  body('secteur').isIn(['IMMOBILIER', 'ASSURANCE', 'BANQUE_PRET', 'MARCHE_FINANCIER']).withMessage('Secteur invalide'),
+  body('secteur').notEmpty().withMessage('Le secteur est requis'),
   body('statut').optional().isIn(['NOUVEAU', 'CONTACTE', 'CONVERTI', 'PERDU']).withMessage('Statut invalide'),
 ];
 

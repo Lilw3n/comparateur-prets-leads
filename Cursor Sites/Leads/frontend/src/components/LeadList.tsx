@@ -10,7 +10,7 @@ interface LeadListProps {
   onRefresh: () => void;
 }
 
-export default function LeadList({ leads, onEdit, onDelete, onRefresh }: LeadListProps) {
+export default function LeadList({ leads, onEdit, onDelete }: LeadListProps) {
   const [searchTerm, setSearchTerm] = useState('');
   const [secteurFilter, setSecteurFilter] = useState<string>('');
   const [statutFilter, setStatutFilter] = useState<string>('');
@@ -37,13 +37,13 @@ export default function LeadList({ leads, onEdit, onDelete, onRefresh }: LeadLis
   };
 
   const getSecteurLabel = (secteur: Secteur) => {
-    const labels: Record<Secteur, string> = {
+    const labels: Partial<Record<Secteur, string>> = {
       [Secteur.IMMOBILIER]: 'Immobilier',
       [Secteur.ASSURANCE]: 'Assurance',
       [Secteur.BANQUE_PRET]: 'Banque - Prêts',
       [Secteur.MARCHE_FINANCIER]: 'Marché financier',
     };
-    return labels[secteur];
+    return labels[secteur] || secteur.replace(/_/g, ' ');
   };
 
   const getStatutColor = (statut: Statut) => {

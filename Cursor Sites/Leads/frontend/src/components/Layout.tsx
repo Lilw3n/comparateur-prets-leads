@@ -2,7 +2,7 @@ import { Link, useLocation } from 'react-router-dom';
 import { useState } from 'react';
 import { 
   Home, Users, TrendingUp, Calculator, FileText, CreditCard, 
-  Shield, RefreshCw, Briefcase, DollarSign, Menu, X
+  Menu, X
 } from 'lucide-react';
 import NotificationCenter from './NotificationCenter';
 
@@ -37,6 +37,7 @@ export default function Layout({ children }: LayoutProps) {
       icon: Home,
       submenu: [
         { label: 'Comparateur crédit immobilier', path: '/comparateur-prets?type=immobilier' },
+        { label: 'Recherche de biens', path: '/recherche-biens' },
         { label: 'Simulation de prêt', path: '/simulateurs/mensualites' },
         { label: 'Capacité d\'emprunt', path: '/simulateurs/capacite-emprunt' },
         { label: 'Taux immobilier', path: '/comparateur?type=immobilier' }
@@ -63,6 +64,11 @@ export default function Layout({ children }: LayoutProps) {
         { label: 'Frais de notaire', path: '/simulateurs/frais-notaire' },
         { label: 'Comparateur de taux', path: '/comparateur-prets' }
       ]
+    },
+    {
+      label: 'Articles',
+      path: '/articles',
+      icon: FileText
     },
     {
       label: 'Guides',

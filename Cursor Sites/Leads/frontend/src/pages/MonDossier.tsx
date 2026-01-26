@@ -1,33 +1,107 @@
 import { useState } from 'react';
 import DossierSuivi from '../components/DossierSuivi';
 import CreditScoreCard from '../components/CreditScoreCard';
-import { FileText, Download, Mail, Phone } from 'lucide-react';
+import FormulaireDossierPret from '../components/FormulaireDossierPret';
+import DossierDetail from '../components/DossierDetail';
+import { FileText, Download, Mail, Phone, Plus, X } from 'lucide-react';
 
 export default function MonDossier() {
   const [dossierId] = useState('PRT-2026-001234'); // En production, récupérer depuis l'API
   const [creditScore] = useState(78); // En production, récupérer depuis l'API
+  const [showFormulaire, setShowFormulaire] = useState(false);
+  const [viewMode, setViewMode] = useState<'detail' | 'simple'>('detail'); // 'detail' ou 'simple'
+
+  const handleSaveDossier = (data: any) => {
+    console.log('Dossier sauvegardé:', data);
+    // Ici, vous pouvez appeler l'API pour sauvegarder le dossier
+    setShowFormulaire(false);
+    setViewMode('detail'); // Passer en mode détail après création
+    alert('Dossier enregistré avec succès !');
+  };
 
   return (
-    <div className="max-w-6xl mx-auto space-y-8">
+    <div className="max-w-7xl mx-auto space-y-8">
       {/* Header */}
       <div className="bg-gradient-to-r from-blue-600 to-purple-600 rounded-2xl p-8 text-white shadow-xl">
-        <h1 className="text-4xl font-bold mb-2">Mon dossier de prêt</h1>
-        <p className="text-blue-100 text-lg">
-          Suivez l'avancement de votre demande de prêt en temps réel
-        </p>
+        <div className="flex items-center justify-between">
+          <div>
+            <h1 className="text-4xl font-bold mb-2">
+              {viewMode === 'detail' ? 'Dossier - REMOUE Franck' : 'Mon dossier de prêt'}
+            </h1>
+            <p className="text-blue-100 text-lg">
+              {viewMode === 'detail' 
+                ? 'Gestion complète du dossier de prêt' 
+                : "Suivez l'avancement de votre demande de prêt en temps réel"}
+            </p>
+          </div>
+          <div className="flex gap-3">
+            {viewMode === 'detail' && (
+              <button
+                onClick={() => setViewMode('simple')}
+                className="px-4 py-2 bg-white/20 text-white rounded-lg hover:bg-white/30 font-semibold transition-colors"
+              >
+                Vue simple
+              </button>
+            )}
+            {viewMode === 'simple' && (
+              <button
+                onClick={() => setViewMode('detail')}
+                className="px-4 py-2 bg-white/20 text-white rounded-lg hover:bg-white/30 font-semibold transition-colors"
+              >
+                Vue détaillée
+              </button>
+            )}
+            {!showFormulaire && (
+              <button
+                onClick={() => setShowFormulaire(true)}
+                className="px-6 py-3 bg-white text-blue-600 rounded-lg hover:bg-blue-50 font-semibold transition-colors flex items-center gap-2"
+              >
+                <Plus className="w-5 h-5" />
+                Nouveau dossier
+              </button>
+            )}
+          </div>
+        </div>
       </div>
 
-      {/* Score de crédit */}
-      <CreditScoreCard
-        score={creditScore}
-        interpretation="Excellent profil, très bonnes chances d'obtenir un crédit aux meilleures conditions."
-        showDetails={true}
-      />
+      {/* Formulaire de dossier */}
+      {showFormulaire && (
+        <div className="bg-white rounded-xl shadow-lg border-2 border-gray-200 p-6">
+          <div className="flex items-center justify-between mb-4">
+            <h2 className="text-2xl font-bold text-gray-900">Nouveau dossier de prêt</h2>
+            <button
+              onClick={() => setShowFormulaire(false)}
+              className="text-gray-400 hover:text-gray-600"
+            >
+              <X className="w-6 h-6" />
+            </button>
+          </div>
+          <FormulaireDossierPret
+            onSave={handleSaveDossier}
+            onCancel={() => setShowFormulaire(false)}
+          />
+        </div>
+      )}
 
-      {/* Suivi du dossier */}
-      <DossierSuivi dossierId={dossierId} />
+      {/* Vue détaillée du dossier */}
+      {viewMode === 'detail' && !showFormulaire && (
+        <DossierDetail dossierId={dossierId} />
+      )}
 
-      {/* Documents et actions */}
+      {/* Vue simple du dossier */}
+      {viewMode === 'simple' && !showFormulaire && (
+        <>
+          {/* Score de crédit */}
+          <CreditScoreCard
+            score={creditScore}
+            interpretation="Excellent profil, très bonnes chances d'obtenir un crédit aux meilleures conditions."
+            showDetails={true}
+          />
+
+          {/* Suivi du dossier */}
+          <DossierSuivi dossierId={dossierId} />
+
+          {/* Documents et actions */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         {/* Documents */}
         <div className="bg-white rounded-xl shadow-lg p-6 border-2 border-gray-100">
@@ -106,16 +180,18 @@ export default function MonDossier() {
         </div>
       </div>
 
-      {/* Informations importantes */}
-      <div className="bg-blue-50 border-2 border-blue-200 rounded-xl p-6">
-        <h3 className="font-bold text-gray-900 mb-3">💡 Informations importantes</h3>
-        <ul className="space-y-2 text-sm text-gray-700">
-          <li>• Votre dossier est traité dans les meilleurs délais par notre équipe</li>
-          <li>• Vous recevrez une notification à chaque étape importante</li>
-          <li>• N'hésitez pas à contacter votre conseiller pour toute question</li>
-          <li>• Les documents manquants peuvent ralentir le traitement de votre dossier</li>
-        </ul>
-      </div>
+          {/* Informations importantes */}
+          <div className="bg-blue-50 border-2 border-blue-200 rounded-xl p-6">
+            <h3 className="font-bold text-gray-900 mb-3">💡 Informations importantes</h3>
+            <ul className="space-y-2 text-sm text-gray-700">
+              <li>• Votre dossier est traité dans les meilleurs délais par notre équipe</li>
+              <li>• Vous recevrez une notification à chaque étape importante</li>
+              <li>• N'hésitez pas à contacter votre conseiller pour toute question</li>
+              <li>• Les documents manquants peuvent ralentir le traitement de votre dossier</li>
+            </ul>
+          </div>
+        </>
+      )}
     </div>
   );
 }

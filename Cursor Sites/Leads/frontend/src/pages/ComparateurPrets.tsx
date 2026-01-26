@@ -7,9 +7,14 @@ import QuestionnairePretComponent from '../components/QuestionnairePret';
 import SimulateurTAEG from '../components/SimulateurTAEG';
 import BankingConnection from '../components/BankingConnection';
 import CreditScoreCard from '../components/CreditScoreCard';
-import { TrendingDown, CheckCircle, Building2, FileText, Settings, ArrowLeft, Clock, Zap } from 'lucide-react';
+import LeadCaptureForm from '../components/LeadCaptureForm';
+import LeadCaptureService from '../services/leadCapture';
+import FiltresAvances from '../components/FiltresAvances';
+import ArticlesRecommandes from '../components/ArticlesRecommandes';
+import { CheckCircle, Building2, FileText, Settings, ArrowLeft, Clock, Zap, List, Grid } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { bankingApiService } from '../services/bankingApi';
+import { Secteur } from '../types';
 
 export default function ComparateurPrets() {
   const navigate = useNavigate();
@@ -36,6 +41,38 @@ export default function ComparateurPrets() {
   const [scoreInterpretation, setScoreInterpretation] = useState<string>('');
   const [bankingData, setBankingData] = useState<any>(null);
   const [showBankingConnection, setShowBankingConnection] = useState(false);
+  const [showCaptureForm, setShowCaptureForm] = useState(false);
+  const [filteredOffres, setFilteredOffres] = useState<OffrePret[]>([]);
+
+  const handleCaptureLead = async (data: {
+    nom?: string;
+    prenom?: string;
+    email: string;
+    telephone?: string;
+  }) => {
+    const secteur = formData.typeCredit === 'immobilier' 
+      ? Secteur.CREDIT_IMMOBILIER 
+      : formData.typeCredit === 'consommation'
+      ? Secteur.CREDIT_CONSOMMATION
+      : Secteur.CREDIT_PROFESSIONNEL;
+
+    await LeadCaptureService.captureFromComparateur(data.email, {
+      nom: data.nom,
+      prenom: data.prenom,
+      telephone: data.telephone,
+      comparaisonData: {
+        montant: formData.montant,
+        duree: formData.duree,
+        typeCredit: formData.typeCredit,
+        apport: formData.apport,
+        revenus: formData.revenus || 0,
+      },
+      source: 'Comparateur de prêts',
+    });
+  };
+
+  const [realtimeUpdateTimeout, setRealtimeUpdateTimeout] = useState<NodeJS.Timeout | null>(null);
+  const [isRealtimeUpdating, setIsRealtimeUpdating] = useState(false);
 
   useEffect(() => {
     // Comparer automatiquement au chargement si on a les données minimales
@@ -43,6 +80,32 @@ export default function ComparateurPrets() {
       handleComparerAvecDonnees(formData);
     }
   }, []);
+
+  // Real-time comparison on form changes (debounced)
+  useEffect(() => {
+    // Clear previous timeout
+    if (realtimeUpdateTimeout) {
+      clearTimeout(realtimeUpdateTimeout);
+    }
+
+    // Only auto-compare if we have minimum data and results already exist
+    if (resultats && formData.montant >= 10000 && formData.duree >= 12 && formData.typeCredit) {
+      setIsRealtimeUpdating(true);
+      
+      const timeout = setTimeout(() => {
+        handleComparerAvecDonnees(formData, questionnaireData || undefined);
+        setIsRealtimeUpdating(false);
+      }, 800); // 800ms debounce
+
+      setRealtimeUpdateTimeout(timeout);
+    }
+
+    return () => {
+      if (realtimeUpdateTimeout) {
+        clearTimeout(realtimeUpdateTimeout);
+      }
+    };
+  }, [formData.montant, formData.duree, formData.apport, formData.revenus]);
 
   const handleQuestionnaireComplete = (data: QuestionnairePret) => {
     setQuestionnaireData(data);
@@ -91,6 +154,7 @@ export default function ComparateurPrets() {
       }
       
       setResultats(result);
+      setFilteredOffres(result.offres); // Initialize filtered offers
 
       // Calculer le score de crédit si on a les données
       if (bankingData || donneesForm.revenus) {
@@ -277,10 +341,22 @@ export default function ComparateurPrets() {
           <div>
             <h2 className="text-2xl font-bold text-gray-900 mb-2">Simulation gratuite en 5 minutes</h2>
             <p className="text-gray-600">Comparez les offres de plus de 100 banques et obtenez un résultat instantané</p>
+            {isRealtimeUpdating && resultats && (
+              <div className="mt-2 flex items-center text-sm text-blue-600">
+                <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-blue-600 mr-2"></div>
+                <span>Mise à jour en temps réel...</span>
+              </div>
+            )}
           </div>
           <div className="hidden md:flex items-center text-sm text-gray-500">
             <Clock className="w-4 h-4 mr-1" />
             <span>Rapide et gratuit</span>
+            {resultats && (
+              <span className="ml-4 flex items-center text-green-600">
+                <Zap className="w-4 h-4 mr-1" />
+                <span>Mise à jour automatique</span>
+              </span>
+            )}
           </div>
         </div>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -521,7 +597,10 @@ export default function ComparateurPrets() {
                 </div>
                 
                 <div className="mt-6 flex gap-3">
-                  <button className="px-6 py-3 bg-white text-green-600 rounded-xl hover:bg-green-50 font-bold transition-all flex-1">
+                  <button 
+                    onClick={() => setShowCaptureForm(true)}
+                    className="px-6 py-3 bg-white text-green-600 rounded-xl hover:bg-green-50 font-bold transition-all flex-1"
+                  >
                     Demander cette offre
                   </button>
                   <button
@@ -536,23 +615,55 @@ export default function ComparateurPrets() {
             </div>
           )}
 
-          {/* Tableau comparatif - Style Meilleurtaux */}
-          <div className="bg-white rounded-2xl shadow-xl overflow-hidden border-2 border-gray-100">
-            {Object.keys(offresModifiees).length > 0 && (
-              <div className="bg-blue-50 border-b border-blue-200 px-6 py-4">
-                <div className="flex items-center text-sm text-blue-800">
-                  <Settings className="w-4 h-4 mr-2" />
-                  Mode simulation actif - Les valeurs modifiées sont marquées avec *
+          {/* Filtres avancés et Tableau comparatif */}
+          <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
+            {/* Sidebar avec filtres */}
+            <div className="lg:col-span-1">
+              <FiltresAvances
+                offres={resultats.offres}
+                onFilter={(filtered) => {
+                  setFilteredOffres(filtered);
+                  // Update meilleureOffre if needed
+                  if (filtered.length > 0) {
+                    const sorted = [...filtered].sort((a, b) => {
+                      const scoreA = a.score || a.tauxEffectif;
+                      const scoreB = b.score || b.tauxEffectif;
+                      return scoreA - scoreB;
+                    });
+                    setResultats({
+                      ...resultats,
+                      meilleureOffre: sorted[0]
+                    });
+                  }
+                }}
+              />
+            </div>
+
+            {/* Tableau comparatif */}
+            <div className="lg:col-span-3 bg-white rounded-2xl shadow-xl overflow-hidden border-2 border-gray-100">
+              {Object.keys(offresModifiees).length > 0 && (
+                <div className="bg-blue-50 border-b border-blue-200 px-6 py-4">
+                  <div className="flex items-center text-sm text-blue-800">
+                    <Settings className="w-4 h-4 mr-2" />
+                    Mode simulation actif - Les valeurs modifiées sont marquées avec *
+                  </div>
+                </div>
+              )}
+              
+              <div className="px-6 py-5 border-b border-gray-200 bg-gray-50">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <h2 className="text-2xl font-bold text-gray-900">
+                      Comparaison des {filteredOffres.length || resultats.offres.length} offre{(filteredOffres.length || resultats.offres.length) > 1 ? 's' : ''}
+                    </h2>
+                    <p className="text-gray-600 mt-1">
+                      {filteredOffres.length !== resultats.offres.length 
+                        ? `${filteredOffres.length} offre${filteredOffres.length > 1 ? 's' : ''} correspondant à vos filtres`
+                        : 'Comparez toutes les offres disponibles selon vos critères'}
+                    </p>
+                  </div>
                 </div>
               </div>
-            )}
-            
-            <div className="px-6 py-5 border-b border-gray-200 bg-gray-50">
-              <h2 className="text-2xl font-bold text-gray-900">
-                Comparaison des {resultats.offres.length} offre{resultats.offres.length > 1 ? 's' : ''}
-              </h2>
-              <p className="text-gray-600 mt-1">Comparez toutes les offres disponibles selon vos critères</p>
-            </div>
             
             {/* Tableau comparatif responsive */}
             <div className="overflow-x-auto">
@@ -583,7 +694,7 @@ export default function ComparateurPrets() {
                   </tr>
                 </thead>
                 <tbody className="bg-white divide-y divide-gray-200">
-                  {resultats.offres.map((offre, index) => {
+                  {(filteredOffres.length > 0 ? filteredOffres : resultats.offres).map((offre, index) => {
                     const offreAffichee = offresModifiees[offre.id] || offre;
                     const simulateurVisible = showSimulateur[offre.id];
                     const isBest = index === 0;
@@ -674,6 +785,7 @@ export default function ComparateurPrets() {
                                 <Settings className="w-4 h-4" />
                               </button>
                               <button
+                                onClick={() => setShowCaptureForm(true)}
                                 className="px-4 py-1.5 bg-blue-600 text-white rounded-lg hover:bg-blue-700 text-xs font-semibold transition-all"
                               >
                                 Demander
@@ -700,7 +812,39 @@ export default function ComparateurPrets() {
               </table>
             </div>
           </div>
+        </div>
+        </div>
+      )}
 
+      {/* Articles recommandés */}
+      {resultats && (
+        <ArticlesRecommandes
+          categorie={formData.typeCredit === 'immobilier' ? 'CREDIT_IMMOBILIER' : 'CREDIT_CONSOMMATION'}
+          searchTerms={`prêt ${formData.typeCredit} ${formData.montant}€`}
+          limit={3}
+        />
+      )}
+
+      {/* Formulaire de capture - Modal */}
+      {showCaptureForm && (
+        <div 
+          className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4"
+          onClick={() => setShowCaptureForm(false)}
+          style={{ zIndex: 9999 }}
+        >
+          <div 
+            className="bg-white rounded-lg shadow-xl max-w-md w-full max-h-[90vh] overflow-y-auto"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <LeadCaptureForm
+              onCapture={handleCaptureLead}
+              onClose={() => setShowCaptureForm(false)}
+              title="Recevez les meilleures offres par email"
+              description="Laissez-nous vos coordonnées pour recevoir les offres personnalisées et être contacté par un conseiller."
+              requirePhone={true}
+              showCloseButton={true}
+            />
+          </div>
         </div>
       )}
     </div>

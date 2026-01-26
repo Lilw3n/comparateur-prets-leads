@@ -1,5 +1,8 @@
 import { useState } from 'react';
-import { Calculator, TrendingUp, DollarSign, Home } from 'lucide-react';
+import { Calculator, TrendingUp, DollarSign } from 'lucide-react';
+import LeadCaptureForm from '../components/LeadCaptureForm';
+import LeadCaptureService from '../services/leadCapture';
+import { Secteur } from '../types';
 
 export default function SimulateurCapaciteEmprunt() {
   const [revenus, setRevenus] = useState<number>(3000);
@@ -26,6 +29,33 @@ export default function SimulateurCapaciteEmprunt() {
 
   const capaciteEmprunt = calculerCapacite();
   const mensualiteMax = Math.round((revenus - charges) * tauxEndettement / 100);
+  const [showCaptureForm, setShowCaptureForm] = useState(false);
+
+  const handleCaptureLead = async (data: {
+    nom?: string;
+    prenom?: string;
+    email: string;
+    telephone?: string;
+  }) => {
+    await LeadCaptureService.captureFromSimulator(data.email, {
+      nom: data.nom,
+      prenom: data.prenom,
+      telephone: data.telephone,
+      secteur: Secteur.CREDIT_IMMOBILIER,
+      simulatorType: 'capacite',
+      simulatorData: {
+        revenus,
+        charges,
+        tauxEndettement,
+        tauxPret,
+        duree,
+        assurance,
+        capaciteEmprunt,
+        mensualiteMax,
+      },
+      source: 'Simulateur capacité d\'emprunt',
+    });
+  };
 
   return (
     <div className="max-w-4xl mx-auto space-y-8">
@@ -200,8 +230,14 @@ export default function SimulateurCapaciteEmprunt() {
               </div>
 
               <button
-                onClick={() => window.location.href = '/comparateur-prets'}
+                onClick={() => setShowCaptureForm(true)}
                 className="w-full bg-white text-blue-600 font-semibold py-3 rounded-lg hover:bg-blue-50 transition-all mt-6"
+              >
+                Recevoir mes résultats par email
+              </button>
+              <button
+                onClick={() => window.location.href = '/comparateur-prets'}
+                className="w-full bg-blue-500 text-white font-semibold py-3 rounded-lg hover:bg-blue-600 transition-all mt-3"
               >
                 Comparer les offres
               </button>
@@ -209,6 +245,18 @@ export default function SimulateurCapaciteEmprunt() {
           </div>
         </div>
       </div>
+
+      {/* Formulaire de capture */}
+      {showCaptureForm && (
+        <div className="max-w-md mx-auto">
+          <LeadCaptureForm
+            onCapture={handleCaptureLead}
+            onClose={() => setShowCaptureForm(false)}
+            title="Recevez votre capacité d'emprunt par email"
+            description="Laissez-nous vos coordonnées pour recevoir vos résultats détaillés et être contacté par un conseiller."
+          />
+        </div>
+      )}
 
       {/* Informations complémentaires */}
       <div className="bg-blue-50 rounded-xl p-6">

@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { OffrePret } from '../types/comparateurs';
-import { Calculator, Save, X, TrendingDown } from 'lucide-react';
+import { Calculator, Save, X } from 'lucide-react';
 
 interface SimulateurTAEGProps {
   offre: OffrePret;

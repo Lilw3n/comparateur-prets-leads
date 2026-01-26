@@ -12,6 +12,9 @@ import CalculateurFraisNotaire from './pages/CalculateurFraisNotaire';
 import CalculateurTauxEndettement from './pages/CalculateurTauxEndettement';
 import AttestationFinancement from './pages/AttestationFinancement';
 import MonDossier from './pages/MonDossier';
+import RechercheBiens from './pages/RechercheBiens';
+import Articles from './pages/Articles';
+import ArticleDetail from './pages/ArticleDetail';
 
 function App() {
   return (
@@ -31,6 +34,9 @@ function App() {
           <Route path="/mon-dossier" element={<MonDossier />} />
           <Route path="/guides" element={<Guides />} />
           <Route path="/actualites" element={<Actualites />} />
+          <Route path="/recherche-biens" element={<RechercheBiens />} />
+          <Route path="/articles" element={<Articles />} />
+          <Route path="/articles/:slug" element={<ArticleDetail />} />
         </Routes>
       </Layout>
     </Router>
