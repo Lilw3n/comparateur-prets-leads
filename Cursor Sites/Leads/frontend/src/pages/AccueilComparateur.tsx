@@ -134,29 +134,57 @@ export default function AccueilComparateur() {
   const temoignages = [
     {
       nom: 'Laurent',
-      date: '24/01/2026',
+      date: '15/12/2025',
       texte: 'Bonjour très content de morgane et très agréable et très à l\'écoute quand j\'avais des documents...',
       note: 5,
       service: 'Crédit immobilier'
     },
     {
       nom: 'Nieto',
-      date: '24/01/2026',
+      date: '08/01/2026',
       texte: 'Conseiller répond rapidement, réactif et efficace, pour connaître un fournisseur d\'énergie....',
       note: 5,
       service: 'Assurance'
     },
     {
       nom: 'Marie-odile',
-      date: '24/01/2026',
+      date: '22/11/2025',
       texte: 'J\'ai demandé des devis: Réponse rapide et complète. Merci...',
       note: 5,
       service: 'Crédit consommation'
     },
     {
       nom: 'Bellet',
-      date: '24/01/2026',
+      date: '03/01/2026',
       texte: 'Personne à l\'écoute Rapidement disponible Trouve rapidement une solution au problème...',
+      note: 5,
+      service: 'Rachat de crédit'
+    },
+    {
+      nom: 'Sophie M.',
+      date: '28/12/2025',
+      texte: 'Excellent accompagnement pour mon crédit immobilier. Le conseiller a été très professionnel et m\'a aidé à obtenir les meilleures conditions.',
+      note: 5,
+      service: 'Crédit immobilier'
+    },
+    {
+      nom: 'Pierre D.',
+      date: '10/12/2025',
+      texte: 'Service rapide et efficace. J\'ai pu comparer plusieurs offres en quelques minutes et trouver celle qui me convenait le mieux.',
+      note: 5,
+      service: 'Crédit consommation'
+    },
+    {
+      nom: 'Claire L.',
+      date: '05/01/2026',
+      texte: 'Très satisfaite de l\'accompagnement pour mon assurance de prêt. Économies importantes réalisées grâce aux conseils.',
+      note: 5,
+      service: 'Assurance'
+    },
+    {
+      nom: 'Marc T.',
+      date: '18/11/2025',
+      texte: 'Rachat de crédit réussi ! L\'équipe m\'a aidé à regrouper mes crédits et réduire mes mensualités de manière significative.',
       note: 5,
       service: 'Rachat de crédit'
     }
@@ -494,7 +522,7 @@ export default function AccueilComparateur() {
         </div>
         
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-          {temoignages.map((temoignage, index) => (
+          {temoignages.slice(0, 4).map((temoignage, index) => (
             <div key={index} className="bg-gray-50 rounded-xl p-6 shadow-md hover:shadow-lg transition-all">
               <div className="flex items-center mb-3">
                 <div className="flex">
