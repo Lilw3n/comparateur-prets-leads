@@ -18,6 +18,10 @@ import ArticleDetail from './pages/ArticleDetail';
 import FormulaireDossierComplet from './pages/FormulaireDossierComplet';
 import ListeDossiers from './pages/ListeDossiers';
 import Presentation from './pages/Presentation';
+import Assurance from './pages/Assurance';
+import MentionsLegales from './pages/MentionsLegales';
+import Confidentialite from './pages/Confidentialite';
+import CGU from './pages/CGU';
 
 function App() {
   return (
@@ -43,6 +47,11 @@ function App() {
           <Route path="/formulaire-dossier/:id?" element={<FormulaireDossierComplet />} />
           <Route path="/dossiers" element={<ListeDossiers />} />
           <Route path="/presentation" element={<Presentation />} />
+          <Route path="/assurance" element={<Assurance />} />
+          <Route path="/assurance/:type" element={<Assurance />} />
+          <Route path="/mentions-legales" element={<MentionsLegales />} />
+          <Route path="/confidentialite" element={<Confidentialite />} />
+          <Route path="/cgu" element={<CGU />} />
         </Routes>
       </Layout>
     </Router>

@@ -337,9 +337,9 @@ export default function Layout({ children }: LayoutProps) {
                 <p className="mt-1">Un crédit vous engage et doit être remboursé. Vérifiez vos capacités de remboursement avant de vous engager.</p>
               </div>
               <div className="flex gap-6 text-sm">
-                <Link to="/guides" className="text-gray-400 hover:text-white transition-colors">Mentions légales</Link>
-                <Link to="/actualites" className="text-gray-400 hover:text-white transition-colors">CGU</Link>
-                <Link to="/comparateur" className="text-gray-400 hover:text-white transition-colors">Confidentialité</Link>
+                <Link to="/mentions-legales" className="text-gray-400 hover:text-white transition-colors">Mentions légales</Link>
+                <Link to="/cgu" className="text-gray-400 hover:text-white transition-colors">CGU</Link>
+                <Link to="/confidentialite" className="text-gray-400 hover:text-white transition-colors">Confidentialité</Link>
               </div>
             </div>
           </div>
