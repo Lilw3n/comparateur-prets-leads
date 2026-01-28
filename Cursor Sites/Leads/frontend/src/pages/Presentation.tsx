@@ -47,7 +47,7 @@ export default function Presentation() {
             <Building2 className="w-10 h-10" />
           </div>
           <h1 className="text-4xl md:text-5xl font-bold mb-4">
-            Votre Expert Immobilier en Martinique
+            Votre Expert Immobilier en France
           </h1>
           <p className="text-xl md:text-2xl text-blue-100 mb-6 max-w-3xl mx-auto">
             Accompagnement professionnel pour tous vos projets immobiliers
@@ -67,22 +67,36 @@ export default function Presentation() {
 
       {/* À propos */}
       <div className="bg-white rounded-xl shadow-md p-8">
-        <h2 className="text-3xl font-bold text-gray-900 mb-6 flex items-center gap-3">
-          <Users className="w-8 h-8 text-blue-600" />
-          À propos de notre activité
-        </h2>
-        <div className="prose prose-lg max-w-none">
-          <p className="text-gray-700 text-lg leading-relaxed mb-4">
-            Spécialisé dans l'immobilier en Martinique, je vous accompagne dans tous vos projets immobiliers 
-            avec expertise et professionnalisme. Que vous souhaitiez acheter, vendre, investir ou simplement 
-            obtenir des conseils, je mets mon expérience et mon réseau à votre service.
-          </p>
-          <p className="text-gray-700 text-lg leading-relaxed">
-            Ma connaissance approfondie du marché martiniquais et mon approche personnalisée garantissent 
-            un accompagnement sur-mesure adapté à vos besoins spécifiques. Je travaille avec un réseau 
-            de partenaires de confiance (notaires, banques, assureurs) pour vous offrir un service complet 
-            et sécurisé.
-          </p>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 items-start">
+          <div className="md:col-span-2">
+            <h2 className="text-3xl font-bold text-gray-900 mb-6 flex items-center gap-3">
+              <Users className="w-8 h-8 text-blue-600" />
+              À propos de notre activité
+            </h2>
+            <div className="prose prose-lg max-w-none">
+              <p className="text-gray-700 text-lg leading-relaxed mb-4">
+                Spécialisé dans l'immobilier en France, je vous accompagne dans tous vos projets immobiliers 
+                avec expertise et professionnalisme. Que vous souhaitiez acheter, vendre, investir ou simplement 
+                obtenir des conseils, je mets mon expérience et mon réseau à votre service.
+              </p>
+              <p className="text-gray-700 text-lg leading-relaxed">
+                Ma connaissance approfondie du marché français et mon approche personnalisée garantissent 
+                un accompagnement sur-mesure adapté à vos besoins spécifiques. Je travaille avec un réseau 
+                de partenaires de confiance (notaires, banques, assureurs) pour vous offrir un service complet 
+                et sécurisé.
+              </p>
+            </div>
+          </div>
+          <div className="flex justify-center md:justify-end">
+            <div className="relative">
+              <div className="absolute inset-0 bg-gradient-to-br from-blue-500 to-purple-600 rounded-2xl blur-xl opacity-30"></div>
+              <img 
+                src="/images/portrait-professionnel.png" 
+                alt="Portrait professionnel - Courtier Multi-Activités"
+                className="relative w-64 h-80 object-cover rounded-2xl shadow-xl border-4 border-white"
+              />
+            </div>
+          </div>
         </div>
       </div>
 
@@ -144,16 +158,16 @@ export default function Presentation() {
         </h2>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           <div className="text-center p-6 bg-blue-50 rounded-lg">
-            <h3 className="font-semibold text-lg text-gray-900 mb-2">Martinique</h3>
-            <p className="text-gray-600">Toute l'île</p>
+            <h3 className="font-semibold text-lg text-gray-900 mb-2">France Métropolitaine</h3>
+            <p className="text-gray-600">Tout le territoire</p>
           </div>
           <div className="text-center p-6 bg-purple-50 rounded-lg">
-            <h3 className="font-semibold text-lg text-gray-900 mb-2">Fort-de-France</h3>
-            <p className="text-gray-600">Capitale et environs</p>
+            <h3 className="font-semibold text-lg text-gray-900 mb-2">Île-de-France</h3>
+            <p className="text-gray-600">Paris et région parisienne</p>
           </div>
           <div className="text-center p-6 bg-green-50 rounded-lg">
-            <h3 className="font-semibold text-lg text-gray-900 mb-2">Sud & Nord</h3>
-            <p className="text-gray-600">Toutes les communes</p>
+            <h3 className="font-semibold text-lg text-gray-900 mb-2">Régions</h3>
+            <p className="text-gray-600">Toutes les régions</p>
           </div>
         </div>
       </div>
