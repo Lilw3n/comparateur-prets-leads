@@ -2,7 +2,7 @@ import { Link, useLocation } from 'react-router-dom';
 import { useState } from 'react';
 import { 
   Home, Users, TrendingUp, Calculator, FileText, CreditCard, 
-  Menu, X, Building2, Shield, DollarSign, GraduationCap
+  Menu, X, Building2, Shield, DollarSign, GraduationCap, Globe
 } from 'lucide-react';
 import NotificationCenter from './NotificationCenter';
 import DevBanner from './DevBanner';
@@ -40,6 +40,9 @@ export default function Layout({ children }: LayoutProps) {
       return location.pathname === '/mon-dossier' || location.pathname === '/dossiers' || location.pathname === '/dashboard' || location.pathname === '/leads';
     }
     if (path === '/nos-autres-sites') {
+      return location.pathname === '/nos-autres-sites';
+    }
+    if (path === '/nos-autres-sites' || path.startsWith('/nos-autres-sites')) {
       return location.pathname === '/nos-autres-sites';
     }
     return location.pathname === path;
@@ -100,12 +103,12 @@ export default function Layout({ children }: LayoutProps) {
       ]
     },
     {
-      label: 'Formations',
+      label: 'Nos autres sites',
       path: '/nos-autres-sites',
-      icon: GraduationCap,
+      icon: Globe,
       submenu: [
-        { label: 'Nos autres sites', path: '/nos-autres-sites' },
-        { label: 'Formation CGP', path: 'https://formation-cgp.vercel.app/', external: true }
+        { label: 'Formation CGP', path: 'https://formation-cgp.vercel.app/', external: true },
+        { label: 'Voir tous nos sites', path: '/nos-autres-sites' }
       ]
     },
     {
