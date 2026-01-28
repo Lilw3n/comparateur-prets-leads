@@ -288,7 +288,7 @@ export default function Layout({ children }: LayoutProps) {
             <div className="px-2 pt-2 pb-3 space-y-1 max-h-[80vh] overflow-y-auto">
               {menuItems.map((item) => {
                 const Icon = item.icon;
-                const isExternal = item.external || false;
+                const isExternal = (item as any).external || false;
                 return (
                   <div key={item.path} className="mb-2">
                     {isExternal ? (
