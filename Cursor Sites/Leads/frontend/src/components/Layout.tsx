@@ -190,20 +190,49 @@ export default function Layout({ children }: LayoutProps) {
                         </button>
                         
                         {dropdownOpen === item.path && (
-                          <div className="absolute left-0 mt-1 w-72 bg-white rounded-lg shadow-xl border-2 border-gray-200 py-2 z-50">
+                          <div 
+                            className="absolute left-0 mt-1 w-72 bg-white rounded-lg shadow-xl border-2 border-gray-200 py-2 z-50"
+                            onMouseEnter={() => {
+                              if (dropdownTimeout) {
+                                clearTimeout(dropdownTimeout);
+                                setDropdownTimeout(null);
+                              }
+                              setDropdownOpen(item.path);
+                            }}
+                            onMouseLeave={() => {
+                              const timeout = setTimeout(() => {
+                                setDropdownOpen(null);
+                              }, 200);
+                              setDropdownTimeout(timeout);
+                            }}
+                          >
                             <div className="px-3 py-2 border-b border-gray-200">
                               <span className="text-xs font-semibold text-gray-500 uppercase">{item.label}</span>
                             </div>
-                            {item.submenu?.map((subitem) => (
-                              <Link
-                                key={subitem.path}
-                                to={subitem.path}
-                                className="block px-4 py-2.5 text-sm text-gray-700 hover:bg-blue-50 hover:text-blue-600 transition-colors"
-                                onClick={() => setDropdownOpen(null)}
-                              >
-                                {subitem.label}
-                              </Link>
-                            ))}
+                            {item.submenu?.map((subitem) => {
+                              const isSubExternal = (subitem as any).external || false;
+                              return isSubExternal ? (
+                                <a
+                                  key={subitem.path}
+                                  href={subitem.path}
+                                  target="_blank"
+                                  rel="noopener noreferrer"
+                                  className="block px-4 py-2.5 text-sm text-gray-700 hover:bg-blue-50 hover:text-blue-600 transition-colors"
+                                  onClick={() => setDropdownOpen(null)}
+                                >
+                                  {subitem.label}
+                                </a>
+                              ) : (
+                                <Link
+                                  key={subitem.path}
+                                  to={subitem.path}
+                                  className="block px-4 py-2.5 text-sm text-gray-700 hover:bg-blue-50 hover:text-blue-600 transition-colors"
+                                  onClick={() => setDropdownOpen(null)}
+                                >
+                                  {subitem.label}
+                                </Link>
+                              );
+                            })}
                           </div>
                         )}
                       </div>
