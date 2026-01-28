@@ -2,7 +2,7 @@ import { Link, useLocation } from 'react-router-dom';
 import { useState } from 'react';
 import { 
   Home, Users, TrendingUp, Calculator, FileText, CreditCard, 
-  Menu, X, Building2, Shield, DollarSign
+  Menu, X, Building2, Shield, DollarSign, GraduationCap
 } from 'lucide-react';
 import NotificationCenter from './NotificationCenter';
 import DevBanner from './DevBanner';
@@ -93,6 +93,17 @@ export default function Layout({ children }: LayoutProps) {
         { label: 'Crédit auto', path: '/comparateur-prets?type=consommation' },
         { label: 'Prêt personnel', path: '/comparateur-prets?type=consommation' },
         { label: 'Attestation financement', path: '/attestation-financement' }
+      ]
+    },
+    {
+      label: 'Formations',
+      path: 'https://formation-cgp.vercel.app/',
+      icon: GraduationCap,
+      external: true,
+      submenu: [
+        { label: 'Formations certifiantes', path: 'https://formation-cgp.vercel.app/', external: true },
+        { label: 'Quiz AMF gratuit', path: 'https://formation-cgp.vercel.app/', external: true },
+        { label: 'Mon espace formation', path: 'https://formation-cgp.vercel.app/', external: true }
       ]
     },
     {
@@ -235,32 +246,60 @@ export default function Layout({ children }: LayoutProps) {
             <div className="px-2 pt-2 pb-3 space-y-1 max-h-[80vh] overflow-y-auto">
               {menuItems.map((item) => {
                 const Icon = item.icon;
+                const isExternal = item.external || false;
                 return (
                   <div key={item.path} className="mb-2">
-                    <Link
-                      to={item.path}
-                      onClick={() => setMobileMenuOpen(false)}
-                      className={`flex items-center px-3 py-2.5 rounded-md text-base font-semibold ${
-                        isActive(item.path)
-                          ? 'bg-blue-50 text-blue-700 border-2 border-blue-200'
-                          : 'text-gray-700 hover:bg-gray-50 hover:text-gray-900'
-                      }`}
-                    >
-                      <Icon className="w-5 h-5 mr-3" />
-                      {item.label}
-                    </Link>
+                    {isExternal ? (
+                      <a
+                        href={item.path}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        onClick={() => setMobileMenuOpen(false)}
+                        className={`flex items-center px-3 py-2.5 rounded-md text-base font-semibold text-gray-700 hover:bg-gray-50 hover:text-gray-900`}
+                      >
+                        <Icon className="w-5 h-5 mr-3" />
+                        {item.label}
+                      </a>
+                    ) : (
+                      <Link
+                        to={item.path}
+                        onClick={() => setMobileMenuOpen(false)}
+                        className={`flex items-center px-3 py-2.5 rounded-md text-base font-semibold ${
+                          isActive(item.path)
+                            ? 'bg-blue-50 text-blue-700 border-2 border-blue-200'
+                            : 'text-gray-700 hover:bg-gray-50 hover:text-gray-900'
+                        }`}
+                      >
+                        <Icon className="w-5 h-5 mr-3" />
+                        {item.label}
+                      </Link>
+                    )}
                     {item.submenu && (
                       <div className="mt-1 ml-4 pl-4 border-l-2 border-gray-200">
-                        {item.submenu.map((subitem) => (
-                          <Link
-                            key={subitem.path}
-                            to={subitem.path}
-                            onClick={() => setMobileMenuOpen(false)}
-                            className="flex items-center px-3 py-2 rounded-md text-sm text-gray-600 hover:bg-blue-50 hover:text-blue-600"
-                          >
-                            {subitem.label}
-                          </Link>
-                        ))}
+                        {item.submenu.map((subitem) => {
+                          const isSubExternal = subitem.external || false;
+                          return isSubExternal ? (
+                            <a
+                              key={subitem.path}
+                              href={subitem.path}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              onClick={() => setMobileMenuOpen(false)}
+                              className="flex items-center px-3 py-2 rounded-md text-sm text-gray-600 hover:bg-blue-50 hover:text-blue-600"
+                            >
+                              {subitem.label}
+                            </a>
+                          ) : (
+                            <Link
+                              key={subitem.path}
+                              to={subitem.path}
+                              onClick={() => setMobileMenuOpen(false)}
+                              className="flex items-center px-3 py-2 rounded-md text-sm text-gray-600 hover:bg-blue-50 hover:text-blue-600"
+                            >
+                              {subitem.label}
+                            </Link>
+                          );
+                        })}
                       </div>
                     )}
                   </div>
@@ -327,6 +366,14 @@ export default function Layout({ children }: LayoutProps) {
                 <li><Link to="/comparateur-prets" className="hover:text-white">Comparateur prêts</Link></li>
                 <li><Link to="/comparateur-prets?type=consommation" className="hover:text-white">Crédit consommation</Link></li>
                 <li><Link to="/attestation-financement" className="hover:text-white">Attestation</Link></li>
+              </ul>
+            </div>
+            <div>
+              <h4 className="font-semibold mb-4">Formations</h4>
+              <ul className="space-y-2 text-sm text-gray-400">
+                <li><a href="https://formation-cgp.vercel.app/" target="_blank" rel="noopener noreferrer" className="hover:text-white">Formations certifiantes</a></li>
+                <li><a href="https://formation-cgp.vercel.app/" target="_blank" rel="noopener noreferrer" className="hover:text-white">Quiz AMF gratuit</a></li>
+                <li><a href="https://formation-cgp.vercel.app/" target="_blank" rel="noopener noreferrer" className="hover:text-white">Mon espace</a></li>
               </ul>
             </div>
           </div>
