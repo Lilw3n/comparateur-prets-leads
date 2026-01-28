@@ -71,7 +71,7 @@ export default function RechercheBiens() {
     },
     {
       id: '2',
-      titre: 'Maison T4 avec jardin',
+      titre: '[EXEMPLE] Maison T4 avec jardin',
       type: 'Maison',
       prix: 450000,
       surface: 120,
@@ -113,7 +113,7 @@ export default function RechercheBiens() {
     },
     {
       id: '4',
-      titre: 'Appartement T2 rénové',
+      titre: '[EXEMPLE] Appartement T2 rénové',
       type: 'Appartement',
       prix: 195000,
       surface: 45,
@@ -134,7 +134,7 @@ export default function RechercheBiens() {
     },
     {
       id: '5',
-      titre: 'Villa T5 avec piscine',
+      titre: '[EXEMPLE] Villa T5 avec piscine',
       type: 'Villa',
       prix: 650000,
       surface: 180,
@@ -197,7 +197,7 @@ export default function RechercheBiens() {
     },
     {
       id: '8',
-      titre: 'Maison T3 avec terrasse',
+      titre: '[EXEMPLE] Maison T3 avec terrasse',
       type: 'Maison',
       prix: 295000,
       surface: 90,
@@ -239,7 +239,7 @@ export default function RechercheBiens() {
     },
     {
       id: '10',
-      titre: 'Maison T5 de caractère',
+      titre: '[EXEMPLE] Maison T5 de caractère',
       type: 'Maison',
       prix: 520000,
       surface: 150,
@@ -340,6 +340,15 @@ export default function RechercheBiens() {
         <p className="text-gray-600 text-lg">
           Trouvez le bien qui correspond à vos critères parmi nos milliers d'annonces
         </p>
+        <div className="mt-4">
+          <Link 
+            to="/presentation" 
+            className="inline-flex items-center gap-2 text-blue-600 hover:text-blue-700 font-semibold"
+          >
+            <Video className="w-5 h-5" />
+            Découvrez nos visites virtuelles 360°
+          </Link>
+        </div>
       </div>
 
       {/* Formulaire de recherche */}
