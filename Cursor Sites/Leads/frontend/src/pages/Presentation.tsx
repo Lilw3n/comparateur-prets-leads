@@ -107,6 +107,66 @@ export default function Presentation() {
           Découvrez nos biens immobiliers en visite virtuelle interactive. Explorez chaque pièce, 
           chaque détail comme si vous y étiez, depuis votre écran.
         </p>
+        
+        {/* Équipements professionnels */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8 max-w-4xl mx-auto">
+          <div className="bg-gradient-to-br from-blue-50 to-purple-50 rounded-xl p-6 shadow-md border border-blue-100">
+            <div className="flex items-start gap-4">
+              <div className="flex-shrink-0 w-24 h-24 bg-white rounded-lg shadow-sm flex items-center justify-center">
+                <img 
+                  src="/images/matterport-pro2.png" 
+                  alt="Matterport Pro 2"
+                  className="w-full h-full object-contain p-2"
+                  onError={(e) => {
+                    // Fallback si l'image n'existe pas encore
+                    (e.target as HTMLImageElement).style.display = 'none';
+                    (e.target as HTMLImageElement).parentElement!.innerHTML = '<div class="w-full h-full flex items-center justify-center text-blue-600 font-bold text-xs">Matterport<br/>Pro 2</div>';
+                  }}
+                />
+              </div>
+              <div className="flex-1">
+                <h3 className="text-xl font-bold text-gray-900 mb-2">Matterport Pro 2</h3>
+                <p className="text-gray-600 text-sm mb-2">
+                  Caméra professionnelle 3D pour visites virtuelles de qualité supérieure
+                </p>
+                <ul className="text-xs text-gray-500 space-y-1">
+                  <li>✓ Résolution 134 mégapixels</li>
+                  <li>✓ Photos 4K HDR</li>
+                  <li>✓ Précision 99% jusqu'à 4,5m</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+          
+          <div className="bg-gradient-to-br from-green-50 to-teal-50 rounded-xl p-6 shadow-md border border-green-100">
+            <div className="flex items-start gap-4">
+              <div className="flex-shrink-0 w-24 h-24 bg-white rounded-lg shadow-sm flex items-center justify-center">
+                <img 
+                  src="/images/fujifilm-xt2.png" 
+                  alt="Fujifilm X-T2"
+                  className="w-full h-full object-contain p-2"
+                  onError={(e) => {
+                    // Fallback si l'image n'existe pas encore
+                    (e.target as HTMLImageElement).style.display = 'none';
+                    (e.target as HTMLImageElement).parentElement!.innerHTML = '<div class="w-full h-full flex items-center justify-center text-green-600 font-bold text-xs">Fujifilm<br/>X-T2</div>';
+                  }}
+                />
+              </div>
+              <div className="flex-1">
+                <h3 className="text-xl font-bold text-gray-900 mb-2">Fujifilm X-T2</h3>
+                <p className="text-gray-600 text-sm mb-2">
+                  Appareil photo professionnel pour des clichés immobiliers de qualité
+                </p>
+                <ul className="text-xs text-gray-500 space-y-1">
+                  <li>✓ Capteur 24 MP APS-C</li>
+                  <li>✓ 325 points d'autofocus</li>
+                  <li>✓ Résistant aux intempéries</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+        
         <VisiteVirtuelle
           matterportId="RsKKA9cRJnj"
           titre="Exemple de visite virtuelle"
