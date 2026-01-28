@@ -272,25 +272,87 @@ export default function ComparateurPrets() {
     );
   }
 
+  // Déterminer l'étape actuelle
+  const getCurrentStep = () => {
+    if (!resultats) return 1; // Formulaire
+    if (resultats && !showCaptureForm && !showContactForm) return 2; // Résultats
+    if (showCaptureForm || showContactForm) return 3; // Contact
+    return 1;
+  };
+
+  const currentStep = getCurrentStep();
+  const steps = [
+    { number: 1, title: 'Votre projet', description: 'Définissez votre besoin', icon: FileText },
+    { number: 2, title: 'Comparaison', description: 'Comparez les offres', icon: TrendingUp },
+    { number: 3, title: 'Demande', description: 'Contactez-nous', icon: Mail }
+  ];
+
   return (
     <div className="space-y-8">
-      {/* Header Premium */}
+      {/* Header Premium avec Processus en Étapes - Style Meilleurtaux */}
       <div className="bg-gradient-to-r from-blue-600 to-purple-600 rounded-2xl p-8 text-white shadow-xl">
         <button
           onClick={() => navigate('/comparateur')}
-          className="flex items-center text-white/80 hover:text-white mb-4 transition-colors"
+          className="flex items-center text-white/80 hover:text-white mb-6 transition-colors"
         >
           <ArrowLeft className="w-4 h-4 mr-2" />
           Retour à l'accueil
         </button>
-        <div className="flex items-center justify-between">
-          <div>
-            <h1 className="text-4xl font-bold mb-2">Comparateur de Prêts</h1>
-            <p className="text-blue-100 text-lg">Comparez les meilleures offres en quelques clics</p>
+        
+        <div className="mb-6">
+          <h1 className="text-4xl font-bold mb-2">Comparateur de Prêts</h1>
+          <p className="text-blue-100 text-lg">Comparez les meilleures offres en quelques clics</p>
+        </div>
+
+        {/* Processus en étapes - Style Meilleurtaux */}
+        <div className="bg-white/10 backdrop-blur-md rounded-xl p-6 border border-white/20">
+          <div className="flex items-center justify-between">
+            {steps.map((step, index) => {
+              const Icon = step.icon;
+              const isActive = currentStep === step.number;
+              const isCompleted = currentStep > step.number;
+              const isLast = index === steps.length - 1;
+              
+              return (
+                <div key={step.number} className="flex items-center flex-1">
+                  <div className="flex flex-col items-center flex-1">
+                    <div className={`flex items-center justify-center w-12 h-12 rounded-full border-2 transition-all ${
+                      isActive 
+                        ? 'bg-yellow-400 border-yellow-400 text-gray-900' 
+                        : isCompleted
+                        ? 'bg-green-500 border-green-500 text-white'
+                        : 'bg-white/20 border-white/40 text-white'
+                    }`}>
+                      {isCompleted ? (
+                        <CheckCircle className="w-6 h-6" />
+                      ) : (
+                        <Icon className="w-6 h-6" />
+                      )}
+                    </div>
+                    <div className="mt-3 text-center">
+                      <div className={`text-sm font-semibold ${isActive ? 'text-yellow-300' : 'text-blue-200'}`}>
+                        Étape {step.number}
+                      </div>
+                      <div className={`text-xs mt-1 ${isActive ? 'text-white font-bold' : 'text-blue-200'}`}>
+                        {step.title}
+                      </div>
+                    </div>
+                  </div>
+                  {!isLast && (
+                    <div className={`flex-1 h-0.5 mx-4 ${
+                      isCompleted ? 'bg-green-500' : 'bg-white/30'
+                    }`} />
+                  )}
+                </div>
+              );
+            })}
           </div>
+        </div>
+
+        <div className="mt-6 flex justify-end">
           <button
             onClick={() => setShowQuestionnaire(true)}
-            className="hidden md:inline-flex items-center px-6 py-3 bg-white/20 backdrop-blur-sm border-2 border-white/30 rounded-xl text-white hover:bg-white/30 font-semibold transition-all"
+            className="inline-flex items-center px-6 py-3 bg-white/20 backdrop-blur-sm border-2 border-white/30 rounded-xl text-white hover:bg-white/30 font-semibold transition-all"
           >
             <FileText className="w-5 h-5 mr-2" />
             {questionnaireData ? 'Modifier le questionnaire' : 'Questionnaire détaillé'}

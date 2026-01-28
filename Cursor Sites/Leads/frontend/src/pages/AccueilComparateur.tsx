@@ -7,7 +7,7 @@ import {
   TrendingUp, Shield, Users, Award, ArrowRight, Home, CreditCard, 
   Building2, RefreshCw, Calculator, FileText, Star, CheckCircle,
   Briefcase, Zap, DollarSign, BookOpen, Clock, 
-  Sparkles, Target, Lock, ThumbsUp
+  Sparkles, Target, Lock, ThumbsUp, Euro, Percent, Calendar
 } from 'lucide-react';
 import AlerteTaux from '../components/AlerteTaux';
 
@@ -15,6 +15,15 @@ export default function AccueilComparateur() {
   const navigate = useNavigate();
   const [tauxMoyens, setTauxMoyens] = useState<TauxMoyen[]>([]);
   const [loading, setLoading] = useState(true);
+  
+  // État pour le simulateur intégré
+  const [simulationData, setSimulationData] = useState({
+    montant: 200000,
+    duree: 20,
+    apport: 20,
+    revenus: 3000,
+    typeCredit: 'immobilier'
+  });
 
   useEffect(() => {
     chargerTauxMoyens();
@@ -36,6 +45,25 @@ export default function AccueilComparateur() {
     navigate(`/comparateur-prets?type=${typeCredit}`);
   };
 
+  const handleSimulationSubmit = () => {
+    navigate(`/comparateur-prets?type=${simulationData.typeCredit}&montant=${simulationData.montant}&duree=${simulationData.duree}&apport=${simulationData.apport}&revenus=${simulationData.revenus}`);
+  };
+
+  const calculerMensualite = () => {
+    const tauxAnnuel = 3.0 / 100; // Taux moyen approximatif
+    const tauxMensuel = tauxAnnuel / 12;
+    const nombreMois = simulationData.duree * 12;
+    const montantEmprunte = simulationData.montant * (1 - simulationData.apport / 100);
+    
+    if (tauxMensuel === 0) {
+      return montantEmprunte / nombreMois;
+    }
+    
+    const mensualite = montantEmprunte * (tauxMensuel * Math.pow(1 + tauxMensuel, nombreMois)) / 
+                       (Math.pow(1 + tauxMensuel, nombreMois) - 1);
+    return mensualite;
+  };
+
   const services = [
     {
       id: 'immobilier',
@@ -47,27 +75,6 @@ export default function AccueilComparateur() {
       badgeText: 'Taux moyen sur 15 ans',
       link: '/comparateur-prets?type=immobilier',
       highlight: true
-    },
-    {
-      id: 'recherche-biens',
-      label: 'Recherche de biens',
-      description: 'Trouvez votre bien immobilier idéal',
-      icon: Home,
-      color: 'from-purple-500 to-pink-600',
-      badge: '10+',
-      badgeText: 'Biens disponibles',
-      link: '/recherche-biens',
-      highlight: false
-    },
-    {
-      id: 'assurance',
-      label: 'Assurance prêt immobilier',
-      description: 'Économisez jusqu\'à 77% sur votre assurance',
-      icon: Shield,
-      color: 'from-green-500 to-green-600',
-      badge: '-77%',
-      badgeText: 'Économies possibles',
-      link: '/comparateur-prets?type=immobilier'
     },
     {
       id: 'consommation',
@@ -98,16 +105,6 @@ export default function AccueilComparateur() {
       badge: 'Sur mesure',
       badgeText: 'Solutions adaptées',
       link: '/comparateur-prets?type=professionnel'
-    },
-    {
-      id: 'placement',
-      label: 'Placement et épargne',
-      description: 'Assurance vie & SCPI',
-      icon: DollarSign,
-      color: 'from-teal-500 to-teal-600',
-      badge: '5%',
-      badgeText: 'Rendement net',
-      link: '/comparateur-prets'
     }
   ];
 
@@ -167,7 +164,7 @@ export default function AccueilComparateur() {
 
   return (
     <div className="space-y-16">
-      {/* Hero Section Ultra Moderne */}
+      {/* Hero Section avec Simulateur Intégré - Style Meilleurtaux */}
       <div className="relative bg-gradient-to-br from-blue-600 via-blue-700 to-indigo-800 rounded-2xl p-8 md:p-16 text-white shadow-2xl overflow-hidden">
         {/* Effet de fond animé */}
         <div className="absolute inset-0 opacity-10">
@@ -182,36 +179,104 @@ export default function AccueilComparateur() {
           </div>
           
           <h1 className="text-5xl md:text-6xl font-bold mb-6 leading-tight">
-            Comparez les meilleurs taux<br />
-            <span className="text-yellow-300">immobiliers, crédits et assurances</span>
+            Votre crédit immobilier à<br />
+            <span className="text-yellow-300">quelques clics...</span>
           </h1>
           
           <p className="text-xl md:text-2xl text-blue-100 mb-8 max-w-2xl">
-            Simulation gratuite en 5 minutes • Plus de 100 banques comparées • Résultat instantané
+            + de 100 partenaires bancaires pour trouver la meilleure offre
           </p>
           
-          {/* CTA Principal */}
-          <div className="flex flex-col sm:flex-row gap-4 mb-12">
+          {/* Simulateur Intégré - Style Meilleurtaux */}
+          <div className="bg-white/10 backdrop-blur-md rounded-2xl p-8 border border-white/20 shadow-xl mb-8">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+              {/* Type de crédit */}
+              <div>
+                <label className="block text-white font-semibold mb-2">Type de crédit</label>
+                <select
+                  value={simulationData.typeCredit}
+                  onChange={(e) => setSimulationData({...simulationData, typeCredit: e.target.value})}
+                  className="w-full px-4 py-3 rounded-lg bg-white text-gray-900 font-semibold focus:ring-2 focus:ring-yellow-300"
+                >
+                  <option value="immobilier">Crédit immobilier</option>
+                  <option value="consommation">Crédit consommation</option>
+                  <option value="rachat">Rachat de crédit</option>
+                  <option value="professionnel">Financement Pro</option>
+                </select>
+              </div>
+
+              {/* Montant */}
+              <div>
+                <label className="block text-white font-semibold mb-2 flex items-center gap-2">
+                  <Euro className="w-4 h-4" />
+                  Montant du prêt
+                </label>
+                <div className="relative">
+                  <input
+                    type="number"
+                    value={simulationData.montant}
+                    onChange={(e) => setSimulationData({...simulationData, montant: parseInt(e.target.value) || 0})}
+                    className="w-full px-4 py-3 rounded-lg bg-white text-gray-900 font-semibold focus:ring-2 focus:ring-yellow-300"
+                    placeholder="200 000"
+                  />
+                  <span className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-500">€</span>
+                </div>
+              </div>
+
+              {/* Durée */}
+              <div>
+                <label className="block text-white font-semibold mb-2 flex items-center gap-2">
+                  <Calendar className="w-4 h-4" />
+                  Durée
+                </label>
+                <div className="relative">
+                  <input
+                    type="number"
+                    value={simulationData.duree}
+                    onChange={(e) => setSimulationData({...simulationData, duree: parseInt(e.target.value) || 0})}
+                    className="w-full px-4 py-3 rounded-lg bg-white text-gray-900 font-semibold focus:ring-2 focus:ring-yellow-300"
+                    placeholder="20"
+                  />
+                  <span className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-500">ans</span>
+                </div>
+              </div>
+
+              {/* Apport */}
+              <div>
+                <label className="block text-white font-semibold mb-2 flex items-center gap-2">
+                  <Percent className="w-4 h-4" />
+                  Apport personnel
+                </label>
+                <div className="relative">
+                  <input
+                    type="number"
+                    value={simulationData.apport}
+                    onChange={(e) => setSimulationData({...simulationData, apport: parseInt(e.target.value) || 0})}
+                    className="w-full px-4 py-3 rounded-lg bg-white text-gray-900 font-semibold focus:ring-2 focus:ring-yellow-300"
+                    placeholder="20"
+                  />
+                  <span className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-500">%</span>
+                </div>
+              </div>
+            </div>
+
+            {/* Résultat de la simulation */}
+            <div className="bg-yellow-400 text-gray-900 rounded-xl p-6 mb-6">
+              <div className="text-center">
+                <div className="text-sm font-semibold mb-2">Votre mensualité estimée</div>
+                <div className="text-4xl font-bold">{calculerMensualite().toFixed(0)} €/mois</div>
+                <div className="text-sm mt-2 opacity-80">Sur {simulationData.duree} ans</div>
+              </div>
+            </div>
+
+            {/* CTA Principal */}
             <button
-              onClick={() => navigate('/comparateur-prets?type=immobilier')}
-              className="group px-8 py-4 bg-white text-blue-600 rounded-xl hover:bg-blue-50 font-bold text-lg shadow-xl hover:shadow-2xl transition-all flex items-center justify-center"
+              onClick={handleSimulationSubmit}
+              className="w-full group px-8 py-4 bg-yellow-400 text-gray-900 rounded-xl hover:bg-yellow-300 font-bold text-lg shadow-xl hover:shadow-2xl transition-all flex items-center justify-center"
             >
               <Zap className="w-5 h-5 mr-2" />
-              Simuler mon crédit gratuitement
+              Comparer les offres gratuitement
               <ArrowRight className="w-5 h-5 ml-2 group-hover:translate-x-1 transition-transform" />
-            </button>
-            <button
-              onClick={() => navigate('/simulateurs/capacite-emprunt')}
-              className="px-8 py-4 bg-white/10 backdrop-blur-sm border-2 border-white/30 text-white rounded-xl hover:bg-white/20 font-semibold text-lg transition-all"
-            >
-              Calculer ma capacité d'emprunt
-            </button>
-            <button
-              onClick={() => navigate('/recherche-biens')}
-              className="px-8 py-4 bg-purple-500 text-white rounded-xl hover:bg-purple-600 font-semibold text-lg shadow-lg hover:shadow-xl transition-all flex items-center justify-center"
-            >
-              <Home className="w-5 h-5 mr-2" />
-              Rechercher un bien
             </button>
           </div>
           
@@ -236,59 +301,7 @@ export default function AccueilComparateur() {
         </div>
       </div>
 
-      {/* Services Principaux - Style Pretto Moderne */}
-      <div>
-        <div className="text-center mb-8">
-          <h2 className="text-4xl font-bold text-gray-900 mb-3">
-            Tous nos services en un clic
-          </h2>
-          <p className="text-xl text-gray-600">
-            Plateforme complète pour tous vos projets financiers
-          </p>
-        </div>
-        
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {services.map((service) => {
-            const Icon = service.icon;
-            return (
-              <div
-                key={service.id}
-                onClick={() => navigate(service.link)}
-                className={`group relative bg-gradient-to-br ${service.color} rounded-2xl shadow-lg p-8 text-white cursor-pointer hover:shadow-2xl hover:scale-105 transition-all overflow-hidden ${
-                  service.highlight ? 'ring-4 ring-yellow-300 ring-opacity-50' : ''
-                }`}
-              >
-                {/* Effet de brillance au hover */}
-                <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000"></div>
-                
-                <div className="relative z-10">
-                  <div className="flex items-start justify-between mb-4">
-                    <Icon className="w-12 h-12" />
-                    {service.highlight && (
-                      <Sparkles className="w-6 h-6 text-yellow-300" />
-                    )}
-                  </div>
-                  
-                  <div className="mb-2">
-                    <div className="text-2xl font-bold mb-1">{service.label}</div>
-                    <p className="text-sm opacity-90 mb-4">{service.description}</p>
-                  </div>
-                  
-                  <div className="flex items-center justify-between">
-                    <div>
-                      <div className="text-3xl font-bold">{service.badge}</div>
-                      <div className="text-xs opacity-80">{service.badgeText}</div>
-                    </div>
-                    <ArrowRight className="w-6 h-6 group-hover:translate-x-2 transition-transform" />
-                  </div>
-                </div>
-              </div>
-            );
-          })}
-        </div>
-      </div>
-
-      {/* Taux moyens avec Alerte */}
+      {/* Taux moyens avec Alerte - Style Meilleurtaux */}
       {tauxMoyens.length > 0 && (
         <div>
           <div className="flex items-center justify-between mb-6">
@@ -335,6 +348,58 @@ export default function AccueilComparateur() {
           )}
         </div>
       )}
+
+      {/* Services Principaux - Style Pretto Moderne */}
+      <div>
+        <div className="text-center mb-8">
+          <h2 className="text-4xl font-bold text-gray-900 mb-3">
+            Tous nos services en un clic
+          </h2>
+          <p className="text-xl text-gray-600">
+            Plateforme complète pour tous vos projets financiers
+          </p>
+        </div>
+        
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+          {services.map((service) => {
+            const Icon = service.icon;
+            return (
+              <div
+                key={service.id}
+                onClick={() => navigate(service.link)}
+                className={`group relative bg-gradient-to-br ${service.color} rounded-2xl shadow-lg p-8 text-white cursor-pointer hover:shadow-2xl hover:scale-105 transition-all overflow-hidden ${
+                  service.highlight ? 'ring-4 ring-yellow-300 ring-opacity-50' : ''
+                }`}
+              >
+                {/* Effet de brillance au hover */}
+                <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000"></div>
+                
+                <div className="relative z-10">
+                  <div className="flex items-start justify-between mb-4">
+                    <Icon className="w-12 h-12" />
+                    {service.highlight && (
+                      <Sparkles className="w-6 h-6 text-yellow-300" />
+                    )}
+                  </div>
+                  
+                  <div className="mb-2">
+                    <div className="text-2xl font-bold mb-1">{service.label}</div>
+                    <p className="text-sm opacity-90 mb-4">{service.description}</p>
+                  </div>
+                  
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <div className="text-3xl font-bold">{service.badge}</div>
+                      <div className="text-xs opacity-80">{service.badgeText}</div>
+                    </div>
+                    <ArrowRight className="w-6 h-6 group-hover:translate-x-2 transition-transform" />
+                  </div>
+                </div>
+              </div>
+            );
+          })}
+        </div>
+      </div>
 
       {/* Avantages - Style Meilleurtaux */}
       <div className="bg-gradient-to-r from-gray-50 to-blue-50 rounded-2xl p-12">
