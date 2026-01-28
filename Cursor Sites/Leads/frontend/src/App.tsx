@@ -15,6 +15,9 @@ import MonDossier from './pages/MonDossier';
 import RechercheBiens from './pages/RechercheBiens';
 import Articles from './pages/Articles';
 import ArticleDetail from './pages/ArticleDetail';
+import FormulaireDossierComplet from './pages/FormulaireDossierComplet';
+import ListeDossiers from './pages/ListeDossiers';
+import Presentation from './pages/Presentation';
 
 function App() {
   return (
@@ -37,6 +40,9 @@ function App() {
           <Route path="/recherche-biens" element={<RechercheBiens />} />
           <Route path="/articles" element={<Articles />} />
           <Route path="/articles/:slug" element={<ArticleDetail />} />
+          <Route path="/formulaire-dossier/:id?" element={<FormulaireDossierComplet />} />
+          <Route path="/dossiers" element={<ListeDossiers />} />
+          <Route path="/presentation" element={<Presentation />} />
         </Routes>
       </Layout>
     </Router>

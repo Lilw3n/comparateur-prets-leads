@@ -172,3 +172,102 @@ model AvisBanque {
   @@index([note])
   @@index([verified])
 }
+
+model DossierPret {
+  id                String   @id @default(uuid())
+  identifiant       String   @unique
+  
+  // Responsable de dossier
+  gestionnaireDossier Boolean @default(true)
+  
+  // Le Projet
+  typePret          String
+  montantSouhaite   Float
+  dureeSouhaitee    Int      // En années
+  apportPersonnel   Float?
+  finalite          String?
+  natureBien        String?
+  travaux           Boolean  @default(false)
+  
+  // Emprunteur
+  emprunteurCivilite String
+  emprunteurNom     String
+  emprunteurPrenom   String
+  emprunteurDateNaissance DateTime?
+  emprunteurLieuNaissance String?
+  emprunteurNationalite String?
+  emprunteurSituationFamiliale String?
+  emprunteurNombreEnfants Int @default(0)
+  emprunteurAdresse String?
+  emprunteurCodePostal String?
+  emprunteurVille   String?
+  emprunteurPays    String?
+  emprunteurEmail   String
+  emprunteurTelephone String?
+  
+  // Co-emprunteur (JSON pour flexibilité)
+  coEmprunteurData  String?  // JSON avec toutes les données co-emprunteur
+  
+  // Situation de famille
+  situationFamiliale String?
+  nomConjoint       String?
+  prenomConjoint    String?
+  dateNaissanceConjoint DateTime?
+  regimeMatrimonial String?
+  enfantsCharge     Boolean  @default(false)
+  agesEnfants       String?  // JSON array
+  situationFiscale String?
+  nombrePartsFiscales Float?
+  revenusMensuelsFoyer Float?
+  
+  // Logement
+  statutLogement    String?
+  loyerMensuel      Float?
+  adresseLogement   String?
+  codePostalLogement String?
+  villeLogement     String?
+  typeLogement      String?
+  usageLogement     String?
+  depuisQuandLogement String?
+  
+  // Situation professionnelle (JSON pour emprunteur et co-emprunteur)
+  emprunteurSituationPro String? // JSON
+  coEmprunteurSituationPro String? // JSON
+  
+  // Banque
+  nomBanque         String?
+  numeroCompte      String?
+  depuisQuandBanque String?
+  statutCompte      String?
+  montantDecouvert  Float?
+  
+  // Revenus et charges (JSON arrays)
+  revenus           String?  // JSON array
+  charges           String?  // JSON array
+  
+  // Simulation
+  capaciteEmprunt   Float?
+  mensualiteMax     Float?
+  tauxEndettement   Float?
+  resteAVivre       Float?
+  mensualiteEstimee Float?
+  tauxPropose       Float?
+  coutTotal         Float?
+  
+  // Informations complémentaires
+  informationsComplementaires String?
+  commentaires      String?  // JSON array
+  
+  // Statut du dossier
+  statut            String   @default("BROUILLON") // BROUILLON, EN_COURS, VALIDE, REFUSE, ACCEPTE
+  leadId            String?  // Lien vers le lead généré
+  
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+
+  @@index([identifiant])
+  @@index([emprunteurEmail])
+  @@index([statut])
+  @@index([typePret])
+  @@index([leadId])
+}

@@ -2,9 +2,10 @@ import { Link, useLocation } from 'react-router-dom';
 import { useState } from 'react';
 import { 
   Home, Users, TrendingUp, Calculator, FileText, CreditCard, 
-  Menu, X
+  Menu, X, Building2
 } from 'lucide-react';
 import NotificationCenter from './NotificationCenter';
+import DevBanner from './DevBanner';
 
 interface LayoutProps {
   children: React.ReactNode;
@@ -81,8 +82,23 @@ export default function Layout({ children }: LayoutProps) {
       icon: FileText
     },
     {
+      label: 'Notre activité',
+      path: '/presentation',
+      icon: Building2
+    },
+    {
       label: 'Mon dossier',
       path: '/mon-dossier',
+      icon: FileText
+    },
+    {
+      label: 'Formulaire dossier',
+      path: '/formulaire-dossier',
+      icon: FileText
+    },
+    {
+      label: 'Liste dossiers',
+      path: '/dossiers',
       icon: FileText
     },
     {
@@ -99,6 +115,7 @@ export default function Layout({ children }: LayoutProps) {
 
   return (
     <div className="min-h-screen bg-gray-50">
+      <DevBanner />
       {/* Navigation principale - Style Premium */}
       <nav className="bg-white shadow-lg border-b sticky top-0 z-50 backdrop-blur-sm bg-white/95">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">

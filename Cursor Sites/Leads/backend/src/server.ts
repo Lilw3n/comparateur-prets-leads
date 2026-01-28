@@ -4,6 +4,8 @@ import leadsRoutes from './routes/leads';
 import comparateursRoutes from './routes/comparateurs';
 import bankingRoutes from './routes/banking';
 import articlesRoutes from './routes/articles';
+import dossiersRoutes from './routes/dossiers';
+import contactRoutes from './routes/contact';
 
 const app = express();
 const PORT = process.env.PORT || 3002;
@@ -18,6 +20,8 @@ app.use('/api/leads', leadsRoutes);
 app.use('/api', comparateursRoutes);
 app.use('/api', bankingRoutes);
 app.use('/api/articles', articlesRoutes);
+app.use('/api/dossiers', dossiersRoutes);
+app.use('/api/contact', contactRoutes);
 
 // Health check
 app.get('/api/health', (req, res) => {

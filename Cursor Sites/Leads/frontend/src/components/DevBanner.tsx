@@ -1,0 +1,27 @@
+import { Calendar, Wrench } from 'lucide-react';
+
+export default function DevBanner() {
+  const today = new Date();
+  const formattedDate = today.toLocaleDateString('fr-FR', {
+    weekday: 'long',
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric'
+  });
+
+  return (
+    <div className="bg-gradient-to-r from-yellow-400 via-orange-500 to-red-500 text-white py-3 px-4 shadow-lg sticky top-0 z-50">
+      <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-center gap-3 text-sm md:text-base">
+        <div className="flex items-center gap-2">
+          <Wrench className="w-5 h-5 animate-spin" style={{ animationDuration: '3s' }} />
+          <span className="font-bold">🚧 Site en cours de développement 🚧</span>
+        </div>
+        <div className="hidden md:block text-white opacity-70">|</div>
+        <div className="flex items-center gap-2">
+          <Calendar className="w-4 h-4" />
+          <span className="font-medium">Dernière mise à jour : {formattedDate}</span>
+        </div>
+      </div>
+    </div>
+  );
+}

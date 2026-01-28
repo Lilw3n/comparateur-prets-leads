@@ -11,7 +11,8 @@ import LeadCaptureForm from '../components/LeadCaptureForm';
 import LeadCaptureService from '../services/leadCapture';
 import FiltresAvances from '../components/FiltresAvances';
 import ArticlesRecommandes from '../components/ArticlesRecommandes';
-import { CheckCircle, Building2, FileText, Settings, ArrowLeft, Clock, Zap, List, Grid } from 'lucide-react';
+import ContactForm from '../components/ContactForm';
+import { CheckCircle, Building2, FileText, Settings, ArrowLeft, Clock, Zap, List, Grid, Mail } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { bankingApiService } from '../services/bankingApi';
 import { Secteur } from '../types';
@@ -42,6 +43,7 @@ export default function ComparateurPrets() {
   const [bankingData, setBankingData] = useState<any>(null);
   const [showBankingConnection, setShowBankingConnection] = useState(false);
   const [showCaptureForm, setShowCaptureForm] = useState(false);
+  const [showContactForm, setShowContactForm] = useState(false);
   const [filteredOffres, setFilteredOffres] = useState<OffrePret[]>([]);
 
   const handleCaptureLead = async (data: {
@@ -814,6 +816,39 @@ export default function ComparateurPrets() {
           </div>
         </div>
         </div>
+      )}
+
+      {/* Bouton pour contacter le courtier */}
+      {resultats && (
+        <div className="bg-gradient-to-r from-blue-600 to-purple-600 rounded-xl shadow-md p-6 text-white">
+          <div className="flex flex-col md:flex-row items-center justify-between gap-4">
+            <div>
+              <h2 className="text-2xl font-bold mb-2">Besoin d'aide pour votre prêt ?</h2>
+              <p className="text-blue-100">Notre courtier vous accompagne et vous propose les meilleures offres de prêt</p>
+            </div>
+            <button
+              onClick={() => setShowContactForm(!showContactForm)}
+              className="px-6 py-3 bg-white text-blue-600 rounded-lg hover:bg-gray-100 font-semibold flex items-center gap-2 whitespace-nowrap"
+            >
+              <Mail className="w-5 h-5" />
+              {showContactForm ? 'Masquer le formulaire' : 'Contacter le courtier'}
+            </button>
+          </div>
+        </div>
+      )}
+
+      {/* Formulaire de contact */}
+      {showContactForm && resultats && (
+        <ContactForm
+          typeDemande="PRET"
+          prefillData={{
+            montant: formData.montant,
+            duree: Math.round(formData.duree / 12),
+          }}
+          onSuccess={() => {
+            setShowContactForm(false);
+          }}
+        />
       )}
 
       {/* Articles recommandés */}
