@@ -15,6 +15,7 @@ export default function Layout({ children }: LayoutProps) {
   const location = useLocation();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [dropdownOpen, setDropdownOpen] = useState<string | null>(null);
+  const [dropdownTimeout, setDropdownTimeout] = useState<NodeJS.Timeout | null>(null);
 
   const isActive = (path: string) => {
     if (path === '/comparateur') {
@@ -163,8 +164,19 @@ export default function Layout({ children }: LayoutProps) {
                       <div
                         key={item.path}
                         className="relative"
-                        onMouseEnter={() => setDropdownOpen(item.path)}
-                        onMouseLeave={() => setDropdownOpen(null)}
+                        onMouseEnter={() => {
+                          if (dropdownTimeout) {
+                            clearTimeout(dropdownTimeout);
+                            setDropdownTimeout(null);
+                          }
+                          setDropdownOpen(item.path);
+                        }}
+                        onMouseLeave={() => {
+                          const timeout = setTimeout(() => {
+                            setDropdownOpen(null);
+                          }, 200); // Délai de 200ms avant fermeture
+                          setDropdownTimeout(timeout);
+                        }}
                       >
                         <button
                           className={`inline-flex items-center px-4 py-2 rounded-md text-sm font-semibold transition-colors ${
@@ -277,7 +289,7 @@ export default function Layout({ children }: LayoutProps) {
                     {item.submenu && (
                       <div className="mt-1 ml-4 pl-4 border-l-2 border-gray-200">
                         {item.submenu.map((subitem) => {
-                          const isSubExternal = subitem.external || false;
+                          const isSubExternal = (subitem as any).external || false;
                           return isSubExternal ? (
                             <a
                               key={subitem.path}
