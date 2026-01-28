@@ -2,7 +2,7 @@ import { Link, useLocation } from 'react-router-dom';
 import { useState } from 'react';
 import { 
   Home, Users, TrendingUp, Calculator, FileText, CreditCard, 
-  Menu, X, Building2
+  Menu, X, Building2, Shield, DollarSign
 } from 'lucide-react';
 import NotificationCenter from './NotificationCenter';
 import DevBanner from './DevBanner';
@@ -23,6 +23,21 @@ export default function Layout({ children }: LayoutProps) {
     if (path === '/simulateurs') {
       return location.pathname.startsWith('/simulateurs');
     }
+    if (path === '/recherche-biens' || path === '/presentation') {
+      return location.pathname === '/recherche-biens' || location.pathname === '/presentation';
+    }
+    if (path === '/assurance') {
+      return location.pathname.startsWith('/assurance');
+    }
+    if (path === '/comparateur-prets') {
+      return location.pathname === '/comparateur-prets' || location.pathname.startsWith('/comparateur-prets');
+    }
+    if (path === '/articles' || path === '/guides' || path === '/actualites') {
+      return location.pathname === '/articles' || location.pathname === '/guides' || location.pathname === '/actualites';
+    }
+    if (path === '/mon-dossier' || path === '/dossiers' || path === '/dashboard' || path === '/leads') {
+      return location.pathname === '/mon-dossier' || location.pathname === '/dossiers' || location.pathname === '/dashboard' || location.pathname === '/leads';
+    }
     return location.pathname === path;
   };
 
@@ -33,83 +48,73 @@ export default function Layout({ children }: LayoutProps) {
       icon: Home
     },
     {
-      label: 'Crédit immobilier',
+      label: 'Immobilier',
+      path: '/recherche-biens',
+      icon: Building2,
+      submenu: [
+        { label: 'Recherche de biens', path: '/recherche-biens' },
+        { label: 'Notre activité immobilière', path: '/presentation' },
+        { label: 'Visites virtuelles', path: '/recherche-biens' }
+      ]
+    },
+    {
+      label: 'Prêt Immobilier',
       path: '/comparateur-prets?type=immobilier',
       icon: Home,
       submenu: [
         { label: 'Comparateur crédit immobilier', path: '/comparateur-prets?type=immobilier' },
-        { label: 'Recherche de biens', path: '/recherche-biens' },
         { label: 'Simulation de prêt', path: '/simulateurs/mensualites' },
         { label: 'Capacité d\'emprunt', path: '/simulateurs/capacite-emprunt' },
-        { label: 'Taux immobilier', path: '/comparateur?type=immobilier' }
-      ]
-    },
-    {
-      label: 'Crédit consommation',
-      path: '/comparateur-prets?type=consommation',
-      icon: CreditCard,
-      submenu: [
-        { label: 'Comparateur crédit conso', path: '/comparateur-prets?type=consommation' },
-        { label: 'Crédit auto', path: '/comparateur-prets?type=consommation' },
-        { label: 'Prêt personnel', path: '/comparateur-prets?type=consommation' }
-      ]
-    },
-    {
-      label: 'Simulateurs',
-      path: '/simulateurs',
-      icon: Calculator,
-      submenu: [
-        { label: 'Capacité d\'emprunt', path: '/simulateurs/capacite-emprunt' },
-        { label: 'Calcul mensualités', path: '/simulateurs/mensualites' },
         { label: 'Taux d\'endettement', path: '/simulateurs/taux-endettement' },
         { label: 'Frais de notaire', path: '/simulateurs/frais-notaire' },
-        { label: 'Comparateur de taux', path: '/comparateur-prets' }
+        { label: 'Formulaire dossier', path: '/formulaire-dossier' },
+        { label: 'Mes dossiers', path: '/dossiers' }
       ]
     },
     {
-      label: 'Articles',
+      label: 'Assurance',
+      path: '/assurance',
+      icon: Shield,
+      submenu: [
+        { label: 'Toutes les assurances', path: '/assurance' },
+        { label: 'Assurance habitation', path: '/assurance/habitation' },
+        { label: 'Assurance prêt immobilier', path: '/assurance/pret' },
+        { label: 'Assurance vie', path: '/assurance/vie' },
+        { label: 'Assurance auto', path: '/assurance/auto' }
+      ]
+    },
+    {
+      label: 'Finance',
+      path: '/comparateur-prets',
+      icon: DollarSign,
+      submenu: [
+        { label: 'Comparateur de prêts', path: '/comparateur-prets' },
+        { label: 'Crédit consommation', path: '/comparateur-prets?type=consommation' },
+        { label: 'Crédit auto', path: '/comparateur-prets?type=consommation' },
+        { label: 'Prêt personnel', path: '/comparateur-prets?type=consommation' },
+        { label: 'Attestation financement', path: '/attestation-financement' }
+      ]
+    },
+    {
+      label: 'Ressources',
       path: '/articles',
-      icon: FileText
+      icon: FileText,
+      submenu: [
+        { label: 'Articles', path: '/articles' },
+        { label: 'Guides', path: '/guides' },
+        { label: 'Actualités', path: '/actualites' }
+      ]
     },
     {
-      label: 'Guides',
-      path: '/guides',
-      icon: FileText
-    },
-    {
-      label: 'Actualités',
-      path: '/actualites',
-      icon: FileText
-    },
-    {
-      label: 'Notre activité',
-      path: '/presentation',
-      icon: Building2
-    },
-    {
-      label: 'Mon dossier',
+      label: 'Mon espace',
       path: '/mon-dossier',
-      icon: FileText
-    },
-    {
-      label: 'Formulaire dossier',
-      path: '/formulaire-dossier',
-      icon: FileText
-    },
-    {
-      label: 'Liste dossiers',
-      path: '/dossiers',
-      icon: FileText
-    },
-    {
-      label: 'Leads',
-      path: '/leads',
-      icon: Users
-    },
-    {
-      label: 'Dashboard',
-      path: '/dashboard',
-      icon: TrendingUp
+      icon: Users,
+      submenu: [
+        { label: 'Mon dossier', path: '/mon-dossier' },
+        { label: 'Mes dossiers', path: '/dossiers' },
+        { label: 'Dashboard', path: '/dashboard' },
+        { label: 'Gestion Leads', path: '/leads' }
+      ]
     }
   ];
 
@@ -129,15 +134,15 @@ export default function Layout({ children }: LayoutProps) {
                   </div>
                   <div className="ml-3">
                     <h1 className="text-xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
-                      ComparateurPrêts
+                      Courtier Multi-Activités
                     </h1>
-                    <p className="text-xs text-gray-500">#1 en France</p>
+                    <p className="text-xs text-gray-500">Immobilier • Prêts • Assurance</p>
                   </div>
                 </Link>
               </div>
               
               {/* Menu desktop */}
-              <div className="hidden lg:ml-8 lg:flex lg:space-x-1">
+              <div className="hidden lg:ml-8 lg:flex lg:items-center lg:space-x-2">
                 {menuItems.map((item) => {
                   const Icon = item.icon;
                   const hasSubmenu = item.submenu && item.submenu.length > 0;
@@ -151,10 +156,10 @@ export default function Layout({ children }: LayoutProps) {
                         onMouseLeave={() => setDropdownOpen(null)}
                       >
                         <button
-                          className={`inline-flex items-center px-3 pt-1 border-b-2 text-sm font-medium ${
+                          className={`inline-flex items-center px-4 py-2 rounded-md text-sm font-semibold transition-colors ${
                             isActive(item.path)
-                              ? 'border-blue-500 text-gray-900'
-                              : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
+                              ? 'bg-blue-50 text-blue-700 border-2 border-blue-200'
+                              : 'text-gray-700 hover:bg-gray-100 hover:text-gray-900'
                           }`}
                         >
                           <Icon className="w-4 h-4 mr-2" />
@@ -162,12 +167,15 @@ export default function Layout({ children }: LayoutProps) {
                         </button>
                         
                         {dropdownOpen === item.path && (
-                          <div className="absolute left-0 mt-2 w-64 bg-white rounded-lg shadow-lg border border-gray-200 py-2 z-50">
+                          <div className="absolute left-0 mt-1 w-72 bg-white rounded-lg shadow-xl border-2 border-gray-200 py-2 z-50">
+                            <div className="px-3 py-2 border-b border-gray-200">
+                              <span className="text-xs font-semibold text-gray-500 uppercase">{item.label}</span>
+                            </div>
                             {item.submenu?.map((subitem) => (
                               <Link
                                 key={subitem.path}
                                 to={subitem.path}
-                                className="block px-4 py-2 text-sm text-gray-700 hover:bg-blue-50 hover:text-blue-600"
+                                className="block px-4 py-2.5 text-sm text-gray-700 hover:bg-blue-50 hover:text-blue-600 transition-colors"
                                 onClick={() => setDropdownOpen(null)}
                               >
                                 {subitem.label}
@@ -183,10 +191,10 @@ export default function Layout({ children }: LayoutProps) {
                     <Link
                       key={item.path}
                       to={item.path}
-                      className={`inline-flex items-center px-3 pt-1 border-b-2 text-sm font-medium ${
+                      className={`inline-flex items-center px-4 py-2 rounded-md text-sm font-semibold transition-colors ${
                         isActive(item.path)
-                          ? 'border-blue-500 text-gray-900'
-                          : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
+                          ? 'bg-blue-50 text-blue-700 border-2 border-blue-200'
+                          : 'text-gray-700 hover:bg-gray-100 hover:text-gray-900'
                       }`}
                     >
                       <Icon className="w-4 h-4 mr-2" />
@@ -224,33 +232,37 @@ export default function Layout({ children }: LayoutProps) {
         {/* Mobile menu */}
         {mobileMenuOpen && (
           <div className="lg:hidden border-t border-gray-200 bg-white">
-            <div className="px-2 pt-2 pb-3 space-y-1">
+            <div className="px-2 pt-2 pb-3 space-y-1 max-h-[80vh] overflow-y-auto">
               {menuItems.map((item) => {
                 const Icon = item.icon;
                 return (
-                  <div key={item.path}>
+                  <div key={item.path} className="mb-2">
                     <Link
                       to={item.path}
                       onClick={() => setMobileMenuOpen(false)}
-                      className={`flex items-center px-3 py-2 rounded-md text-base font-medium ${
+                      className={`flex items-center px-3 py-2.5 rounded-md text-base font-semibold ${
                         isActive(item.path)
-                          ? 'bg-blue-50 text-blue-600'
+                          ? 'bg-blue-50 text-blue-700 border-2 border-blue-200'
                           : 'text-gray-700 hover:bg-gray-50 hover:text-gray-900'
                       }`}
                     >
                       <Icon className="w-5 h-5 mr-3" />
                       {item.label}
                     </Link>
-                    {item.submenu && item.submenu.map((subitem) => (
-                      <Link
-                        key={subitem.path}
-                        to={subitem.path}
-                        onClick={() => setMobileMenuOpen(false)}
-                        className="flex items-center px-6 py-2 rounded-md text-sm text-gray-600 hover:bg-gray-50"
-                      >
-                        {subitem.label}
-                      </Link>
-                    ))}
+                    {item.submenu && (
+                      <div className="mt-1 ml-4 pl-4 border-l-2 border-gray-200">
+                        {item.submenu.map((subitem) => (
+                          <Link
+                            key={subitem.path}
+                            to={subitem.path}
+                            onClick={() => setMobileMenuOpen(false)}
+                            className="flex items-center px-3 py-2 rounded-md text-sm text-gray-600 hover:bg-blue-50 hover:text-blue-600"
+                          >
+                            {subitem.label}
+                          </Link>
+                        ))}
+                      </div>
+                    )}
                   </div>
                 );
               })}
@@ -270,7 +282,7 @@ export default function Layout({ children }: LayoutProps) {
             <div>
               <div className="flex items-center mb-4">
                 <TrendingUp className="w-8 h-8 text-blue-400 mr-2" />
-                <h3 className="text-xl font-bold">ComparateurPrêts</h3>
+                <h3 className="text-xl font-bold">Courtier Multi-Activités</h3>
               </div>
               <p className="text-gray-400 text-sm mb-4">
                 Plateforme #1 pour comparer les meilleurs taux immobiliers, crédits et assurances en quelques clics.
@@ -287,7 +299,14 @@ export default function Layout({ children }: LayoutProps) {
               </div>
             </div>
             <div>
-              <h4 className="font-semibold mb-4">Crédit Immobilier</h4>
+              <h4 className="font-semibold mb-4">Immobilier</h4>
+              <ul className="space-y-2 text-sm text-gray-400">
+                <li><Link to="/recherche-biens" className="hover:text-white">Recherche de biens</Link></li>
+                <li><Link to="/presentation" className="hover:text-white">Notre activité</Link></li>
+              </ul>
+            </div>
+            <div>
+              <h4 className="font-semibold mb-4">Prêt Immobilier</h4>
               <ul className="space-y-2 text-sm text-gray-400">
                 <li><Link to="/comparateur-prets?type=immobilier" className="hover:text-white">Comparateur</Link></li>
                 <li><Link to="/simulateurs/mensualites" className="hover:text-white">Simulation</Link></li>
@@ -295,26 +314,26 @@ export default function Layout({ children }: LayoutProps) {
               </ul>
             </div>
             <div>
-              <h4 className="font-semibold mb-4">Simulateurs</h4>
+              <h4 className="font-semibold mb-4">Assurance</h4>
               <ul className="space-y-2 text-sm text-gray-400">
-                <li><Link to="/simulateurs/capacite-emprunt" className="hover:text-white">Capacité d'emprunt</Link></li>
-                <li><Link to="/simulateurs/mensualites" className="hover:text-white">Mensualités</Link></li>
-                <li><Link to="/comparateur-prets" className="hover:text-white">Taux personnalisé</Link></li>
+                <li><Link to="/assurance" className="hover:text-white">Toutes les assurances</Link></li>
+                <li><Link to="/assurance/habitation" className="hover:text-white">Assurance habitation</Link></li>
+                <li><Link to="/assurance/pret" className="hover:text-white">Assurance prêt</Link></li>
               </ul>
             </div>
             <div>
-              <h4 className="font-semibold mb-4">Informations</h4>
+              <h4 className="font-semibold mb-4">Finance</h4>
               <ul className="space-y-2 text-sm text-gray-400">
-                <li><Link to="/dashboard" className="hover:text-white">Dashboard</Link></li>
-                <li><Link to="/leads" className="hover:text-white">Gestion Leads</Link></li>
-                <li><Link to="/comparateur" className="hover:text-white">Accueil</Link></li>
+                <li><Link to="/comparateur-prets" className="hover:text-white">Comparateur prêts</Link></li>
+                <li><Link to="/comparateur-prets?type=consommation" className="hover:text-white">Crédit consommation</Link></li>
+                <li><Link to="/attestation-financement" className="hover:text-white">Attestation</Link></li>
               </ul>
             </div>
           </div>
           <div className="border-t border-gray-700 mt-12 pt-8">
             <div className="flex flex-col md:flex-row justify-between items-center gap-4">
               <div className="text-sm text-gray-400">
-                <p>© 2026 ComparateurPrêts. Tous droits réservés.</p>
+                <p>© 2026 Courtier Multi-Activités. Tous droits réservés.</p>
                 <p className="mt-1">Un crédit vous engage et doit être remboursé. Vérifiez vos capacités de remboursement avant de vous engager.</p>
               </div>
               <div className="flex gap-6 text-sm">
