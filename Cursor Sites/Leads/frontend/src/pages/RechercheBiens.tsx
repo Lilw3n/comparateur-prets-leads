@@ -1,5 +1,6 @@
 import { useState } from 'react';
-import { Search, Home, MapPin, Euro, Ruler, Bed, Bath, Car, Heart, Share2, Mail, Video } from 'lucide-react';
+import { Link } from 'react-router-dom';
+import { Search, Home, MapPin, Euro, Ruler, Bed, Bath, Car, Heart, Share2, Mail, Video, Plus, X, ExternalLink, AlertCircle } from 'lucide-react';
 import LeadCaptureForm from '../components/LeadCaptureForm';
 import LeadCaptureService from '../services/leadCapture';
 import ArticlesRecommandes from '../components/ArticlesRecommandes';
@@ -33,6 +34,7 @@ interface BienImmobilier {
 export default function RechercheBiens() {
   const [showCaptureForm, setShowCaptureForm] = useState(false);
   const [showContactForm, setShowContactForm] = useState(false);
+  const [showAddForm, setShowAddForm] = useState(false);
   const [favoris, setFavoris] = useState<Set<string>>(new Set());
   
   const [filtres, setFiltres] = useState({
@@ -45,8 +47,8 @@ export default function RechercheBiens() {
     chambres: '',
   });
 
-  // Biens immobiliers simulés (en production, cela viendrait d'une API)
-  const [biens] = useState<BienImmobilier[]>([
+  // Biens immobiliers (exemples + biens ajoutés manuellement)
+  const [biens, setBiens] = useState<BienImmobilier[]>([
     {
       id: '1',
       titre: 'Appartement T3 lumineux avec balcon',
@@ -67,11 +69,12 @@ export default function RechercheBiens() {
       ascenseur: true,
       dpe: 'C',
       ges: 'B',
-      visiteVirtuelleId: 'RsKKA9cRJnj', // Exemple de visite virtuelle Matterport
+      visiteVirtuelleId: 'RsKKA9cRJnj',
+      isExemple: true,
     },
     {
       id: '2',
-      titre: '[EXEMPLE] Maison T4 avec jardin',
+      titre: 'Maison T4 avec jardin',
       type: 'Maison',
       prix: 450000,
       surface: 120,
@@ -89,6 +92,7 @@ export default function RechercheBiens() {
       ascenseur: false,
       dpe: 'B',
       ges: 'A',
+      isExemple: true,
     },
     {
       id: '3',
@@ -110,10 +114,11 @@ export default function RechercheBiens() {
       ascenseur: true,
       dpe: 'A',
       ges: 'A',
+      isExemple: true,
     },
     {
       id: '4',
-      titre: '[EXEMPLE] Appartement T2 rénové',
+      titre: 'Appartement T2 rénové',
       type: 'Appartement',
       prix: 195000,
       surface: 45,
@@ -131,10 +136,11 @@ export default function RechercheBiens() {
       ascenseur: false,
       dpe: 'B',
       ges: 'B',
+      isExemple: true,
     },
     {
       id: '5',
-      titre: '[EXEMPLE] Villa T5 avec piscine',
+      titre: 'Villa T5 avec piscine',
       type: 'Villa',
       prix: 650000,
       surface: 180,
@@ -152,6 +158,7 @@ export default function RechercheBiens() {
       ascenseur: false,
       dpe: 'C',
       ges: 'B',
+      isExemple: true,
     },
     {
       id: '6',
@@ -173,6 +180,7 @@ export default function RechercheBiens() {
       ascenseur: true,
       dpe: 'D',
       ges: 'C',
+      isExemple: true,
     },
     {
       id: '7',
@@ -194,10 +202,11 @@ export default function RechercheBiens() {
       ascenseur: true,
       dpe: 'B',
       ges: 'A',
+      isExemple: true,
     },
     {
       id: '8',
-      titre: '[EXEMPLE] Maison T3 avec terrasse',
+      titre: 'Maison T3 avec terrasse',
       type: 'Maison',
       prix: 295000,
       surface: 90,
@@ -215,6 +224,7 @@ export default function RechercheBiens() {
       ascenseur: false,
       dpe: 'C',
       ges: 'B',
+      isExemple: true,
     },
     {
       id: '9',
@@ -236,10 +246,11 @@ export default function RechercheBiens() {
       ascenseur: true,
       dpe: 'A',
       ges: 'A',
+      isExemple: true,
     },
     {
       id: '10',
-      titre: '[EXEMPLE] Maison T5 de caractère',
+      titre: 'Maison T5 de caractère',
       type: 'Maison',
       prix: 520000,
       surface: 150,
@@ -257,6 +268,7 @@ export default function RechercheBiens() {
       ascenseur: false,
       dpe: 'D',
       ges: 'C',
+      isExemple: true,
     },
   ]);
 
@@ -340,7 +352,7 @@ export default function RechercheBiens() {
         <p className="text-gray-600 text-lg">
           Trouvez le bien qui correspond à vos critères parmi nos milliers d'annonces
         </p>
-        <div className="mt-4">
+        <div className="mt-4 flex items-center justify-center gap-4">
           <Link 
             to="/presentation" 
             className="inline-flex items-center gap-2 text-blue-600 hover:text-blue-700 font-semibold"
@@ -348,6 +360,13 @@ export default function RechercheBiens() {
             <Video className="w-5 h-5" />
             Découvrez nos visites virtuelles 360°
           </Link>
+          <button
+            onClick={() => setShowAddForm(true)}
+            className="inline-flex items-center gap-2 px-4 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 font-semibold"
+          >
+            <Plus className="w-5 h-5" />
+            Ajouter un bien
+          </button>
         </div>
       </div>
 
@@ -528,6 +547,178 @@ export default function RechercheBiens() {
         />
       )}
 
+      {/* Formulaire d'ajout de bien */}
+      {showAddForm && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+          <div className="bg-white rounded-xl shadow-xl max-w-2xl w-full max-h-[90vh] overflow-y-auto">
+            <div className="p-6 border-b border-gray-200 flex items-center justify-between">
+              <h2 className="text-2xl font-bold text-gray-900">Ajouter un bien immobilier</h2>
+              <button
+                onClick={() => setShowAddForm(false)}
+                className="text-gray-400 hover:text-gray-600"
+              >
+                <X className="w-6 h-6" />
+              </button>
+            </div>
+            <form
+              onSubmit={(e) => {
+                e.preventDefault();
+                const formData = new FormData(e.target as HTMLFormElement);
+                const nouveauBien: BienImmobilier = {
+                  id: Date.now().toString(),
+                  titre: formData.get('titre') as string,
+                  type: formData.get('type') as string,
+                  prix: parseInt(formData.get('prix') as string),
+                  surface: parseInt(formData.get('surface') as string),
+                  pieces: parseInt(formData.get('pieces') as string),
+                  chambres: parseInt(formData.get('chambres') as string),
+                  sallesDeBain: parseInt(formData.get('sallesDeBain') as string),
+                  localisation: formData.get('localisation') as string,
+                  codePostal: formData.get('codePostal') as string,
+                  ville: formData.get('ville') as string,
+                  description: formData.get('description') as string,
+                  images: ['/api/placeholder/400/300'],
+                  parking: formData.get('parking') === 'on',
+                  balcon: formData.get('balcon') === 'on',
+                  jardin: formData.get('jardin') === 'on',
+                  ascenseur: formData.get('ascenseur') === 'on',
+                  dpe: formData.get('dpe') as string,
+                  ges: formData.get('ges') as string,
+                  lienExterne: formData.get('lienExterne') as string || undefined,
+                  isExemple: false,
+                };
+                setBiens([...biens, nouveauBien]);
+                setBiensFiltres([...biensFiltres, nouveauBien]);
+                setShowAddForm(false);
+              }}
+              className="p-6 space-y-4"
+            >
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">Titre *</label>
+                  <input type="text" name="titre" required className="w-full px-4 py-2 border border-gray-300 rounded-md" />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">Type *</label>
+                  <select name="type" required className="w-full px-4 py-2 border border-gray-300 rounded-md">
+                    <option value="Appartement">Appartement</option>
+                    <option value="Maison">Maison</option>
+                    <option value="Villa">Villa</option>
+                    <option value="Studio">Studio</option>
+                    <option value="Loft">Loft</option>
+                  </select>
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">Prix (€) *</label>
+                  <input type="number" name="prix" required className="w-full px-4 py-2 border border-gray-300 rounded-md" />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">Surface (m²) *</label>
+                  <input type="number" name="surface" required className="w-full px-4 py-2 border border-gray-300 rounded-md" />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">Pièces *</label>
+                  <input type="number" name="pieces" required className="w-full px-4 py-2 border border-gray-300 rounded-md" />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">Chambres *</label>
+                  <input type="number" name="chambres" required className="w-full px-4 py-2 border border-gray-300 rounded-md" />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">Salles de bain *</label>
+                  <input type="number" name="sallesDeBain" required className="w-full px-4 py-2 border border-gray-300 rounded-md" />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">Ville *</label>
+                  <input type="text" name="ville" required className="w-full px-4 py-2 border border-gray-300 rounded-md" />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">Code postal *</label>
+                  <input type="text" name="codePostal" required className="w-full px-4 py-2 border border-gray-300 rounded-md" />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">Localisation *</label>
+                  <input type="text" name="localisation" required className="w-full px-4 py-2 border border-gray-300 rounded-md" />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">DPE *</label>
+                  <select name="dpe" required className="w-full px-4 py-2 border border-gray-300 rounded-md">
+                    <option value="A">A</option>
+                    <option value="B">B</option>
+                    <option value="C">C</option>
+                    <option value="D">D</option>
+                    <option value="E">E</option>
+                    <option value="F">F</option>
+                    <option value="G">G</option>
+                  </select>
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">GES *</label>
+                  <select name="ges" required className="w-full px-4 py-2 border border-gray-300 rounded-md">
+                    <option value="A">A</option>
+                    <option value="B">B</option>
+                    <option value="C">C</option>
+                    <option value="D">D</option>
+                    <option value="E">E</option>
+                    <option value="F">F</option>
+                    <option value="G">G</option>
+                  </select>
+                </div>
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">Description *</label>
+                <textarea name="description" required rows={3} className="w-full px-4 py-2 border border-gray-300 rounded-md" />
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  Lien externe (LeBonCoin, SeLoger, Les Portes, etc.)
+                </label>
+                <input 
+                  type="url" 
+                  name="lienExterne" 
+                  placeholder="https://www.leboncoin.fr/..." 
+                  className="w-full px-4 py-2 border border-gray-300 rounded-md" 
+                />
+                <p className="text-xs text-gray-500 mt-1">Optionnel : Ajoutez un lien vers l'annonce originale</p>
+              </div>
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                <label className="flex items-center">
+                  <input type="checkbox" name="parking" className="mr-2" />
+                  <span className="text-sm">Parking</span>
+                </label>
+                <label className="flex items-center">
+                  <input type="checkbox" name="balcon" className="mr-2" />
+                  <span className="text-sm">Balcon</span>
+                </label>
+                <label className="flex items-center">
+                  <input type="checkbox" name="jardin" className="mr-2" />
+                  <span className="text-sm">Jardin</span>
+                </label>
+                <label className="flex items-center">
+                  <input type="checkbox" name="ascenseur" className="mr-2" />
+                  <span className="text-sm">Ascenseur</span>
+                </label>
+              </div>
+              <div className="flex gap-3 pt-4">
+                <button
+                  type="submit"
+                  className="flex-1 px-6 py-3 bg-purple-600 text-white rounded-lg hover:bg-purple-700 font-semibold"
+                >
+                  Ajouter le bien
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setShowAddForm(false)}
+                  className="px-6 py-3 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300 font-semibold"
+                >
+                  Annuler
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
+
       {/* Articles recommandés */}
       {biensFiltres.length > 0 && (
         <ArticlesRecommandes
@@ -571,7 +762,20 @@ export default function RechercheBiens() {
             </div>
 
             <div className="p-4">
-              <h3 className="text-lg font-bold text-gray-900 mb-2">{bien.titre}</h3>
+              <div className="flex items-start justify-between mb-2">
+                <h3 className="text-lg font-bold text-gray-900 flex-1">{bien.titre}</h3>
+                {bien.lienExterne && (
+                  <a
+                    href={bien.lienExterne}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="ml-2 text-blue-600 hover:text-blue-800"
+                    onClick={(e) => e.stopPropagation()}
+                  >
+                    <ExternalLink className="w-4 h-4" />
+                  </a>
+                )}
+              </div>
               <div className="flex items-center text-gray-600 mb-3">
                 <MapPin className="w-4 h-4 mr-1" />
                 <span className="text-sm">{bien.localisation}</span>
