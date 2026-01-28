@@ -54,7 +54,7 @@ export default function Layout({ children }: LayoutProps) {
       submenu: [
         { label: 'Recherche de biens', path: '/recherche-biens' },
         { label: 'Notre activité immobilière', path: '/presentation' },
-        { label: 'Visites virtuelles', path: '/recherche-biens' }
+        { label: 'Visites virtuelles', path: '/presentation' }
       ]
     },
     {
