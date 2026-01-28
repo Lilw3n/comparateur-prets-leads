@@ -39,6 +39,9 @@ export default function Layout({ children }: LayoutProps) {
     if (path === '/mon-dossier' || path === '/dossiers' || path === '/dashboard' || path === '/leads') {
       return location.pathname === '/mon-dossier' || location.pathname === '/dossiers' || location.pathname === '/dashboard' || location.pathname === '/leads';
     }
+    if (path === '/nos-autres-sites') {
+      return location.pathname === '/nos-autres-sites';
+    }
     return location.pathname === path;
   };
 
@@ -98,13 +101,11 @@ export default function Layout({ children }: LayoutProps) {
     },
     {
       label: 'Formations',
-      path: 'https://formation-cgp.vercel.app/',
+      path: '/nos-autres-sites',
       icon: GraduationCap,
-      external: true,
       submenu: [
-        { label: 'Formations certifiantes', path: 'https://formation-cgp.vercel.app/', external: true },
-        { label: 'Quiz AMF gratuit', path: 'https://formation-cgp.vercel.app/', external: true },
-        { label: 'Mon espace formation', path: 'https://formation-cgp.vercel.app/', external: true }
+        { label: 'Nos autres sites', path: '/nos-autres-sites' },
+        { label: 'Formation CGP', path: 'https://formation-cgp.vercel.app/', external: true }
       ]
     },
     {
@@ -412,9 +413,8 @@ export default function Layout({ children }: LayoutProps) {
             <div>
               <h4 className="font-semibold mb-4">Formations</h4>
               <ul className="space-y-2 text-sm text-gray-400">
-                <li><a href="https://formation-cgp.vercel.app/" target="_blank" rel="noopener noreferrer" className="hover:text-white">Formations certifiantes</a></li>
-                <li><a href="https://formation-cgp.vercel.app/" target="_blank" rel="noopener noreferrer" className="hover:text-white">Quiz AMF gratuit</a></li>
-                <li><a href="https://formation-cgp.vercel.app/" target="_blank" rel="noopener noreferrer" className="hover:text-white">Mon espace</a></li>
+                <li><Link to="/nos-autres-sites" className="hover:text-white">Nos autres sites</Link></li>
+                <li><a href="https://formation-cgp.vercel.app/" target="_blank" rel="noopener noreferrer" className="hover:text-white">Formation CGP</a></li>
               </ul>
             </div>
           </div>

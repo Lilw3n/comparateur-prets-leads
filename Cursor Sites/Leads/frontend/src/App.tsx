@@ -22,6 +22,7 @@ import Assurance from './pages/Assurance';
 import MentionsLegales from './pages/MentionsLegales';
 import Confidentialite from './pages/Confidentialite';
 import CGU from './pages/CGU';
+import NosAutresSites from './pages/NosAutresSites';
 
 function App() {
   return (
@@ -52,6 +53,7 @@ function App() {
           <Route path="/mentions-legales" element={<MentionsLegales />} />
           <Route path="/confidentialite" element={<Confidentialite />} />
           <Route path="/cgu" element={<CGU />} />
+          <Route path="/nos-autres-sites" element={<NosAutresSites />} />
         </Routes>
       </Layout>
     </Router>
