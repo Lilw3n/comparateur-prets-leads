@@ -42,9 +42,6 @@ export default function Layout({ children }: LayoutProps) {
     if (path === '/nos-autres-sites') {
       return location.pathname === '/nos-autres-sites';
     }
-    if (path === '/nos-autres-sites' || path.startsWith('/nos-autres-sites')) {
-      return location.pathname === '/nos-autres-sites';
-    }
     return location.pathname === path;
   };
 
@@ -414,10 +411,10 @@ export default function Layout({ children }: LayoutProps) {
               </ul>
             </div>
             <div>
-              <h4 className="font-semibold mb-4">Formations</h4>
+              <h4 className="font-semibold mb-4">Nos autres sites</h4>
               <ul className="space-y-2 text-sm text-gray-400">
-                <li><Link to="/nos-autres-sites" className="hover:text-white">Nos autres sites</Link></li>
                 <li><a href="https://formation-cgp.vercel.app/" target="_blank" rel="noopener noreferrer" className="hover:text-white">Formation CGP</a></li>
+                <li><Link to="/nos-autres-sites" className="hover:text-white">Voir tous nos sites</Link></li>
               </ul>
             </div>
           </div>
