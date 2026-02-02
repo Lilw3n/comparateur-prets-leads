@@ -24,7 +24,7 @@ export default function ContactFloatingButton({ variant = 'floating' }: ContactF
         {/* Modal de contact */}
         {isOpen && (
           <div 
-            className="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4"
+            className="fixed inset-0 bg-black bg-opacity-50 z-[100] flex items-center justify-center p-4"
             onClick={() => setIsOpen(false)}
           >
             <div 
@@ -86,7 +86,7 @@ export default function ContactFloatingButton({ variant = 'floating' }: ContactF
       {/* Modal de contact */}
       {isOpen && (
         <div 
-          className="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4"
+          className="fixed inset-0 bg-black bg-opacity-50 z-[100] flex items-center justify-center p-4"
           onClick={() => setIsOpen(false)}
         >
           <div 

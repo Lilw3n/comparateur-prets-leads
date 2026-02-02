@@ -194,7 +194,7 @@ export default function Layout({ children }: LayoutProps) {
                         
                         {dropdownOpen === item.path && (
                           <div 
-                            className="absolute left-0 mt-1 w-72 bg-white rounded-lg shadow-xl border-2 border-gray-200 py-2 z-50"
+                            className="absolute left-0 mt-1 w-72 bg-white rounded-lg shadow-xl border-2 border-gray-200 py-2 z-[60]"
                             onMouseEnter={() => {
                               if (dropdownTimeout) {
                                 clearTimeout(dropdownTimeout);
@@ -261,15 +261,15 @@ export default function Layout({ children }: LayoutProps) {
             </div>
 
             {/* Right side - Notifications and mobile menu */}
-            <div className="flex items-center gap-4">
-              {/* Bouton Contact - Desktop */}
-              <div className="hidden lg:flex">
-                <ContactFloatingButton variant="header" />
-              </div>
-              
+            <div className="flex items-center gap-3">
               {/* Notification Center */}
               <div className="hidden md:block">
                 <NotificationCenter />
+              </div>
+
+              {/* Bouton Contact - Desktop */}
+              <div className="hidden lg:flex relative z-10">
+                <ContactFloatingButton variant="header" />
               </div>
 
               {/* Mobile menu button */}
