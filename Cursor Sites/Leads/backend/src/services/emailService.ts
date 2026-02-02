@@ -1,4 +1,5 @@
 import nodemailer from 'nodemailer';
+import { Resend } from 'resend';
 
 interface ContactRequest {
   nom: string;
@@ -32,16 +33,40 @@ const createTransporter = () => {
   return transporter;
 };
 
-// Email de contact simple (sans authentification SMTP)
+// Email de contact avec support Resend (prioritaire) et SMTP (fallback)
 const sendEmailSimple = async (to: string, subject: string, html: string) => {
-  // En production, utiliser un vrai service d'email
-  // Pour l'instant, on log juste l'email
-  console.log('📧 Email à envoyer:');
+  console.log('📧 Tentative d\'envoi d\'email:');
   console.log('À:', to);
   console.log('Sujet:', subject);
-  console.log('Contenu:', html);
   
-  // Si SMTP est configuré, utiliser nodemailer
+  // Option 1: Utiliser Resend (service moderne et simple)
+  const resendApiKey = process.env.RESEND_API_KEY;
+  if (resendApiKey) {
+    try {
+      const resend = new Resend(resendApiKey);
+      const fromEmail = process.env.EMAIL_FROM || 'onboarding@resend.dev';
+      
+      const { data, error } = await resend.emails.send({
+        from: fromEmail,
+        to: [to],
+        subject: subject,
+        html: html,
+      });
+
+      if (error) {
+        console.error('❌ Erreur Resend:', error);
+        // Continuer avec SMTP en fallback
+      } else {
+        console.log('✅ Email envoyé via Resend:', data?.id);
+        return { success: true, message: 'Email envoyé avec succès via Resend' };
+      }
+    } catch (error: any) {
+      console.error('❌ Erreur Resend:', error.message);
+      // Continuer avec SMTP en fallback
+    }
+  }
+  
+  // Option 2: Utiliser SMTP (Gmail, etc.)
   const smtpUser = process.env.SMTP_USER || process.env.EMAIL_FROM;
   const smtpPass = process.env.SMTP_PASS || process.env.EMAIL_PASSWORD;
   
@@ -54,10 +79,10 @@ const sendEmailSimple = async (to: string, subject: string, html: string) => {
         subject,
         html,
       });
-      console.log('✅ Email envoyé avec succès:', info.messageId);
-      return { success: true, message: 'Email envoyé avec succès' };
+      console.log('✅ Email envoyé via SMTP:', info.messageId);
+      return { success: true, message: 'Email envoyé avec succès via SMTP' };
     } catch (error: any) {
-      console.error('❌ Erreur envoi email:', error);
+      console.error('❌ Erreur SMTP:', error);
       console.error('Détails:', error.message);
       // En cas d'erreur, on retourne quand même un succès partiel pour ne pas bloquer la création du lead
       return { 
@@ -67,10 +92,19 @@ const sendEmailSimple = async (to: string, subject: string, html: string) => {
     }
   }
   
-  // Si pas de SMTP configuré, on log l'email mais on considère que c'est un succès
-  // pour permettre la création du lead quand même
-  console.warn('⚠️ SMTP non configuré - Email non envoyé mais lead créé');
-  return { success: true, message: 'Email loggé (SMTP non configuré - veuillez configurer SMTP_USER et SMTP_PASS)' };
+  // Option 3: Aucune configuration - log seulement
+  console.warn('⚠️ Aucune configuration email trouvée');
+  console.log('📧 Email à envoyer:');
+  console.log('À:', to);
+  console.log('Sujet:', subject);
+  console.log('Contenu HTML:', html.substring(0, 200) + '...');
+  
+  // On retourne un succès pour permettre la création du lead
+  // L'email sera visible dans les logs Vercel
+  return { 
+    success: true, 
+    message: 'Email loggé (aucune configuration email - configurez RESEND_API_KEY ou SMTP)' 
+  };
 };
 
 export const sendContactEmail = async (contactData: ContactRequest) => {
