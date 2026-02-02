@@ -290,12 +290,12 @@ export const comparerPrets = async (req: Request, res: Response) => {
         });
       }
 
-      // Créer quelques offres mockées
+      // Créer des offres mockées basées sur les vrais comparateurs français
       const offresMockees = [
         {
           comparateurId: comparateurInterne.id,
-          nomBanque: 'Banque Partenaire A',
-          nomProduit: 'Prêt Immobilier Classique',
+          nomBanque: 'Pretto',
+          nomProduit: 'Prêt Immobilier Optimisé',
           typeCredit,
           montantMin: montant * 0.8,
           montantMax: montant * 1.2,
@@ -309,12 +309,13 @@ export const comparerPrets = async (req: Request, res: Response) => {
           assuranceObli: true,
           montantAssurance: 50,
           delaiTraitement: 15,
-          disponible: true
+          disponible: true,
+          avantages: 'Courtier en ligne, démarches simplifiées'
         },
         {
           comparateurId: comparateurInterne.id,
-          nomBanque: 'Banque Partenaire B',
-          nomProduit: 'Prêt Immobilier Avantage',
+          nomBanque: 'Meilleur Taux',
+          nomProduit: 'Crédit Immobilier Avantage',
           typeCredit,
           montantMin: montant * 0.85,
           montantMax: montant * 1.15,
@@ -328,26 +329,88 @@ export const comparerPrets = async (req: Request, res: Response) => {
           assuranceObli: false,
           montantAssurance: null,
           delaiTraitement: 20,
-          disponible: true
+          disponible: true,
+          avantages: 'Leader du courtage, large réseau'
         },
         {
           comparateurId: comparateurInterne.id,
-          nomBanque: 'Banque Partenaire C',
-          nomProduit: 'Prêt Immobilier Premium',
+          nomBanque: 'APICIL / Crédit Logement',
+          nomProduit: 'Prêt avec Garantie CL',
           typeCredit,
           montantMin: montant * 0.9,
           montantMax: montant * 1.1,
           dureeMin: Math.max(12, duree - 12),
           dureeMax: duree + 12,
-          tauxNominal: 2.4,
-          tauxEffectif: 2.7,
-          apportMin: 12,
-          fraisDossier: 600,
-          fraisGarantie: 800,
+          tauxNominal: 2.2,
+          tauxEffectif: 2.5,
+          apportMin: 10,
+          fraisDossier: 700,
+          fraisGarantie: 1200,
           assuranceObli: true,
-          montantAssurance: 45,
-          delaiTraitement: 12,
-          disponible: true
+          montantAssurance: 48,
+          delaiTraitement: 18,
+          disponible: true,
+          avantages: 'Garantie Crédit Logement, financement jusqu\'à 100%'
+        },
+        {
+          comparateurId: comparateurInterne.id,
+          nomBanque: 'Cercle des Épargnants',
+          nomProduit: 'Crédit Immobilier Épargnant',
+          typeCredit,
+          montantMin: montant * 0.85,
+          montantMax: montant * 1.15,
+          dureeMin: Math.max(12, duree - 20),
+          dureeMax: duree + 20,
+          tauxNominal: 2.1,
+          tauxEffectif: 2.4,
+          apportMin: 10,
+          fraisDossier: 550,
+          fraisGarantie: 900,
+          assuranceObli: true,
+          montantAssurance: 42,
+          delaiTraitement: 14,
+          disponible: true,
+          avantages: 'Taux préférentiel pour épargnants'
+        },
+        {
+          comparateurId: comparateurInterne.id,
+          nomBanque: 'Immoprêt / CAFPI',
+          nomProduit: 'Prêt Immobilier Réseau',
+          typeCredit,
+          montantMin: montant * 0.8,
+          montantMax: montant * 1.2,
+          dureeMin: Math.max(12, duree - 24),
+          dureeMax: duree + 24,
+          tauxNominal: 2.0,
+          tauxEffectif: 2.3,
+          apportMin: 10,
+          fraisDossier: 600,
+          fraisGarantie: 1000,
+          assuranceObli: true,
+          montantAssurance: 50,
+          delaiTraitement: 16,
+          disponible: true,
+          avantages: 'Réseau de courtiers experts'
+        },
+        {
+          comparateurId: comparateurInterne.id,
+          nomBanque: 'Weinberg Capital',
+          nomProduit: 'Crédit Immobilier Premium',
+          typeCredit,
+          montantMin: montant * 0.9,
+          montantMax: montant * 1.1,
+          dureeMin: Math.max(12, duree - 12),
+          dureeMax: duree + 12,
+          tauxNominal: 2.0,
+          tauxEffectif: 2.3,
+          apportMin: 15,
+          fraisDossier: 750,
+          fraisGarantie: 1100,
+          assuranceObli: true,
+          montantAssurance: 48,
+          delaiTraitement: 14,
+          disponible: true,
+          avantages: 'Accompagnement premium, taux négociés'
         }
       ];
 

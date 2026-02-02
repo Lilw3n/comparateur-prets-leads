@@ -4,7 +4,7 @@ const prisma = new PrismaClient();
 
 async function initComparateurs() {
   try {
-    // Créer les comparateurs de base
+    // Créer les comparateurs de base basés sur les vrais comparateurs français
     const comparateurs = [
       {
         nom: 'Comparateur Interne',
@@ -17,21 +17,70 @@ async function initComparateurs() {
         type: 'PRETTO',
         actif: true,
         url: 'https://www.pretto.fr',
-        description: 'Comparateur de prêts immobiliers Pretto'
+        description: 'Comparateur de prêts immobiliers Pretto - Courtier en ligne'
       },
       {
         nom: 'Meilleur Taux',
         type: 'MEILLEUR_TAUX',
         actif: true,
         url: 'https://www.meilleurtaux.com',
-        description: 'Comparateur Meilleur Taux'
+        description: 'Comparateur Meilleur Taux - Leader du courtage en ligne'
       },
       {
-        nom: 'Meilleur Agents',
-        type: 'MEILLEUR_AGENTS',
+        nom: 'APICIL / Crédit Logement',
+        type: 'APICIL',
         actif: true,
-        url: 'https://www.meilleuragents.com',
-        description: 'Comparateur Meilleur Agents'
+        url: 'https://www.credit-logement.fr',
+        description: 'APICIL via Crédit Logement - Garantie et financement'
+      },
+      {
+        nom: 'Cercle des Épargnants',
+        type: 'CERCLE_EPARGNANTS',
+        actif: true,
+        url: 'https://www.cercledesepargnants.fr',
+        description: 'Cercle des Épargnants - Courtier en crédit immobilier'
+      },
+      {
+        nom: 'Immoprêt / CAFPI',
+        type: 'IMMOPRET',
+        actif: true,
+        url: 'https://www.immopret.fr',
+        description: 'Immoprêt / CAFPI - Réseau de courtiers immobiliers'
+      },
+      {
+        nom: 'Linéa',
+        type: 'LINEA',
+        actif: true,
+        url: 'https://www.linea.fr',
+        description: 'Linéa - Courtier en crédit immobilier'
+      },
+      {
+        nom: 'Premista',
+        type: 'PREMISTA',
+        actif: true,
+        url: 'https://www.premista.fr',
+        description: 'Premista - Courtier en crédit immobilier'
+      },
+      {
+        nom: 'Partners Finances',
+        type: 'PARTNERS_FINANCES',
+        actif: true,
+        url: 'https://www.partners-finances.fr',
+        description: 'Partners Finances - Courtier en crédit immobilier'
+      },
+      {
+        nom: 'Weinberg Capital',
+        type: 'WEINBERG',
+        actif: true,
+        url: 'https://www.weinberg-capital.fr',
+        description: 'Weinberg Capital - Courtier en crédit immobilier'
+      },
+      {
+        nom: 'Hexafi',
+        type: 'HEXAFI',
+        actif: true,
+        url: 'https://www.hexafi.fr',
+        description: 'Hexafi - Courtier en crédit immobilier'
       }
     ];
 
