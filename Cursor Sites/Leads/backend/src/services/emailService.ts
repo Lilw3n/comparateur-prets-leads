@@ -44,24 +44,48 @@ const sendEmailSimple = async (to: string, subject: string, html: string) => {
   if (resendApiKey) {
     try {
       const resend = new Resend(resendApiKey);
-      const fromEmail = process.env.EMAIL_FROM || 'onboarding@resend.dev';
+      // Resend nécessite un domaine vérifié ou utilise le domaine de test
+      // Pour le domaine de test, utiliser "delivered@resend.dev" ou votre domaine vérifié
+      const fromEmail = process.env.EMAIL_FROM || 'delivered@resend.dev';
       
-      const { data, error } = await resend.emails.send({
+      const result = await resend.emails.send({
         from: fromEmail,
         to: [to],
         subject: subject,
         html: html,
       });
 
-      if (error) {
-        console.error('❌ Erreur Resend:', error);
-        // Continuer avec SMTP en fallback
+      if (result.error) {
+        console.error('❌ Erreur Resend:', result.error);
+        // Si erreur de domaine, essayer avec le domaine de test
+        if (result.error.message?.includes('domain') || result.error.message?.includes('Domain')) {
+          try {
+            const retryResult = await resend.emails.send({
+              from: 'delivered@resend.dev',
+              to: [to],
+              subject: subject,
+              html: html,
+            });
+            if (retryResult.error) {
+              console.error('❌ Erreur Resend (retry):', retryResult.error);
+              // Continuer avec SMTP en fallback
+            } else {
+              console.log('✅ Email envoyé via Resend:', retryResult.data?.id);
+              return { success: true, message: 'Email envoyé avec succès via Resend' };
+            }
+          } catch (retryError: any) {
+            console.error('❌ Erreur Resend (retry):', retryError.message);
+            // Continuer avec SMTP en fallback
+          }
+        } else {
+          // Continuer avec SMTP en fallback
+        }
       } else {
-        console.log('✅ Email envoyé via Resend:', data?.id);
+        console.log('✅ Email envoyé via Resend:', result.data?.id);
         return { success: true, message: 'Email envoyé avec succès via Resend' };
       }
     } catch (error: any) {
-      console.error('❌ Erreur Resend:', error.message);
+      console.error('❌ Erreur Resend:', error.message || error);
       // Continuer avec SMTP en fallback
     }
   }
