@@ -270,6 +270,110 @@ export const comparerPrets = async (req: Request, res: Response) => {
       orderBy: { tauxEffectif: 'asc' }
     });
 
+    // Si aucune offre trouvée, créer des offres mockées pour la démo
+    if (offres.length === 0) {
+      console.log('Aucune offre trouvée, création d\'offres mockées pour la démo');
+      
+      // Trouver ou créer un comparateur interne
+      let comparateurInterne = await prisma.comparateurPret.findFirst({
+        where: { type: 'INTERNE' }
+      });
+
+      if (!comparateurInterne) {
+        comparateurInterne = await prisma.comparateurPret.create({
+          data: {
+            nom: 'Comparateur Interne',
+            type: 'INTERNE',
+            actif: true,
+            description: 'Comparateur interne avec offres de démonstration'
+          }
+        });
+      }
+
+      // Créer quelques offres mockées
+      const offresMockees = [
+        {
+          comparateurId: comparateurInterne.id,
+          nomBanque: 'Banque Partenaire A',
+          nomProduit: 'Prêt Immobilier Classique',
+          typeCredit,
+          montantMin: montant * 0.8,
+          montantMax: montant * 1.2,
+          dureeMin: Math.max(12, duree - 24),
+          dureeMax: duree + 24,
+          tauxNominal: 2.5,
+          tauxEffectif: 2.8,
+          apportMin: 10,
+          fraisDossier: 500,
+          fraisGarantie: 0,
+          assuranceObli: true,
+          montantAssurance: 50,
+          delaiTraitement: 15,
+          disponible: true
+        },
+        {
+          comparateurId: comparateurInterne.id,
+          nomBanque: 'Banque Partenaire B',
+          nomProduit: 'Prêt Immobilier Avantage',
+          typeCredit,
+          montantMin: montant * 0.85,
+          montantMax: montant * 1.15,
+          dureeMin: Math.max(12, duree - 18),
+          dureeMax: duree + 18,
+          tauxNominal: 2.3,
+          tauxEffectif: 2.6,
+          apportMin: 15,
+          fraisDossier: 800,
+          fraisGarantie: 1000,
+          assuranceObli: false,
+          montantAssurance: null,
+          delaiTraitement: 20,
+          disponible: true
+        },
+        {
+          comparateurId: comparateurInterne.id,
+          nomBanque: 'Banque Partenaire C',
+          nomProduit: 'Prêt Immobilier Premium',
+          typeCredit,
+          montantMin: montant * 0.9,
+          montantMax: montant * 1.1,
+          dureeMin: Math.max(12, duree - 12),
+          dureeMax: duree + 12,
+          tauxNominal: 2.4,
+          tauxEffectif: 2.7,
+          apportMin: 12,
+          fraisDossier: 600,
+          fraisGarantie: 800,
+          assuranceObli: true,
+          montantAssurance: 45,
+          delaiTraitement: 12,
+          disponible: true
+        }
+      ];
+
+      // Créer les offres dans la base de données
+      for (const offreData of offresMockees) {
+        try {
+          await prisma.offrePret.create({
+            data: offreData
+          });
+        } catch (createError) {
+          console.error('Error creating mock offer:', createError);
+        }
+      }
+
+      // Récupérer les offres créées
+      offres = await prisma.offrePret.findMany({
+        where: {
+          comparateurId: comparateurInterne.id,
+          typeCredit,
+          disponible: true
+        },
+        include: { comparateur: true },
+        orderBy: { tauxEffectif: 'asc' }
+      });
+    }
+
     // Filtrer selon les capacités de remboursement si revenus fournis
     if (revenus && questionnaireData) {
       const revenusTotaux = (questionnaireData.revenusMensuels || 0) + 
@@ -334,28 +438,46 @@ export const comparerPrets = async (req: Request, res: Response) => {
     // Trier par score (meilleur en premier)
     offresAvecCout.sort((a, b) => a.score - b.score);
 
-    // Sauvegarder la comparaison
-    const comparaison = await prisma.comparaisonPret.create({
-      data: {
-        leadId: leadId || null,
-        montant,
-        duree,
-        typeCredit,
-        apport: apport || null,
-        revenus: revenus || null,
-        offresIds: JSON.stringify(offresAvecCout.map(o => o.id)),
-        meilleureOffreId: offresAvecCout.length > 0 ? offresAvecCout[0].id : null
-      }
-    });
+    // Sauvegarder la comparaison (même si aucune offre trouvée)
+    let comparaison;
+    try {
+      comparaison = await prisma.comparaisonPret.create({
+        data: {
+          leadId: leadId || null,
+          montant,
+          duree,
+          typeCredit,
+          apport: apport || null,
+          revenus: revenus || null,
+          offresIds: JSON.stringify(offresAvecCout.map(o => o.id)),
+          meilleureOffreId: offresAvecCout.length > 0 ? offresAvecCout[0].id : null
+        }
+      });
+    } catch (dbError: any) {
+      console.error('Error saving comparison to database:', dbError);
+      // Continuer même si la sauvegarde échoue
+    }
 
     res.json({
-      comparaison,
+      comparaison: comparaison || null,
       offres: offresAvecCout,
-      meilleureOffre: offresAvecCout.length > 0 ? offresAvecCout[0] : null
+      meilleureOffre: offresAvecCout.length > 0 ? offresAvecCout[0] : null,
+      message: offresAvecCout.length === 0 
+        ? 'Aucune offre trouvée pour vos critères. Veuillez ajuster vos paramètres ou contacter un conseiller.'
+        : undefined
     });
-  } catch (error) {
+  } catch (error: any) {
     console.error('Error comparing prets:', error);
-    res.status(500).json({ error: 'Erreur lors de la comparaison des prêts' });
+    const errorMessage = error.message || 'Erreur lors de la comparaison des prêts';
+    console.error('Error details:', {
+      message: errorMessage,
+      stack: error.stack,
+      name: error.name
+    });
+    res.status(500).json({ 
+      error: errorMessage,
+      details: process.env.NODE_ENV === 'development' ? error.stack : undefined
+    });
   }
 };
 
