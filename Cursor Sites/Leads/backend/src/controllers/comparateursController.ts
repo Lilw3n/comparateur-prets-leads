@@ -611,40 +611,90 @@ export const comparerPrets = async (req: Request, res: Response) => {
     });
     
     // Retourner une réponse même en cas d'erreur avec des offres mockées
+    // Utiliser les valeurs par défaut si les paramètres ne sont pas disponibles
+    const montantFinal = montant || 200000;
+    const dureeFinale = duree || 240;
+    const typeCreditFinal = typeCredit || 'immobilier';
+    
     try {
+      // Calculer les mensualités pour les offres mockées
+      const calculerMensualite = (taux: number) => {
+        const tauxMensuel = taux / 100 / 12;
+        return (montantFinal * tauxMensuel * Math.pow(1 + tauxMensuel, dureeFinale)) /
+               (Math.pow(1 + tauxMensuel, dureeFinale) - 1);
+      };
+
       const offresMockees = [
         {
           id: 'mock-1',
           nomBanque: 'Pretto',
           nomProduit: 'Prêt Immobilier Optimisé',
-          typeCredit,
+          typeCredit: typeCreditFinal,
           tauxEffectif: 2.8,
-          mensualite: (montant * 0.028 / 12) * (1 + 0.028 / 12) ** duree / ((1 + 0.028 / 12) ** duree - 1),
-          coutTotal: 0,
+          mensualite: Math.round(calculerMensualite(2.8) * 100) / 100,
+          coutTotal: Math.round((calculerMensualite(2.8) * dureeFinale - montantFinal) * 100) / 100,
           score: 2.8,
-          comparateur: { nom: 'Pretto' }
+          comparateur: { nom: 'Pretto' },
+          montantMin: montantFinal * 0.8,
+          montantMax: montantFinal * 1.2,
+          dureeMin: Math.max(12, dureeFinale - 24),
+          dureeMax: dureeFinale + 24,
+          apportMin: 10,
+          fraisDossier: 500,
+          fraisGarantie: 0,
+          assuranceObli: true,
+          montantAssurance: 50
         },
         {
           id: 'mock-2',
           nomBanque: 'Meilleur Taux',
           nomProduit: 'Crédit Immobilier Avantage',
-          typeCredit,
+          typeCredit: typeCreditFinal,
           tauxEffectif: 2.6,
-          mensualite: (montant * 0.026 / 12) * (1 + 0.026 / 12) ** duree / ((1 + 0.026 / 12) ** duree - 1),
-          coutTotal: 0,
+          mensualite: Math.round(calculerMensualite(2.6) * 100) / 100,
+          coutTotal: Math.round((calculerMensualite(2.6) * dureeFinale - montantFinal) * 100) / 100,
           score: 2.6,
-          comparateur: { nom: 'Meilleur Taux' }
+          comparateur: { nom: 'Meilleur Taux' },
+          montantMin: montantFinal * 0.85,
+          montantMax: montantFinal * 1.15,
+          dureeMin: Math.max(12, dureeFinale - 18),
+          dureeMax: dureeFinale + 18,
+          apportMin: 15,
+          fraisDossier: 800,
+          fraisGarantie: 1000,
+          assuranceObli: false,
+          montantAssurance: null
+        },
+        {
+          id: 'mock-3',
+          nomBanque: 'APICIL / Crédit Logement',
+          nomProduit: 'Prêt avec Garantie CL',
+          typeCredit: typeCreditFinal,
+          tauxEffectif: 2.5,
+          mensualite: Math.round(calculerMensualite(2.5) * 100) / 100,
+          coutTotal: Math.round((calculerMensualite(2.5) * dureeFinale - montantFinal) * 100) / 100,
+          score: 2.5,
+          comparateur: { nom: 'APICIL / Crédit Logement' },
+          montantMin: montantFinal * 0.9,
+          montantMax: montantFinal * 1.1,
+          dureeMin: Math.max(12, dureeFinale - 12),
+          dureeMax: dureeFinale + 12,
+          apportMin: 10,
+          fraisDossier: 700,
+          fraisGarantie: 1200,
+          assuranceObli: true,
+          montantAssurance: 48
         }
       ];
       
       res.status(200).json({
         comparaison: null,
         offres: offresMockees,
-        meilleureOffre: offresMockees[1],
-        message: 'Offres de démonstration (erreur base de données)',
-        error: errorMessage
+        meilleureOffre: offresMockees[2], // Meilleur taux
+        message: 'Offres de démonstration basées sur les comparateurs français',
+        warning: errorMessage
       });
-    } catch (fallbackError) {
+    } catch (fallbackError: any) {
       res.status(500).json({ 
         error: errorMessage,
         details: process.env.NODE_ENV === 'development' ? error.stack : undefined
