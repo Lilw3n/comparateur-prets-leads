@@ -205,13 +205,42 @@ export const comparerPrets = async (req: Request, res: Response) => {
     }
 
     // Récupérer les comparateurs actifs
-    const comparateurs = await prisma.comparateurPret.findMany({
+    let comparateurs = await prisma.comparateurPret.findMany({
       where: { actif: true }
     });
 
+    // Si aucun comparateur, créer les comparateurs français de base
+    if (comparateurs.length === 0) {
+      console.log('Aucun comparateur trouvé, création des comparateurs français...');
+      const comparateursBase = [
+        { nom: 'Pretto', type: 'PRETTO', actif: true, url: 'https://www.pretto.fr', description: 'Courtier en ligne' },
+        { nom: 'Meilleur Taux', type: 'MEILLEUR_TAUX', actif: true, url: 'https://www.meilleurtaux.com', description: 'Leader du courtage' },
+        { nom: 'APICIL / Crédit Logement', type: 'APICIL', actif: true, url: 'https://www.credit-logement.fr', description: 'Garantie et financement' },
+        { nom: 'Cercle des Épargnants', type: 'CERCLE_EPARGNANTS', actif: true, url: 'https://www.cercledesepargnants.fr', description: 'Courtier crédit immobilier' },
+        { nom: 'Immoprêt / CAFPI', type: 'IMMOPRET', actif: true, url: 'https://www.immopret.fr', description: 'Réseau de courtiers' },
+        { nom: 'Linéa', type: 'LINEA', actif: true, url: 'https://www.linea.fr', description: 'Courtier crédit immobilier' },
+        { nom: 'Premista', type: 'PREMISTA', actif: true, url: 'https://www.premista.fr', description: 'Courtier crédit immobilier' },
+        { nom: 'Partners Finances', type: 'PARTNERS_FINANCES', actif: true, url: 'https://www.partners-finances.fr', description: 'Courtier crédit immobilier' },
+        { nom: 'Weinberg Capital', type: 'WEINBERG', actif: true, url: 'https://www.weinberg-capital.fr', description: 'Courtier crédit immobilier' },
+        { nom: 'Hexafi', type: 'HEXAFI', actif: true, url: 'https://www.hexafi.fr', description: 'Courtier crédit immobilier' }
+      ];
+
+      for (const compData of comparateursBase) {
+        try {
+          await prisma.comparateurPret.create({ data: compData });
+        } catch (error) {
+          // Ignorer si déjà existant
+        }
+      }
+
+      comparateurs = await prisma.comparateurPret.findMany({
+        where: { actif: true }
+      });
+    }
+
     // Synchroniser les offres depuis les APIs externes
     for (const comparateur of comparateurs) {
-      if (comparateur.type !== 'INTERNE' && comparateur.apiKey) {
+      if (comparateur.type !== 'INTERNE') {
         try {
           const externalOffers = await syncExternalOffers(
             comparateur.id,
@@ -221,29 +250,33 @@ export const comparerPrets = async (req: Request, res: Response) => {
           
           // Créer ou mettre à jour les offres dans la base de données
           for (const offerData of externalOffers) {
-            const existingOffer = await prisma.offrePret.findFirst({
-              where: {
-                comparateurId: comparateur.id,
-                nomBanque: offerData.nomBanque,
-                nomProduit: offerData.nomProduit
-              }
-            });
-
-            if (existingOffer) {
-              await prisma.offrePret.update({
-                where: { id: existingOffer.id },
-                data: {
-                  ...offerData,
-                  updatedAt: new Date()
-                }
-              });
-            } else {
-              await prisma.offrePret.create({
-                data: {
+            try {
+              const existingOffer = await prisma.offrePret.findFirst({
+                where: {
                   comparateurId: comparateur.id,
-                  ...offerData
+                  nomBanque: offerData.nomBanque,
+                  nomProduit: offerData.nomProduit
                 }
               });
+
+              if (existingOffer) {
+                await prisma.offrePret.update({
+                  where: { id: existingOffer.id },
+                  data: {
+                    ...offerData,
+                    updatedAt: new Date()
+                  }
+                });
+              } else {
+                await prisma.offrePret.create({
+                  data: {
+                    comparateurId: comparateur.id,
+                    ...offerData
+                  }
+                });
+              }
+            } catch (offerError) {
+              console.error(`Error creating/updating offer from ${comparateur.nom}:`, offerError);
             }
           }
         } catch (error) {
