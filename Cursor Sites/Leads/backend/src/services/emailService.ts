@@ -5,7 +5,7 @@ interface ContactRequest {
   prenom: string;
   email: string;
   telephone?: string;
-  typeDemande: 'BIEN' | 'PRET' | 'ASSURANCE';
+  typeDemande: 'BIEN' | 'PRET' | 'ASSURANCE' | 'CONTACT_GENERAL';
   message?: string;
   montant?: number;
   duree?: number;
@@ -42,23 +42,35 @@ const sendEmailSimple = async (to: string, subject: string, html: string) => {
   console.log('Contenu:', html);
   
   // Si SMTP est configuré, utiliser nodemailer
-  if (process.env.SMTP_USER && process.env.SMTP_PASS) {
+  const smtpUser = process.env.SMTP_USER || process.env.EMAIL_FROM;
+  const smtpPass = process.env.SMTP_PASS || process.env.EMAIL_PASSWORD;
+  
+  if (smtpUser && smtpPass) {
     try {
       const transporter = createTransporter();
-      await transporter.sendMail({
-        from: process.env.EMAIL_FROM || process.env.SMTP_USER,
+      const info = await transporter.sendMail({
+        from: smtpUser,
         to,
         subject,
         html,
       });
+      console.log('✅ Email envoyé avec succès:', info.messageId);
       return { success: true, message: 'Email envoyé avec succès' };
-    } catch (error) {
-      console.error('Erreur envoi email:', error);
-      return { success: false, message: 'Erreur lors de l\'envoi de l\'email' };
+    } catch (error: any) {
+      console.error('❌ Erreur envoi email:', error);
+      console.error('Détails:', error.message);
+      // En cas d'erreur, on retourne quand même un succès partiel pour ne pas bloquer la création du lead
+      return { 
+        success: false, 
+        message: `Erreur lors de l'envoi de l'email: ${error.message || 'Erreur SMTP'}` 
+      };
     }
   }
   
-  return { success: true, message: 'Email loggé (SMTP non configuré)' };
+  // Si pas de SMTP configuré, on log l'email mais on considère que c'est un succès
+  // pour permettre la création du lead quand même
+  console.warn('⚠️ SMTP non configuré - Email non envoyé mais lead créé');
+  return { success: true, message: 'Email loggé (SMTP non configuré - veuillez configurer SMTP_USER et SMTP_PASS)' };
 };
 
 export const sendContactEmail = async (contactData: ContactRequest) => {
@@ -69,6 +81,7 @@ export const sendContactEmail = async (contactData: ContactRequest) => {
     BIEN: 'Nouvelle demande de recherche de bien immobilier',
     PRET: 'Nouvelle demande de prêt immobilier',
     ASSURANCE: 'Nouvelle demande d\'assurance',
+    CONTACT_GENERAL: 'Nouvelle demande de contact',
   };
 
   const sujet = sujetMap[typeDemande] || 'Nouvelle demande de contact';

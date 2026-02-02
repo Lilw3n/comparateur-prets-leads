@@ -10,7 +10,7 @@ export const validateContact = [
   body('nom').trim().notEmpty().withMessage('Le nom est requis'),
   body('prenom').trim().notEmpty().withMessage('Le prénom est requis'),
   body('email').isEmail().withMessage('Email invalide'),
-  body('typeDemande').isIn(['BIEN', 'PRET', 'ASSURANCE']).withMessage('Type de demande invalide'),
+  body('typeDemande').isIn(['BIEN', 'PRET', 'ASSURANCE', 'CONTACT_GENERAL']).withMessage('Type de demande invalide'),
 ];
 
 // Créer une demande de contact
@@ -39,6 +39,7 @@ export const createContact = async (req: Request, res: Response) => {
         BIEN: 'IMMOBILIER',
         PRET: 'CREDIT_IMMOBILIER',
         ASSURANCE: 'ASSURANCE',
+        CONTACT_GENERAL: 'AUTRE',
       };
 
       const lead = await prisma.lead.create({

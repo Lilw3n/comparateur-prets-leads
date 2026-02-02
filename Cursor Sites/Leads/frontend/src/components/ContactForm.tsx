@@ -2,8 +2,10 @@ import { useState } from 'react';
 import { Mail, Phone, User, MessageSquare, Send, CheckCircle, AlertCircle, Loader } from 'lucide-react';
 import axios from 'axios';
 
+// Utiliser le chemin relatif pour Vercel serverless functions
+// En développement, utiliser localhost si VITE_API_URL est défini
 // @ts-ignore
-const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:3002/api';
+const API_BASE_URL = import.meta.env.VITE_API_URL || '/api';
 
 interface ContactFormProps {
   typeDemande: 'BIEN' | 'PRET' | 'ASSURANCE' | 'CONTACT_GENERAL';
