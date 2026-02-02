@@ -199,18 +199,19 @@ export const deleteOffre = async (req: Request, res: Response) => {
 // ========== COMPARAISON ==========
 
 export const comparerPrets = async (req: Request, res: Response) => {
+  // Extraire les paramètres avant le try pour qu'ils soient disponibles dans le catch
+  const {
+    montant,
+    duree,
+    typeCredit,
+    apport,
+    revenus,
+    leadId,
+    questionnaireData
+  } = req.body;
+
   try {
     console.log('📊 Comparaison de prêts - Données reçues:', JSON.stringify(req.body));
-    
-    const {
-      montant,
-      duree,
-      typeCredit,
-      apport,
-      revenus,
-      leadId,
-      questionnaireData
-    } = req.body;
 
     if (!montant || !duree || !typeCredit) {
       console.error('❌ Paramètres manquants:', { montant, duree, typeCredit });
@@ -220,7 +221,7 @@ export const comparerPrets = async (req: Request, res: Response) => {
     console.log('✅ Paramètres validés:', { montant, duree, typeCredit, apport, revenus });
 
     // Récupérer les comparateurs actifs
-    let comparateurs;
+    let comparateurs: any[] = [];
     try {
       comparateurs = await prisma.comparateurPret.findMany({
         where: { actif: true }
@@ -314,7 +315,7 @@ export const comparerPrets = async (req: Request, res: Response) => {
     console.log(`📊 Total offres synchronisées: ${totalOffresSync}`);
 
     // Récupérer les offres correspondantes
-    let offres;
+    let offres: any[] = [];
     try {
       offres = await prisma.offrePret.findMany({
         where: {
@@ -526,7 +527,7 @@ export const comparerPrets = async (req: Request, res: Response) => {
     }
 
     // Calculer le coût total pour chaque offre
-    const offresAvecCout = offres.map(offre => {
+    const offresAvecCout: any[] = offres.map((offre: any) => {
       const tauxMensuel = offre.tauxEffectif / 100 / 12;
       const nombreMois = duree;
       const mensualite = (montant * tauxMensuel * Math.pow(1 + tauxMensuel, nombreMois)) /
