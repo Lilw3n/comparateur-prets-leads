@@ -139,8 +139,8 @@ export default function Layout({ children }: LayoutProps) {
       {/* Navigation principale - Style Premium */}
       <nav className="bg-white shadow-lg border-b sticky top-0 z-50 backdrop-blur-sm bg-white/95">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between h-20">
-            <div className="flex">
+          <div className="flex justify-between h-20 min-w-0">
+            <div className="flex min-w-0 flex-1">
               <div className="flex-shrink-0 flex items-center">
                 <Link to="/" className="flex items-center group">
                   <div className="relative">
@@ -157,7 +157,7 @@ export default function Layout({ children }: LayoutProps) {
               </div>
               
               {/* Menu desktop */}
-              <div className="hidden lg:ml-8 lg:flex lg:items-center lg:space-x-2 lg:flex-1 lg:justify-start">
+              <div className="hidden lg:ml-8 lg:flex lg:items-center lg:space-x-2 lg:flex-1 lg:justify-start lg:min-w-0 lg:max-w-full lg:overflow-hidden">
                 {menuItems.map((item) => {
                   const Icon = item.icon;
                   const hasSubmenu = item.submenu && item.submenu.length > 0;
@@ -182,14 +182,14 @@ export default function Layout({ children }: LayoutProps) {
                         }}
                       >
                         <button
-                          className={`inline-flex items-center px-4 py-2 rounded-md text-sm font-semibold transition-colors ${
+                          className={`inline-flex items-center px-4 py-2 rounded-md text-sm font-semibold transition-colors whitespace-nowrap flex-shrink-0 ${
                             isActive(item.path)
                               ? 'bg-blue-50 text-blue-700 border-2 border-blue-200'
                               : 'text-gray-700 hover:bg-gray-100 hover:text-gray-900'
                           }`}
                         >
-                          <Icon className="w-4 h-4 mr-2" />
-                          {item.label}
+                          <Icon className="w-4 h-4 mr-2 flex-shrink-0" />
+                          <span className="truncate">{item.label}</span>
                         </button>
                         
                         {dropdownOpen === item.path && (
@@ -250,14 +250,14 @@ export default function Layout({ children }: LayoutProps) {
                     <Link
                       key={item.path}
                       to={item.path}
-                      className={`inline-flex items-center px-4 py-2 rounded-md text-sm font-semibold transition-colors ${
+                      className={`inline-flex items-center px-4 py-2 rounded-md text-sm font-semibold transition-colors whitespace-nowrap flex-shrink-0 ${
                         isActive(item.path)
                           ? 'bg-blue-50 text-blue-700 border-2 border-blue-200'
                           : 'text-gray-700 hover:bg-gray-100 hover:text-gray-900'
                       }`}
                     >
-                      <Icon className="w-4 h-4 mr-2" />
-                      {item.label}
+                      <Icon className="w-4 h-4 mr-2 flex-shrink-0" />
+                      <span className="truncate">{item.label}</span>
                     </Link>
                   );
                 })}
@@ -265,14 +265,14 @@ export default function Layout({ children }: LayoutProps) {
             </div>
 
             {/* Right side - Notifications and mobile menu */}
-            <div className="flex items-center gap-3">
+            <div className="flex items-center gap-3 flex-shrink-0 ml-4">
               {/* Notification Center */}
-              <div className="hidden md:block">
+              <div className="hidden md:block flex-shrink-0">
                 <NotificationCenter />
               </div>
 
               {/* Bouton Contact - Desktop */}
-              <div className="hidden lg:flex relative z-10">
+              <div className="hidden lg:flex relative z-10 flex-shrink-0">
                 <ContactFloatingButton variant="header" />
               </div>
 
