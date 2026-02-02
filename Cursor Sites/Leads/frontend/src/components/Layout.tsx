@@ -137,7 +137,7 @@ export default function Layout({ children }: LayoutProps) {
       <DevBanner />
       <ContactFloatingButton />
       {/* Navigation principale - Style Premium */}
-      <nav className="bg-white shadow-lg border-b sticky top-0 z-50 backdrop-blur-sm bg-white/95">
+      <nav className="bg-white shadow-lg border-b sticky top-[73px] z-50 backdrop-blur-sm bg-white/95">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between h-20 min-w-0">
             <div className="flex min-w-0 flex-1">
@@ -194,7 +194,7 @@ export default function Layout({ children }: LayoutProps) {
                         
                         {dropdownOpen === item.path && (
                           <div 
-                            className="absolute left-0 mt-1 w-72 bg-white rounded-lg shadow-xl border-2 border-gray-200 py-2 z-[60]"
+                            className="absolute left-0 mt-1 w-72 bg-white rounded-lg shadow-xl border-2 border-gray-200 py-2 z-[70]"
                             style={{ 
                               right: item.label === 'Ressources' ? '0' : 'auto',
                               left: item.label === 'Ressources' ? 'auto' : '0'

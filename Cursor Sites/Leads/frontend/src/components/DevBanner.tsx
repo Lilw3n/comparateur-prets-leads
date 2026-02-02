@@ -15,7 +15,7 @@ export default function DevBanner() {
   });
 
   return (
-    <div className="bg-gradient-to-r from-yellow-400 via-orange-500 to-red-500 text-white py-3 px-4 shadow-lg sticky top-0 z-50">
+    <div className="bg-gradient-to-r from-yellow-400 via-orange-500 to-red-500 text-white py-3 px-4 shadow-lg sticky top-0 z-40">
       <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-center gap-3 text-sm md:text-base">
         <div className="flex items-center gap-2">
           <Wrench className="w-5 h-5 animate-spin" style={{ animationDuration: '3s' }} />
