@@ -28,10 +28,10 @@ export default function ContactFloatingButton({ variant = 'floating' }: ContactF
             onClick={() => setIsOpen(false)}
           >
             <div 
-              className="bg-white rounded-2xl shadow-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto"
+              className="bg-white rounded-2xl shadow-2xl max-w-2xl w-full max-h-[90vh] overflow-hidden flex flex-col"
               onClick={(e) => e.stopPropagation()}
             >
-              <div className="sticky top-0 bg-gradient-to-r from-blue-600 to-purple-600 text-white p-6 rounded-t-2xl flex items-center justify-between">
+              <div className="sticky top-0 bg-gradient-to-r from-blue-600 to-purple-600 text-white p-6 rounded-t-2xl flex items-center justify-between z-10">
                 <div className="flex items-center gap-3">
                   <div className="bg-white bg-opacity-20 rounded-full p-2">
                     <Mail className="w-6 h-6" />
@@ -43,14 +43,14 @@ export default function ContactFloatingButton({ variant = 'floating' }: ContactF
                 </div>
                 <button
                   onClick={() => setIsOpen(false)}
-                  className="text-white hover:bg-white hover:bg-opacity-20 rounded-full p-2 transition-colors"
+                  className="text-white hover:bg-white hover:bg-opacity-20 rounded-full p-2 transition-colors flex-shrink-0"
                   aria-label="Fermer"
                 >
                   <X className="w-6 h-6" />
                 </button>
               </div>
               
-              <div className="p-6">
+              <div className="p-6 overflow-y-auto flex-1">
                 <ContactForm
                   typeDemande="CONTACT_GENERAL"
                   onSuccess={() => {
@@ -90,10 +90,10 @@ export default function ContactFloatingButton({ variant = 'floating' }: ContactF
           onClick={() => setIsOpen(false)}
         >
           <div 
-            className="bg-white rounded-2xl shadow-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto"
+            className="bg-white rounded-2xl shadow-2xl max-w-2xl w-full max-h-[90vh] overflow-hidden flex flex-col"
             onClick={(e) => e.stopPropagation()}
           >
-            <div className="sticky top-0 bg-gradient-to-r from-blue-600 to-purple-600 text-white p-6 rounded-t-2xl flex items-center justify-between">
+            <div className="sticky top-0 bg-gradient-to-r from-blue-600 to-purple-600 text-white p-6 rounded-t-2xl flex items-center justify-between z-10">
               <div className="flex items-center gap-3">
                 <div className="bg-white bg-opacity-20 rounded-full p-2">
                   <Mail className="w-6 h-6" />
@@ -105,14 +105,14 @@ export default function ContactFloatingButton({ variant = 'floating' }: ContactF
               </div>
               <button
                 onClick={() => setIsOpen(false)}
-                className="text-white hover:bg-white hover:bg-opacity-20 rounded-full p-2 transition-colors"
+                className="text-white hover:bg-white hover:bg-opacity-20 rounded-full p-2 transition-colors flex-shrink-0"
                 aria-label="Fermer"
               >
                 <X className="w-6 h-6" />
               </button>
             </div>
             
-            <div className="p-6">
+            <div className="p-6 overflow-y-auto flex-1">
               <ContactForm
                 typeDemande="CONTACT_GENERAL"
                 onSuccess={() => {

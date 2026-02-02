@@ -157,7 +157,7 @@ export default function Layout({ children }: LayoutProps) {
               </div>
               
               {/* Menu desktop */}
-              <div className="hidden lg:ml-8 lg:flex lg:items-center lg:space-x-2">
+              <div className="hidden lg:ml-8 lg:flex lg:items-center lg:space-x-2 lg:flex-1 lg:justify-start">
                 {menuItems.map((item) => {
                   const Icon = item.icon;
                   const hasSubmenu = item.submenu && item.submenu.length > 0;
@@ -195,6 +195,10 @@ export default function Layout({ children }: LayoutProps) {
                         {dropdownOpen === item.path && (
                           <div 
                             className="absolute left-0 mt-1 w-72 bg-white rounded-lg shadow-xl border-2 border-gray-200 py-2 z-[60]"
+                            style={{ 
+                              right: item.label === 'Ressources' ? '0' : 'auto',
+                              left: item.label === 'Ressources' ? 'auto' : '0'
+                            }}
                             onMouseEnter={() => {
                               if (dropdownTimeout) {
                                 clearTimeout(dropdownTimeout);

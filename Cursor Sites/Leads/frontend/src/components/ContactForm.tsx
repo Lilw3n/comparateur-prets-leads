@@ -84,8 +84,9 @@ export default function ContactForm({ typeDemande, prefillData = {}, onSuccess, 
       BIEN: 'Demander un bien immobilier',
       PRET: 'Demander un prêt immobilier',
       ASSURANCE: 'Demander une assurance',
+      CONTACT_GENERAL: 'Contactez-nous',
     };
-    return titles[typeDemande];
+    return titles[typeDemande] || 'Contactez-nous';
   };
 
   const getDescription = () => {
@@ -93,8 +94,9 @@ export default function ContactForm({ typeDemande, prefillData = {}, onSuccess, 
       BIEN: 'Remplissez ce formulaire et notre courtier vous contactera rapidement pour vous aider à trouver le bien de vos rêves.',
       PRET: 'Remplissez ce formulaire et notre courtier vous contactera rapidement pour vous proposer les meilleures offres de prêt.',
       ASSURANCE: 'Remplissez ce formulaire et notre courtier vous contactera rapidement pour vous proposer les meilleures assurances.',
+      CONTACT_GENERAL: 'Remplissez ce formulaire et nous vous répondrons rapidement. Que ce soit pour une question, une demande de devis ou un accompagnement, nous sommes là pour vous aider.',
     };
-    return descriptions[typeDemande];
+    return descriptions[typeDemande] || 'Remplissez ce formulaire et nous vous répondrons rapidement.';
   };
 
   if (success) {
@@ -121,9 +123,12 @@ export default function ContactForm({ typeDemande, prefillData = {}, onSuccess, 
       </div>
 
       {error && (
-        <div className="mb-4 bg-red-50 border border-red-200 rounded-lg p-4 flex items-start gap-3">
+        <div className="mb-4 bg-red-50 border-2 border-red-300 rounded-lg p-4 flex items-start gap-3 shadow-sm">
           <AlertCircle className="w-5 h-5 text-red-600 flex-shrink-0 mt-0.5" />
-          <p className="text-red-700 text-sm">{error}</p>
+          <div className="flex-1 min-w-0">
+            <p className="text-red-800 font-semibold text-sm mb-1">Erreur</p>
+            <p className="text-red-700 text-sm break-words whitespace-normal">{error}</p>
+          </div>
         </div>
       )}
 
