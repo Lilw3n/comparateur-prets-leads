@@ -2,10 +2,11 @@ import { Link, useLocation } from 'react-router-dom';
 import { useState } from 'react';
 import { 
   Home, Users, TrendingUp, Calculator, FileText, CreditCard, 
-  Menu, X, Building2, Shield, DollarSign, GraduationCap, Globe
+  Menu, X, Building2, Shield, DollarSign, GraduationCap, Globe, Mail
 } from 'lucide-react';
 import NotificationCenter from './NotificationCenter';
 import DevBanner from './DevBanner';
+import ContactFloatingButton from './ContactFloatingButton';
 
 interface LayoutProps {
   children: React.ReactNode;
@@ -134,6 +135,7 @@ export default function Layout({ children }: LayoutProps) {
   return (
     <div className="min-h-screen bg-gray-50">
       <DevBanner />
+      <ContactFloatingButton />
       {/* Navigation principale - Style Premium */}
       <nav className="bg-white shadow-lg border-b sticky top-0 z-50 backdrop-blur-sm bg-white/95">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -260,6 +262,11 @@ export default function Layout({ children }: LayoutProps) {
 
             {/* Right side - Notifications and mobile menu */}
             <div className="flex items-center gap-4">
+              {/* Bouton Contact - Desktop */}
+              <div className="hidden lg:flex">
+                <ContactFloatingButton variant="header" />
+              </div>
+              
               {/* Notification Center */}
               <div className="hidden md:block">
                 <NotificationCenter />
