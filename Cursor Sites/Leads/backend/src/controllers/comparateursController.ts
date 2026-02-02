@@ -4,7 +4,17 @@ import { body, validationResult } from 'express-validator';
 import axios from 'axios';
 import { syncExternalOffers } from '../services/externalApis';
 
-const prisma = new PrismaClient();
+// Créer une instance Prisma avec gestion d'erreur
+let prisma: PrismaClient;
+try {
+  prisma = new PrismaClient({
+    log: process.env.NODE_ENV === 'development' ? ['query', 'error', 'warn'] : ['error'],
+  });
+} catch (error) {
+  console.error('❌ Erreur initialisation Prisma:', error);
+  // Créer une instance minimale même en cas d'erreur
+  prisma = new PrismaClient();
+}
 
 // ========== COMPARATEURS ==========
 
@@ -190,6 +200,8 @@ export const deleteOffre = async (req: Request, res: Response) => {
 
 export const comparerPrets = async (req: Request, res: Response) => {
   try {
+    console.log('📊 Comparaison de prêts - Données reçues:', JSON.stringify(req.body));
+    
     const {
       montant,
       duree,
@@ -201,13 +213,24 @@ export const comparerPrets = async (req: Request, res: Response) => {
     } = req.body;
 
     if (!montant || !duree || !typeCredit) {
+      console.error('❌ Paramètres manquants:', { montant, duree, typeCredit });
       return res.status(400).json({ error: 'Montant, durée et type de crédit sont requis' });
     }
 
+    console.log('✅ Paramètres validés:', { montant, duree, typeCredit, apport, revenus });
+
     // Récupérer les comparateurs actifs
-    let comparateurs = await prisma.comparateurPret.findMany({
-      where: { actif: true }
-    });
+    let comparateurs;
+    try {
+      comparateurs = await prisma.comparateurPret.findMany({
+        where: { actif: true }
+      });
+      console.log(`📋 Comparateurs trouvés: ${comparateurs.length}`);
+    } catch (dbError: any) {
+      console.error('❌ Erreur accès base de données:', dbError);
+      // Continuer avec création des comparateurs
+      comparateurs = [];
+    }
 
     // Si aucun comparateur, créer les comparateurs français de base
     if (comparateurs.length === 0) {
@@ -239,14 +262,17 @@ export const comparerPrets = async (req: Request, res: Response) => {
     }
 
     // Synchroniser les offres depuis les APIs externes
+    let totalOffresSync = 0;
     for (const comparateur of comparateurs) {
       if (comparateur.type !== 'INTERNE') {
         try {
+          console.log(`🔄 Synchronisation ${comparateur.nom} (${comparateur.type})...`);
           const externalOffers = await syncExternalOffers(
             comparateur.id,
             comparateur.type,
             { montant, duree, typeCredit, apiKey: comparateur.apiKey }
           );
+          console.log(`✅ ${externalOffers.length} offres récupérées de ${comparateur.nom}`);
           
           // Créer ou mettre à jour les offres dans la base de données
           for (const offerData of externalOffers) {
@@ -274,34 +300,43 @@ export const comparerPrets = async (req: Request, res: Response) => {
                     ...offerData
                   }
                 });
+                totalOffresSync++;
               }
-            } catch (offerError) {
-              console.error(`Error creating/updating offer from ${comparateur.nom}:`, offerError);
+            } catch (offerError: any) {
+              console.error(`❌ Error creating/updating offer from ${comparateur.nom}:`, offerError.message);
             }
           }
-        } catch (error) {
-          console.error(`Error syncing offers from ${comparateur.nom}:`, error);
+        } catch (error: any) {
+          console.error(`❌ Error syncing offers from ${comparateur.nom}:`, error.message);
         }
       }
     }
+    console.log(`📊 Total offres synchronisées: ${totalOffresSync}`);
 
     // Récupérer les offres correspondantes
-    let offres = await prisma.offrePret.findMany({
-      where: {
-        typeCredit,
-        disponible: true,
-        montantMin: { lte: montant },
-        montantMax: { gte: montant },
-        dureeMin: { lte: duree },
-        dureeMax: { gte: duree },
-        OR: [
-          { dateExpiration: null },
-          { dateExpiration: { gt: new Date() } }
-        ]
-      },
-      include: { comparateur: true },
-      orderBy: { tauxEffectif: 'asc' }
-    });
+    let offres;
+    try {
+      offres = await prisma.offrePret.findMany({
+        where: {
+          typeCredit,
+          disponible: true,
+          montantMin: { lte: montant },
+          montantMax: { gte: montant },
+          dureeMin: { lte: duree },
+          dureeMax: { gte: duree },
+          OR: [
+            { dateExpiration: null },
+            { dateExpiration: { gt: new Date() } }
+          ]
+        },
+        include: { comparateur: true },
+        orderBy: { tauxEffectif: 'asc' }
+      });
+      console.log(`📋 Offres trouvées après filtrage: ${offres.length}`);
+    } catch (dbError: any) {
+      console.error('❌ Erreur récupération offres:', dbError.message);
+      offres = [];
+    }
 
     // Si aucune offre trouvée, créer des offres mockées pour la démo
     if (offres.length === 0) {
@@ -554,6 +589,8 @@ export const comparerPrets = async (req: Request, res: Response) => {
       // Continuer même si la sauvegarde échoue
     }
 
+    console.log(`✅ Comparaison terminée: ${offresAvecCout.length} offres trouvées`);
+    
     res.json({
       comparaison: comparaison || null,
       offres: offresAvecCout,
@@ -563,17 +600,55 @@ export const comparerPrets = async (req: Request, res: Response) => {
         : undefined
     });
   } catch (error: any) {
-    console.error('Error comparing prets:', error);
+    console.error('❌ Error comparing prets:', error);
     const errorMessage = error.message || 'Erreur lors de la comparaison des prêts';
-    console.error('Error details:', {
+    console.error('❌ Error details:', {
       message: errorMessage,
       stack: error.stack,
-      name: error.name
+      name: error.name,
+      code: error.code
     });
-    res.status(500).json({ 
-      error: errorMessage,
-      details: process.env.NODE_ENV === 'development' ? error.stack : undefined
-    });
+    
+    // Retourner une réponse même en cas d'erreur avec des offres mockées
+    try {
+      const offresMockees = [
+        {
+          id: 'mock-1',
+          nomBanque: 'Pretto',
+          nomProduit: 'Prêt Immobilier Optimisé',
+          typeCredit,
+          tauxEffectif: 2.8,
+          mensualite: (montant * 0.028 / 12) * (1 + 0.028 / 12) ** duree / ((1 + 0.028 / 12) ** duree - 1),
+          coutTotal: 0,
+          score: 2.8,
+          comparateur: { nom: 'Pretto' }
+        },
+        {
+          id: 'mock-2',
+          nomBanque: 'Meilleur Taux',
+          nomProduit: 'Crédit Immobilier Avantage',
+          typeCredit,
+          tauxEffectif: 2.6,
+          mensualite: (montant * 0.026 / 12) * (1 + 0.026 / 12) ** duree / ((1 + 0.026 / 12) ** duree - 1),
+          coutTotal: 0,
+          score: 2.6,
+          comparateur: { nom: 'Meilleur Taux' }
+        }
+      ];
+      
+      res.status(200).json({
+        comparaison: null,
+        offres: offresMockees,
+        meilleureOffre: offresMockees[1],
+        message: 'Offres de démonstration (erreur base de données)',
+        error: errorMessage
+      });
+    } catch (fallbackError) {
+      res.status(500).json({ 
+        error: errorMessage,
+        details: process.env.NODE_ENV === 'development' ? error.stack : undefined
+      });
+    }
   }
 };
 
