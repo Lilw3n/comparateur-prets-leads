@@ -23,6 +23,7 @@ import MentionsLegales from './pages/MentionsLegales';
 import Confidentialite from './pages/Confidentialite';
 import CGU from './pages/CGU';
 import NosAutresSites from './pages/NosAutresSites';
+import VisitsStats from './pages/VisitsStats';
 
 function App() {
   return (
@@ -54,6 +55,7 @@ function App() {
           <Route path="/confidentialite" element={<Confidentialite />} />
           <Route path="/cgu" element={<CGU />} />
           <Route path="/nos-autres-sites" element={<NosAutresSites />} />
+          <Route path="/visits-stats" element={<VisitsStats />} />
         </Routes>
       </Layout>
     </Router>

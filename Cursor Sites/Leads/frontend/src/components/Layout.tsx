@@ -7,6 +7,7 @@ import {
 import NotificationCenter from './NotificationCenter';
 import DevBanner from './DevBanner';
 import ContactFloatingButton from './ContactFloatingButton';
+import { useVisitTracker } from '../hooks/useVisitTracker';
 
 interface LayoutProps {
   children: React.ReactNode;
@@ -17,6 +18,9 @@ export default function Layout({ children }: LayoutProps) {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [dropdownOpen, setDropdownOpen] = useState<string | null>(null);
   const [dropdownTimeout, setDropdownTimeout] = useState<NodeJS.Timeout | null>(null);
+  
+  // Tracker les visites automatiquement
+  useVisitTracker();
 
   const isActive = (path: string) => {
     if (path === '/comparateur') {
@@ -127,7 +131,8 @@ export default function Layout({ children }: LayoutProps) {
         { label: 'Mon dossier', path: '/mon-dossier' },
         { label: 'Mes dossiers', path: '/dossiers' },
         { label: 'Dashboard', path: '/dashboard' },
-        { label: 'Gestion Leads', path: '/leads' }
+        { label: 'Gestion Leads', path: '/leads' },
+        { label: 'Statistiques Visites', path: '/visits-stats' }
       ]
     }
   ];

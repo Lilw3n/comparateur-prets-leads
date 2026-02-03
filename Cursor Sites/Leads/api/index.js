@@ -18,6 +18,7 @@ try {
   const articlesRoutes = require('../backend/dist/routes/articles');
   const dossiersRoutes = require('../backend/dist/routes/dossiers');
   const contactRoutes = require('../backend/dist/routes/contact');
+  const visitsRoutes = require('../backend/dist/routes/visits');
 
   // Routes - Gérer les exports CommonJS et ES6
   const getRouter = (routeModule) => {
@@ -33,6 +34,7 @@ try {
     app.use('/api/articles', getRouter(articlesRoutes));
     app.use('/api/dossiers', getRouter(dossiersRoutes));
     app.use('/api/contact', getRouter(contactRoutes));
+    app.use('/api/visits', getRouter(visitsRoutes));
     console.log('✅ Routes chargées avec succès');
   } catch (routeError) {
     console.error('❌ Erreur lors du montage des routes:', routeError);

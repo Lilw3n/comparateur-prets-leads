@@ -271,3 +271,24 @@ model DossierPret {
   @@index([typePret])
   @@index([leadId])
 }
+
+model Visite {
+  id                String   @id @default(uuid())
+  sessionId         String   // ID de session unique pour éviter les doublons
+  page              String   // Chemin de la page visitée
+  referrer          String?  // Page d'origine
+  userAgent         String?  // User agent du navigateur
+  ip                String?  // Adresse IP (optionnel, pour statistiques)
+  pays              String?  // Pays détecté (optionnel)
+  ville             String?  // Ville détectée (optionnel)
+  deviceType        String?  // mobile, desktop, tablet
+  browser           String?  // Chrome, Firefox, Safari, etc.
+  os                String?  // Windows, macOS, Linux, iOS, Android
+  
+  createdAt         DateTime @default(now())
+  
+  @@index([sessionId])
+  @@index([page])
+  @@index([createdAt])
+  @@index([page, createdAt])
+}

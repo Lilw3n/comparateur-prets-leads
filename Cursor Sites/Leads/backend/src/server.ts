@@ -6,6 +6,7 @@ import bankingRoutes from './routes/banking';
 import articlesRoutes from './routes/articles';
 import dossiersRoutes from './routes/dossiers';
 import contactRoutes from './routes/contact';
+import visitsRoutes from './routes/visits';
 
 const app = express();
 const PORT = process.env.PORT || 3002;
@@ -22,6 +23,7 @@ app.use('/api', bankingRoutes);
 app.use('/api/articles', articlesRoutes);
 app.use('/api/dossiers', dossiersRoutes);
 app.use('/api/contact', contactRoutes);
+app.use('/api/visits', visitsRoutes);
 
 // Health check
 app.get('/api/health', (req, res) => {
