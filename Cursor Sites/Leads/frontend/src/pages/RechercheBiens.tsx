@@ -29,6 +29,8 @@ interface BienImmobilier {
   dpe: string;
   ges: string;
   visiteVirtuelleId?: string; // ID Matterport pour la visite virtuelle
+  isExemple?: boolean; // Indique si c'est un bien d'exemple
+  lienExterne?: string; // Lien vers leboncoin, seloger, les portes, etc.
 }
 
 export default function RechercheBiens() {

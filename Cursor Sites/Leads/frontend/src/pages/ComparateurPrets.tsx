@@ -12,7 +12,7 @@ import LeadCaptureService from '../services/leadCapture';
 import FiltresAvances from '../components/FiltresAvances';
 import ArticlesRecommandes from '../components/ArticlesRecommandes';
 import ContactForm from '../components/ContactForm';
-import { CheckCircle, Building2, FileText, Settings, ArrowLeft, Clock, Zap, List, Grid, Mail } from 'lucide-react';
+import { CheckCircle, Building2, FileText, Settings, ArrowLeft, Clock, Zap, List, Grid, Mail, TrendingUp } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { bankingApiService } from '../services/bankingApi';
 import { Secteur } from '../types';

@@ -132,7 +132,8 @@ export default function Layout({ children }: LayoutProps) {
         { label: 'Mes dossiers', path: '/dossiers' },
         { label: 'Dashboard', path: '/dashboard' },
         { label: 'Gestion Leads', path: '/leads' },
-        { label: 'Statistiques Visites', path: '/visits-stats' }
+        { label: 'Statistiques Visites', path: '/visits-stats' },
+        { label: 'Gestion Facebook', path: '/facebook-manager' }
       ]
     }
   ];

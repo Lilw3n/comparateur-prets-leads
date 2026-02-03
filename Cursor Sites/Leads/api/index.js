@@ -19,6 +19,7 @@ try {
   const dossiersRoutes = require('../backend/dist/routes/dossiers');
   const contactRoutes = require('../backend/dist/routes/contact');
   const visitsRoutes = require('../backend/dist/routes/visits');
+  const facebookRoutes = require('../backend/dist/routes/facebook');
 
   // Routes - Gérer les exports CommonJS et ES6
   const getRouter = (routeModule) => {
@@ -35,6 +36,7 @@ try {
     app.use('/api/dossiers', getRouter(dossiersRoutes));
     app.use('/api/contact', getRouter(contactRoutes));
     app.use('/api/visits', getRouter(visitsRoutes));
+    app.use('/api/facebook', getRouter(facebookRoutes));
     console.log('✅ Routes chargées avec succès');
   } catch (routeError) {
     console.error('❌ Erreur lors du montage des routes:', routeError);

@@ -272,6 +272,87 @@ model DossierPret {
   @@index([leadId])
 }
 
+model FacebookPage {
+  id                String   @id @default(uuid())
+  pageId            String   @unique // ID de la page Facebook
+  pageName          String
+  accessToken       String   // Token d'accès Facebook
+  category          String?  // Catégorie de la page
+  followers         Int      @default(0)
+  active            Boolean  @default(true)
+  
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+  
+  posts             FacebookPost[]
+  
+  @@index([pageId])
+  @@index([active])
+}
+
+model FacebookPost {
+  id                String   @id @default(uuid())
+  pageId            String
+  page              FacebookPage @relation(fields: [pageId], references: [id], onDelete: Cascade)
+  
+  facebookPostId    String?  @unique // ID du post sur Facebook
+  articleId         String?  // Lien vers l'article du site
+  message           String   // Message du post
+  link              String?  // Lien partagé
+  imageUrl          String?  // Image du post
+  
+  // Métriques Facebook
+  likes             Int      @default(0)
+  comments          Int      @default(0)
+  shares            Int      @default(0)
+  reach             Int      @default(0)
+  impressions       Int      @default(0)
+  
+  // Statut
+  published         Boolean  @default(false)
+  scheduledAt       DateTime? // Date de publication programmée
+  publishedAt       DateTime? // Date de publication réelle
+  
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+  
+  @@index([pageId])
+  @@index([facebookPostId])
+  @@index([published])
+  @@index([articleId])
+}
+
+model FacebookLead {
+  id                String   @id @default(uuid())
+  leadFormId        String?  // ID du formulaire de lead Facebook
+  facebookLeadId    String   @unique // ID du lead sur Facebook
+  
+  // Données du lead
+  nom               String?
+  prenom            String?
+  email             String?
+  telephone         String?
+  adresse           String?
+  ville             String?
+  codePostal        String?
+  
+  // Métadonnées
+  adId              String?  // ID de l'annonce qui a généré le lead
+  adName            String?  // Nom de l'annonce
+  formName          String?  // Nom du formulaire
+  
+  // Statut
+  imported          Boolean  @default(false)
+  leadId            String?  // ID du lead créé dans le système
+  
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+  
+  @@index([facebookLeadId])
+  @@index([imported])
+  @@index([email])
+}
+
 model Visite {
   id                String   @id @default(uuid())
   sessionId         String   // ID de session unique pour éviter les doublons

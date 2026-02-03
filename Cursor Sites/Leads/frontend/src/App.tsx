@@ -24,6 +24,7 @@ import Confidentialite from './pages/Confidentialite';
 import CGU from './pages/CGU';
 import NosAutresSites from './pages/NosAutresSites';
 import VisitsStats from './pages/VisitsStats';
+import FacebookManager from './pages/FacebookManager';
 
 function App() {
   return (
@@ -56,6 +57,7 @@ function App() {
           <Route path="/cgu" element={<CGU />} />
           <Route path="/nos-autres-sites" element={<NosAutresSites />} />
           <Route path="/visits-stats" element={<VisitsStats />} />
+          <Route path="/facebook-manager" element={<FacebookManager />} />
         </Routes>
       </Layout>
     </Router>
