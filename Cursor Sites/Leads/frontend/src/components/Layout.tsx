@@ -144,12 +144,12 @@ export default function Layout({ children }: LayoutProps) {
       <ContactFloatingButton />
       
       {/* Navigation principale - Refonte complète */}
-      <nav className="bg-white border-b sticky top-[73px] shadow-md" style={{ zIndex: 1000 }}>
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between items-center h-20">
+      <nav className="bg-white border-b sticky top-[73px] shadow-md" style={{ zIndex: 1000, position: 'relative', pointerEvents: 'auto' }}>
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8" style={{ pointerEvents: 'auto' }}>
+          <div className="flex justify-between items-center h-20" style={{ pointerEvents: 'auto' }}>
             {/* Logo */}
-            <div className="flex-shrink-0 flex items-center">
-              <Link to="/" className="flex items-center group">
+            <div className="flex-shrink-0 flex items-center" style={{ pointerEvents: 'auto' }}>
+              <Link to="/" className="flex items-center group" style={{ pointerEvents: 'auto' }}>
                 <div className="relative">
                   <div className="absolute inset-0 bg-gradient-to-br from-blue-500 to-purple-600 rounded-lg blur opacity-75 group-hover:opacity-100 transition-opacity"></div>
                   <TrendingUp className="relative w-10 h-10 text-white p-2 bg-gradient-to-br from-blue-600 to-purple-600 rounded-lg" />
@@ -164,7 +164,7 @@ export default function Layout({ children }: LayoutProps) {
             </div>
             
             {/* Menu desktop */}
-            <div className="hidden lg:flex lg:items-center lg:space-x-1 lg:flex-1 lg:justify-center lg:px-4">
+            <div className="hidden lg:flex lg:items-center lg:space-x-1 lg:flex-1 lg:justify-center lg:px-4" style={{ pointerEvents: 'auto', position: 'relative', zIndex: 1001 }}>
               {menuItems.map((item) => {
                 const Icon = item.icon;
                 const hasSubmenu = item.submenu && item.submenu.length > 0;
@@ -174,6 +174,7 @@ export default function Layout({ children }: LayoutProps) {
                     <div
                       key={item.path}
                       className="relative"
+                      style={{ pointerEvents: 'auto', zIndex: dropdownOpen === item.path ? 1002 : 1001 }}
                       onMouseEnter={() => {
                         if (dropdownTimeout) {
                           clearTimeout(dropdownTimeout);
@@ -194,6 +195,7 @@ export default function Layout({ children }: LayoutProps) {
                             ? 'bg-blue-50 text-blue-700 border-2 border-blue-200'
                             : 'text-gray-700 hover:bg-gray-100 hover:text-gray-900'
                         }`}
+                        style={{ pointerEvents: 'auto' }}
                       >
                         <Icon className="w-4 h-4 mr-2" />
                         <span>{item.label}</span>
@@ -206,7 +208,8 @@ export default function Layout({ children }: LayoutProps) {
                             right: item.label === 'Ressources' ? '0' : 'auto',
                             left: item.label === 'Ressources' ? 'auto' : '0',
                             top: '100%',
-                            zIndex: 1001
+                            zIndex: 1003,
+                            pointerEvents: 'auto'
                           }}
                           onMouseEnter={() => {
                             if (dropdownTimeout) {
@@ -264,6 +267,7 @@ export default function Layout({ children }: LayoutProps) {
                         ? 'bg-blue-50 text-blue-700 border-2 border-blue-200'
                         : 'text-gray-700 hover:bg-gray-100 hover:text-gray-900'
                     }`}
+                    style={{ pointerEvents: 'auto' }}
                   >
                     <Icon className="w-4 h-4 mr-2" />
                     <span>{item.label}</span>
