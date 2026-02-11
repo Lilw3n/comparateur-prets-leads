@@ -304,7 +304,7 @@ export default function Layout({ children }: LayoutProps) {
 
         {/* Mobile menu */}
         {mobileMenuOpen && (
-          <div className="lg:hidden border-t border-gray-200 bg-white">
+          <div className="lg:hidden border-t border-gray-200 bg-white relative z-[110] pointer-events-auto">
             <div className="px-2 pt-2 pb-3 space-y-1 max-h-[80vh] overflow-y-auto">
               {menuItems.map((item) => {
                 const Icon = item.icon;
