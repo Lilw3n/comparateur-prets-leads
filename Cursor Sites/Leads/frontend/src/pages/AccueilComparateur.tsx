@@ -193,7 +193,7 @@ export default function AccueilComparateur() {
   return (
     <div className="space-y-16">
       {/* Hero Section avec Simulateur Intégré - Style Meilleurtaux */}
-      <div className="relative bg-gradient-to-br from-blue-600 via-blue-700 to-indigo-800 rounded-2xl p-8 md:p-16 text-white shadow-2xl overflow-hidden">
+      <div className="relative bg-gradient-to-br from-blue-600 via-blue-700 to-indigo-800 rounded-2xl p-8 md:p-16 text-white shadow-2xl overflow-hidden" style={{ marginTop: '1rem', position: 'relative', zIndex: 1 }}>
         {/* Effet de fond animé */}
         <div className="absolute inset-0 opacity-10">
           <div className="absolute top-0 left-0 w-96 h-96 bg-white rounded-full blur-3xl"></div>
