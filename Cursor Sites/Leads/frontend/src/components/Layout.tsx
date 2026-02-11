@@ -375,7 +375,7 @@ export default function Layout({ children }: LayoutProps) {
         )}
       </nav>
 
-      <main className="max-w-7xl mx-auto py-8 sm:px-6 lg:px-8">
+      <main className="max-w-7xl mx-auto py-8 sm:px-6 lg:px-8" style={{ marginTop: '1rem', position: 'relative', zIndex: 1 }}>
         {children}
       </main>
 
