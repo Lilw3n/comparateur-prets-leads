@@ -143,7 +143,7 @@ export default function Layout({ children }: LayoutProps) {
       <DevBanner />
       <ContactFloatingButton />
       {/* Navigation principale - Style Premium */}
-      <nav className="bg-white shadow-lg border-b sticky top-[73px] z-[100] backdrop-blur-sm bg-white/95 relative" style={{ zIndex: 1000 }}>
+      <nav className="bg-white shadow-lg border-b sticky top-[73px] z-[100] backdrop-blur-sm relative" style={{ zIndex: 1000, backgroundColor: 'white', boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06)' }}>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between h-20 min-w-0">
             <div className="flex min-w-0 flex-1">
@@ -372,8 +372,10 @@ export default function Layout({ children }: LayoutProps) {
         )}
       </nav>
 
-      <main className="max-w-7xl mx-auto pt-8 pb-8 sm:px-6 lg:px-8" style={{ paddingTop: '2rem' }}>
-        {children}
+      <main className="max-w-7xl mx-auto pb-8 sm:px-6 lg:px-8" style={{ paddingTop: '0' }}>
+        <div style={{ marginTop: '0' }}>
+          {children}
+        </div>
       </main>
 
       {/* Footer Premium */}
