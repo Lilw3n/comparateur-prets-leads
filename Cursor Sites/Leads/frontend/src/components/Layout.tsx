@@ -143,7 +143,7 @@ export default function Layout({ children }: LayoutProps) {
       <DevBanner />
       <ContactFloatingButton />
       {/* Navigation principale - Style Premium */}
-      <nav className="bg-white shadow-lg border-b sticky top-[73px] z-[100] backdrop-blur-sm bg-white/95">
+      <nav className="bg-white shadow-lg border-b sticky top-[73px] z-[100] backdrop-blur-sm bg-white/95 relative">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between h-20 min-w-0">
             <div className="flex min-w-0 flex-1">
@@ -163,7 +163,7 @@ export default function Layout({ children }: LayoutProps) {
               </div>
               
               {/* Menu desktop */}
-              <div className="hidden lg:ml-8 lg:flex lg:items-center lg:space-x-2 lg:flex-1 lg:justify-start lg:min-w-0 lg:max-w-full lg:overflow-hidden">
+              <div className="hidden lg:ml-8 lg:flex lg:items-center lg:space-x-2 lg:flex-1 lg:justify-start lg:min-w-0 lg:max-w-full lg:overflow-visible relative z-[1001]">
                 {menuItems.map((item) => {
                   const Icon = item.icon;
                   const hasSubmenu = item.submenu && item.submenu.length > 0;
@@ -173,7 +173,7 @@ export default function Layout({ children }: LayoutProps) {
                       <div
                         key={item.path}
                         className="relative"
-                        style={{ zIndex: 1000 }}
+                        style={{ zIndex: dropdownOpen === item.path ? 1002 : 1000 }}
                         onMouseEnter={() => {
                           if (dropdownTimeout) {
                             clearTimeout(dropdownTimeout);
@@ -206,7 +206,7 @@ export default function Layout({ children }: LayoutProps) {
                               right: item.label === 'Ressources' ? '0' : 'auto',
                               left: item.label === 'Ressources' ? 'auto' : '0',
                               top: '100%',
-                              zIndex: 1001
+                              zIndex: 1003
                             }}
                             onMouseEnter={() => {
                               if (dropdownTimeout) {
