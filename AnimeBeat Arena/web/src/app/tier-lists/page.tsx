@@ -45,12 +45,33 @@ export default async function TierListsPage() {
     },
   });
 
-  const approvedSuggestions = await prisma.linkSuggestion.findMany({
-    where: { status: "APPROVED" },
-    select: { tierListId: true, tierListItemId: true, url: true, title: true },
-    orderBy: { createdAt: "desc" },
-    take: 300,
-  });
+  const suggestionModel = (
+    prisma as unknown as {
+      linkSuggestion?: {
+        findMany: (args: {
+          where: { status: "APPROVED" };
+          select: { tierListId: true; tierListItemId: true; url: true; title: true };
+          orderBy: { createdAt: "desc" };
+          take: number;
+        }) => Promise<
+          Array<{
+            tierListId: string;
+            tierListItemId: string | null;
+            url: string;
+            title: string | null;
+          }>
+        >;
+      };
+    }
+  ).linkSuggestion;
+  const approvedSuggestions = suggestionModel?.findMany
+    ? await suggestionModel.findMany({
+        where: { status: "APPROVED" },
+        select: { tierListId: true, tierListItemId: true, url: true, title: true },
+        orderBy: { createdAt: "desc" },
+        take: 300,
+      })
+    : [];
 
   const listSuggestionMap = new Map<string, Array<{ url: string; title: string | null }>>();
   const itemSuggestionMap = new Map<string, Array<{ url: string; title: string | null }>>();

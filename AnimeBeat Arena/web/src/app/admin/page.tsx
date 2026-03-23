@@ -3,22 +3,55 @@ import { auth } from "@/auth";
 import { SignOutButton } from "@/components/sign-out-button";
 import { getPrisma } from "@/lib/prisma";
 import { getSiteConfig } from "@/lib/site-config";
-import { reviewSuggestionAction, updateLiveTvAction } from "./actions";
+import { importSocialSuggestionsAction, reviewSuggestionAction, updateLiveTvAction } from "./actions";
 
 export default async function AdminPage() {
   const session = await auth();
   const user = session?.user;
   const config = await getSiteConfig();
   const prisma = getPrisma();
-  const pendingSuggestions = await prisma.linkSuggestion.findMany({
-    where: { status: "PENDING" },
-    orderBy: { createdAt: "asc" },
-    take: 100,
-    include: {
-      submittedBy: { select: { email: true, name: true } },
-      tierList: { select: { title: true } },
-      tierListItem: { select: { label: true } },
-    },
+  const suggestionModel = (
+    prisma as unknown as {
+      linkSuggestion?: {
+        findMany: (args: {
+          where: { status: "PENDING" };
+          orderBy: { createdAt: "asc" };
+          take: number;
+          include: {
+            submittedBy: { select: { email: true; name: true } };
+            tierList: { select: { title: true } };
+            tierListItem: { select: { label: true } };
+          };
+        }) => Promise<
+          Array<{
+            id: string;
+            title: string | null;
+            url: string;
+            note: string | null;
+            submittedBy: { email: string; name: string | null };
+            tierList: { title: string };
+            tierListItem: { label: string } | null;
+          }>
+        >;
+      };
+    }
+  ).linkSuggestion;
+  const pendingSuggestions = suggestionModel?.findMany
+    ? await suggestionModel.findMany({
+        where: { status: "PENDING" },
+        orderBy: { createdAt: "asc" },
+        take: 100,
+        include: {
+          submittedBy: { select: { email: true, name: true } },
+          tierList: { select: { title: true } },
+          tierListItem: { select: { label: true } },
+        },
+      })
+    : [];
+  const tierLists = await prisma.tierList.findMany({
+    orderBy: { createdAt: "desc" },
+    take: 50,
+    select: { id: true, title: true, category: true },
   });
 
   return (
@@ -59,6 +92,50 @@ export default async function AdminPage() {
           <span className="text-xs text-zinc-500">
             Etat actuel : {config.liveTvEnabled ? "ON" : "OFF"}
           </span>
+        </form>
+      </section>
+      <section className="rounded-xl border border-zinc-200 bg-white p-5 dark:border-zinc-800 dark:bg-zinc-900">
+        <h2 className="text-lg font-semibold">Import social edits en suggestions</h2>
+        <p className="mt-1 text-sm text-zinc-600 dark:text-zinc-400">
+          Importe des liens TikTok, YouTube Shorts, Instagram Reels, X en attente de validation.
+        </p>
+        <form action={importSocialSuggestionsAction} className="mt-4 space-y-3">
+          <select
+            name="tierListId"
+            required
+            className="w-full rounded-lg border border-zinc-300 bg-white px-3 py-2 text-sm dark:border-zinc-700 dark:bg-zinc-950"
+          >
+            <option value="">Choisir une tier list cible</option>
+            {tierLists.map((list) => (
+              <option key={list.id} value={list.id}>
+                {list.title} ({list.category})
+              </option>
+            ))}
+          </select>
+          <textarea
+            name="rawUrls"
+            rows={4}
+            placeholder="Colle tes URLs ici (1 URL par ligne) puis choisis import perso."
+            className="w-full rounded-lg border border-zinc-300 bg-white px-3 py-2 text-sm dark:border-zinc-700 dark:bg-zinc-950"
+          />
+          <div className="flex flex-wrap gap-2">
+            <button
+              type="submit"
+              name="source"
+              value="seed"
+              className="rounded-md bg-indigo-600 px-3 py-1.5 text-xs font-medium text-white hover:bg-indigo-500"
+            >
+              Import examples social
+            </button>
+            <button
+              type="submit"
+              name="source"
+              value="custom"
+              className="rounded-md bg-zinc-800 px-3 py-1.5 text-xs font-medium text-white hover:bg-zinc-700"
+            >
+              Import mes URLs
+            </button>
+          </div>
         </form>
       </section>
       <section className="rounded-xl border border-zinc-200 bg-white p-5 dark:border-zinc-800 dark:bg-zinc-900">
