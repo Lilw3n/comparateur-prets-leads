@@ -63,12 +63,39 @@
         padding: 4px 6px;
         background: #0d1430;
       }
+      .source-powers {
+        display: flex;
+        gap: 8px;
+        flex-wrap: wrap;
+      }
+      .source-power {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        border: 1px solid var(--border);
+        border-radius: 8px;
+        padding: 4px 6px;
+        background: #0d1430;
+      }
       .slot label {
         display: inline-flex;
         align-items: center;
         gap: 4px;
         font-size: 11px;
         color: var(--muted);
+      }
+      .source-power .name {
+        font-size: 11px;
+        color: var(--muted);
+      }
+      .chat-controls {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        border: 1px solid var(--border);
+        border-radius: 8px;
+        padding: 4px 6px;
+        background: #0d1430;
       }
       select {
         border: 1px solid var(--border);
@@ -100,14 +127,31 @@
     <div class="toolbar">
       <div>
         <div class="title">AnimeBeat Live Hub</div>
-        <div class="hint">Ctrl+1..4: nombre d'ecrans · Ctrl+F: plein ecran</div>
+        <div class="hint">Ctrl+2..4: nombre d'ecrans · Ctrl+C: chat · Ctrl+F: plein ecran</div>
       </div>
       <div class="actions">
         <div class="screen-count">
-          <button data-count="1">1 ecran</button>
           <button data-count="2">2 ecrans</button>
           <button data-count="3">3 ecrans</button>
           <button data-count="4">4 ecrans</button>
+        </div>
+        <div class="source-powers">
+          <div class="source-power">
+            <span class="name">Live 1</span>
+            <button data-source-id="live-1" data-source-power="on">Éteindre</button>
+          </div>
+          <div class="source-power">
+            <span class="name">Live 2</span>
+            <button data-source-id="live-2" data-source-power="on">Éteindre</button>
+          </div>
+          <div class="source-power">
+            <span class="name">Kick</span>
+            <button data-source-id="kick" data-source-power="on">Éteindre</button>
+          </div>
+          <div class="source-power">
+            <span class="name">Twitch</span>
+            <button data-source-id="twitch" data-source-power="on">Éteindre</button>
+          </div>
         </div>
         <div class="slot-configs">
           <div class="slot" data-slot="0">
@@ -159,13 +203,38 @@
             <button data-slot-mode="site" data-slot-index="3">Site</button>
           </div>
         </div>
+        <div class="chat-controls">
+          <button data-chat-toggle="on" class="primary">Chat ON</button>
+          <select data-chat-mode>
+            <option value="mix">Chat Mix</option>
+            <option value="kick">Chat Kick</option>
+            <option value="twitch">Chat Twitch</option>
+            <option value="tiktok">Chat TikTok</option>
+          </select>
+        </div>
         <button class="primary" data-action="toggle-fullscreen">Plein ecran</button>
       </div>
     </div>
     <script>
+      function updatePowerButton(button, isOn) {
+        button.setAttribute("data-source-power", isOn ? "on" : "off");
+        button.textContent = isOn ? "Éteindre" : "Allumer";
+        button.classList.toggle("primary", isOn);
+      }
+
       document.querySelectorAll("[data-count]").forEach((btn) => {
         btn.addEventListener("click", () => {
           window.liveHub.setScreenCount(Number(btn.getAttribute("data-count")));
+        });
+      });
+
+      document.querySelectorAll("[data-source-id]").forEach((btn) => {
+        updatePowerButton(btn, true);
+        btn.addEventListener("click", () => {
+          const currentlyOn = btn.getAttribute("data-source-power") === "on";
+          const nextState = !currentlyOn;
+          window.liveHub.setSourcePower(btn.getAttribute("data-source-id"), nextState);
+          updatePowerButton(btn, nextState);
         });
       });
 
@@ -182,6 +251,19 @@
           const mode = btn.getAttribute("data-slot-mode");
           window.liveHub.setSlotMode(slotIndex, mode);
         });
+      });
+
+      const chatToggle = document.querySelector("[data-chat-toggle]");
+      let chatOn = true;
+      chatToggle.addEventListener("click", () => {
+        chatOn = !chatOn;
+        window.liveHub.setChatVisible(chatOn);
+        chatToggle.textContent = chatOn ? "Chat ON" : "Chat OFF";
+        chatToggle.classList.toggle("primary", chatOn);
+      });
+
+      document.querySelector("[data-chat-mode]").addEventListener("change", (event) => {
+        window.liveHub.setChatMode(event.currentTarget.value);
       });
 
       document.querySelector("[data-action='toggle-fullscreen']").addEventListener("click", () => {

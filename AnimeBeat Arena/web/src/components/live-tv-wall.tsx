@@ -30,6 +30,7 @@ function normalizeHost(host: string): string {
 export function LiveTvWall() {
   const [active, setActive] = useState<Set<TvChannel["id"]>>(new Set(["kick"]));
   const [layout, setLayout] = useState<"single" | "split2" | "split3">("single");
+  const [chatMode, setChatMode] = useState<"mix" | TvChannel["id"]>("mix");
   const [mainChannel, setMainChannel] = useState<TvChannel["id"]>("kick");
   const [host, setHost] = useState("localhost");
   const containerRef = useRef<HTMLDivElement>(null);
@@ -116,6 +117,8 @@ export function LiveTvWall() {
   const secondaryChannels = activeChannels.filter((c) => c.id !== effectiveMain);
   const splitChannels =
     layout === "split2" ? activeChannels.slice(0, 2) : layout === "split3" ? activeChannels.slice(0, 3) : [];
+  const twitchChatUrl = `https://www.twitch.tv/embed/${TWITCH_CHANNEL}/chat?parent=${encodeURIComponent(host)}&darkpopout`;
+  const kickChatUrl = `https://kick.com/${KICK_CHANNEL}`;
 
   function renderChannelFrame(channel: TvChannel, titleSuffix: string) {
     if (!channel.embeddable) {
@@ -153,6 +156,81 @@ export function LiveTvWall() {
         className="h-full w-full"
         allow="autoplay; fullscreen; encrypted-media; picture-in-picture"
       />
+    );
+  }
+
+  function renderChatPanel() {
+    const showTwitch = chatMode === "mix" || chatMode === "twitch";
+    const showKick = chatMode === "mix" || chatMode === "kick";
+    const showTiktok = chatMode === "mix" || chatMode === "tiktok" || chatMode === "tiktok-alt";
+
+    return (
+      <section className="glass-panel mt-4 rounded-xl p-4">
+        <div className="flex flex-wrap items-center justify-between gap-2">
+          <h3 className="text-sm font-semibold text-zinc-100">Chat multi-plateforme</h3>
+          <div className="flex flex-wrap gap-2">
+            <button
+              type="button"
+              onClick={() => setChatMode("mix")}
+              className={`rounded-md px-3 py-1.5 text-xs font-medium ${chatMode === "mix" ? "btn-primary" : "btn-secondary"}`}
+            >
+              Mix
+            </button>
+            <button
+              type="button"
+              onClick={() => setChatMode("kick")}
+              className={`rounded-md px-3 py-1.5 text-xs font-medium ${chatMode === "kick" ? "btn-primary" : "btn-secondary"}`}
+            >
+              Kick
+            </button>
+            <button
+              type="button"
+              onClick={() => setChatMode("twitch")}
+              className={`rounded-md px-3 py-1.5 text-xs font-medium ${chatMode === "twitch" ? "btn-primary" : "btn-secondary"}`}
+            >
+              Twitch
+            </button>
+            <button
+              type="button"
+              onClick={() => setChatMode("tiktok")}
+              className={`rounded-md px-3 py-1.5 text-xs font-medium ${chatMode === "tiktok" ? "btn-primary" : "btn-secondary"}`}
+            >
+              TikTok
+            </button>
+          </div>
+        </div>
+
+        <div className="mt-3 grid gap-3 md:grid-cols-2">
+          {showTwitch ? (
+            <article className="overflow-hidden rounded-xl border border-zinc-700/70 bg-zinc-950/70">
+              <div className="border-b border-zinc-700/60 px-3 py-2 text-xs font-medium text-violet-200">Twitch chat</div>
+              <iframe title="Twitch chat" src={twitchChatUrl} className="h-[360px] w-full" />
+            </article>
+          ) : null}
+          {showKick ? (
+            <article className="overflow-hidden rounded-xl border border-zinc-700/70 bg-zinc-950/70">
+              <div className="border-b border-zinc-700/60 px-3 py-2 text-xs font-medium text-emerald-200">Kick chat</div>
+              <iframe title="Kick chat" src={kickChatUrl} className="h-[360px] w-full" />
+            </article>
+          ) : null}
+        </div>
+
+        {showTiktok ? (
+          <div className="mt-3 rounded-lg border border-zinc-700/60 bg-zinc-900/50 p-3">
+            <p className="text-xs text-zinc-200">
+              Le chat TikTok est souvent bloqué en iframe. Ouvre directement les chats :
+            </p>
+            <div className="mt-2 flex flex-wrap gap-2">
+              <a href={TIKTOK_URL} target="_blank" rel="noopener noreferrer" className="btn-secondary rounded-md px-3 py-1.5 text-xs">
+                Ouvrir chat TikTok 1
+              </a>
+              <a href={TIKTOK_ALT_URL} target="_blank" rel="noopener noreferrer" className="btn-secondary rounded-md px-3 py-1.5 text-xs">
+                Ouvrir chat TikTok 2
+              </a>
+            </div>
+          </div>
+        ) : null}
+      </section>
     );
   }
 
@@ -304,6 +382,7 @@ export function LiveTvWall() {
           );
         })}
       </div>
+      {renderChatPanel()}
     </section>
   );
 }
