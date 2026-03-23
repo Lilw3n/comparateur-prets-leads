@@ -1,9 +1,10 @@
 "use server";
 
+import { revalidatePath } from "next/cache";
 import { auth } from "@/auth";
 import { getPrisma } from "@/lib/prisma";
 import { setLiveTvEnabled } from "@/lib/site-config";
-import { TierRank } from "@/generated/prisma";
+import { LinkSuggestionKind, TierRank } from "@/generated/prisma";
 
 /** Exemples d’URLs (formats Shorts / Reels / TikTok / X) — à valider ou remplacer par les tiennes. */
 const socialSeedUrls = [
@@ -138,10 +139,9 @@ export async function importSocialSuggestionsAction(formData: FormData) {
     throw new Error("Acces refuse.");
   }
 
+  const targetKind = String(formData.get("targetKind") ?? "list_full").trim();
   const tierListId = String(formData.get("tierListId") ?? "").trim();
-  if (!tierListId) {
-    throw new Error("Tier list obligatoire.");
-  }
+  const tierListItemId = String(formData.get("tierListItemId") ?? "").trim();
 
   const rawUrls = String(formData.get("rawUrls") ?? "").trim();
   const source = String(formData.get("source") ?? "seed");
@@ -156,6 +156,27 @@ export async function importSocialSuggestionsAction(formData: FormData) {
   }
 
   const prisma = getPrisma();
+
+  if (targetKind === "home_teaser") {
+    await prisma.linkSuggestion.createMany({
+      data: urls.map((url) => ({
+        kind: LinkSuggestionKind.HOME_TEASER,
+        tierListId: null,
+        tierListItemId: null,
+        url,
+        title: `${inferPlatform(url)} — teaser accueil`,
+        note: "Import admin — teaser page d'accueil",
+        submittedById: session.user.id,
+        status: "PENDING",
+      })),
+    });
+    return;
+  }
+
+  if (!tierListId) {
+    throw new Error("Tier list obligatoire pour une cible liste ou element.");
+  }
+
   const tierList = await prisma.tierList.findUnique({
     where: { id: tierListId },
     select: { id: true },
@@ -164,15 +185,87 @@ export async function importSocialSuggestionsAction(formData: FormData) {
     throw new Error("Tier list introuvable.");
   }
 
+  if (targetKind === "list_item") {
+    if (!tierListItemId) {
+      throw new Error("Choisis un element de la tier list.");
+    }
+    const item = await prisma.tierListItem.findFirst({
+      where: { id: tierListItemId, tierListId },
+      select: { id: true },
+    });
+    if (!item) {
+      throw new Error("Item introuvable.");
+    }
+    await prisma.linkSuggestion.createMany({
+      data: urls.map((url) => ({
+        kind: LinkSuggestionKind.LIST_ITEM,
+        tierListId,
+        tierListItemId,
+        url,
+        title: `${inferPlatform(url)} — element`,
+        note: "Import admin — lien rattache a un element",
+        submittedById: session.user.id,
+        status: "PENDING",
+      })),
+    });
+    return;
+  }
+
   await prisma.linkSuggestion.createMany({
     data: urls.map((url) => ({
+      kind: LinkSuggestionKind.LIST_FULL,
       tierListId,
+      tierListItemId: null,
       url,
-      title: `${inferPlatform(url)} edit suggestion`,
-      note: "Import admin social edits",
+      title: `${inferPlatform(url)} — liste complete`,
+      note: "Import admin — tier list complete",
       submittedById: session.user.id,
       status: "PENDING",
     })),
   });
+}
+
+/** Playlists musique globales : visibles par tous les visiteurs (lecteur en bas de page). */
+export async function createGlobalMusicPlaylistAction(formData: FormData) {
+  const session = await auth();
+  if (!session?.user?.id || session.user.role !== "ADMIN") {
+    throw new Error("Acces refuse.");
+  }
+  const label = String(formData.get("label") ?? "").trim();
+  const url = String(formData.get("url") ?? "").trim();
+  if (!label || !url) {
+    throw new Error("Nom et URL obligatoires.");
+  }
+  if (url.length > 500) {
+    throw new Error("URL trop longue.");
+  }
+  try {
+    new URL(url);
+  } catch {
+    throw new Error("URL invalide.");
+  }
+  const prisma = getPrisma();
+  await prisma.musicPlaylist.create({
+    data: {
+      label,
+      url,
+      createdById: session.user.id,
+    },
+  });
+  revalidatePath("/admin");
+}
+
+export async function deleteGlobalMusicPlaylistAction(formData: FormData) {
+  const session = await auth();
+  if (!session?.user?.id || session.user.role !== "ADMIN") {
+    throw new Error("Acces refuse.");
+  }
+  const playlistId = String(formData.get("playlistId") ?? "").trim();
+  if (!playlistId) {
+    throw new Error("Playlist introuvable.");
+  }
+  const prisma = getPrisma();
+  await prisma.musicPlaylist.delete({ where: { id: playlistId } });
+  revalidatePath("/admin");
 }
 

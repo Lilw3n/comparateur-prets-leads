@@ -1,30 +1,42 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { useSession } from "next-auth/react";
 
 function getSpotifyEmbed(url: string): string | null {
   const clean = url.trim();
   if (!clean) return null;
   const track = clean.match(/spotify\.com\/track\/([a-zA-Z0-9]+)/);
-  if (track) return `https://open.spotify.com/embed/track/${track[1]}?utm_source=generator`;
+  if (track) {
+    return `https://open.spotify.com/embed/track/${track[1]}?utm_source=generator&autoplay=true`;
+  }
   const playlist = clean.match(/spotify\.com\/playlist\/([a-zA-Z0-9]+)/);
-  if (playlist) return `https://open.spotify.com/embed/playlist/${playlist[1]}?utm_source=generator`;
+  if (playlist) {
+    return `https://open.spotify.com/embed/playlist/${playlist[1]}?utm_source=generator&autoplay=true`;
+  }
   const album = clean.match(/spotify\.com\/album\/([a-zA-Z0-9]+)/);
-  if (album) return `https://open.spotify.com/embed/album/${album[1]}?utm_source=generator`;
+  if (album) {
+    return `https://open.spotify.com/embed/album/${album[1]}?utm_source=generator&autoplay=true`;
+  }
   return null;
 }
 
 function getYoutubeEmbed(url: string): string | null {
   const clean = url.trim();
   if (!clean) return null;
+  let id: string | null = null;
   const watch = clean.match(/[?&]v=([a-zA-Z0-9_-]{6,})/);
-  if (watch) return `https://www.youtube.com/embed/${watch[1]}`;
-  const short = clean.match(/youtu\.be\/([a-zA-Z0-9_-]{6,})/);
-  if (short) return `https://www.youtube.com/embed/${short[1]}`;
-  const embed = clean.match(/youtube\.com\/embed\/([a-zA-Z0-9_-]{6,})/);
-  if (embed) return `https://www.youtube.com/embed/${embed[1]}`;
-  return null;
+  if (watch) id = watch[1];
+  else {
+    const short = clean.match(/youtu\.be\/([a-zA-Z0-9_-]{6,})/);
+    if (short) id = short[1];
+    else {
+      const embed = clean.match(/youtube\.com\/embed\/([a-zA-Z0-9_-]{6,})/);
+      if (embed) id = embed[1];
+    }
+  }
+  if (!id) return null;
+  return `https://www.youtube.com/embed/${id}?autoplay=1&mute=0&playsinline=1&rel=0&modestbranding=1`;
 }
 
 type Source = "spotify" | "youtube";
@@ -69,6 +81,8 @@ export function MusicBanner() {
   const [open, setOpen] = useState(true);
   const [dockLow, setDockLow] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  /** Incrémenté pour remonter l’iframe (autoplay + son après geste utilisateur). */
+  const [embedRemountKey, setEmbedRemountKey] = useState(0);
   const allPlaylists = useMemo(
     () => [...presets, ...dbPlaylists, ...customPlaylists],
     [customPlaylists, dbPlaylists],
@@ -105,31 +119,58 @@ export function MusicBanner() {
     }
   }, []);
 
-  useEffect(() => {
-    let mounted = true;
-    async function loadDbPlaylists() {
-      try {
-        const res = await fetch("/api/music-playlists", { cache: "no-store" });
-        if (!res.ok) return;
-        const payload = (await res.json()) as {
-          playlists?: Array<{ id: string; label: string; url: string }>;
-        };
-        if (!mounted) return;
-        const mapped = (payload.playlists ?? []).map((p) => ({
-          id: `db-${p.id}`,
-          label: `${p.label} (Admin)`,
-          url: p.url,
-        }));
-        setDbPlaylists(mapped);
-      } catch {
-        // ignore loading issues
-      }
+  const loadDbPlaylists = useCallback(async () => {
+    try {
+      const res = await fetch("/api/music-playlists", { cache: "no-store" });
+      if (!res.ok) return;
+      const payload = (await res.json()) as {
+        playlists?: Array<{ id: string; label: string; url: string }>;
+      };
+      const mapped = (payload.playlists ?? []).map((p) => ({
+        id: `db-${p.id}`,
+        label: p.label,
+        url: p.url,
+      }));
+      setDbPlaylists(mapped);
+    } catch {
+      // ignore loading issues
     }
-    loadDbPlaylists();
-    return () => {
-      mounted = false;
-    };
   }, []);
+
+  useEffect(() => {
+    loadDbPlaylists();
+  }, [loadDbPlaylists]);
+
+  useEffect(() => {
+    const onFocus = () => loadDbPlaylists();
+    const onVis = () => {
+      if (document.visibilityState === "visible") loadDbPlaylists();
+    };
+    window.addEventListener("focus", onFocus);
+    document.addEventListener("visibilitychange", onVis);
+    return () => {
+      window.removeEventListener("focus", onFocus);
+      document.removeEventListener("visibilitychange", onVis);
+    };
+  }, [loadDbPlaylists]);
+
+  useEffect(() => {
+    if (!savedUrl.trim() || dbPlaylists.length === 0) return;
+    const match = dbPlaylists.find((p) => p.url.trim() === savedUrl.trim());
+    if (!match) return;
+    setSelectedPreset((prev) => (prev === match.id ? prev : match.id));
+  }, [dbPlaylists, savedUrl]);
+
+  const remountPlayer = useCallback(() => {
+    setEmbedRemountKey((k) => k + 1);
+  }, []);
+
+  /** Premier clic / toucher sur la page : beaucoup de navigateurs n’autorisent le son qu’après un geste. */
+  useEffect(() => {
+    const onFirstPointer = () => remountPlayer();
+    document.addEventListener("pointerdown", onFirstPointer, { once: true, capture: true });
+    return () => document.removeEventListener("pointerdown", onFirstPointer, { capture: true });
+  }, [savedUrl, remountPlayer]);
 
   const parsed = useMemo(() => {
     const spotify = getSpotifyEmbed(savedUrl);
@@ -156,6 +197,7 @@ export function MusicBanner() {
     window.localStorage.setItem("music-banner-url", next);
     setUrlInput("");
     setOpen(true);
+    remountPlayer();
   }
 
   function clearUrl() {
@@ -200,11 +242,15 @@ export function MusicBanner() {
         const payload = (await res.json()) as { playlist: { id: string; label: string; url: string } };
         const created = {
           id: `db-${payload.playlist.id}`,
-          label: `${payload.playlist.label} (Admin)`,
+          label: payload.playlist.label,
           url: payload.playlist.url,
         };
-        setDbPlaylists((prev) => [created, ...prev]);
+        setDbPlaylists((prev) => {
+          const withoutDup = prev.filter((p) => p.id !== created.id);
+          return [created, ...withoutDup];
+        });
         setSelectedPreset(created.id);
+        void loadDbPlaylists();
       } catch (err) {
         setError(err instanceof Error ? err.message : "Erreur serveur.");
         return;
@@ -290,7 +336,8 @@ export function MusicBanner() {
         </div>
 
         <p className="mt-1 text-xs text-slate-300/85">
-          La musique continue meme si tu reduis la barre.
+          Lecture lancée automatiquement quand le navigateur l’autorise. Sinon, un clic sur la page ou sur « Démarrer le
+          son » active le lecteur.
         </p>
 
         <div className="mt-2 flex flex-wrap items-center gap-2">
@@ -342,27 +389,33 @@ export function MusicBanner() {
         </div>
 
         {error ? <p className="mt-2 text-xs text-amber-300">{error}</p> : null}
+        <p className="mt-1 text-[11px] text-slate-300/85">
+          Les playlists enregistrées par un admin en base sont listées ici pour{" "}
+          <strong className="text-slate-200">tous les visiteurs</strong> (sans compte).
+        </p>
         {isConnected ? (
           <p className="mt-1 text-[11px] text-slate-300/85">
             {isAdmin
-              ? "Mode admin: les playlists ajoutees ici sont enregistrees en base de donnees."
-              : "Mode utilisateur connecte: playlists temporaires conservees uniquement pendant la session."}
+              ? "En tant qu’admin, « Ajouter playlist » enregistre aussi en base (comme sur la page Admin)."
+              : "Tes propres ajouts restent en session (ce navigateur) jusqu’à fermeture."}
           </p>
         ) : (
           <p className="mt-1 text-[11px] text-slate-300/85">
-            Connecte-toi pour ajouter tes propres playlists.
+            Connecte-toi pour ajouter des playlists personnelles (session).
           </p>
         )}
 
         {open && parsed ? (
           <div className="mt-3 overflow-hidden rounded-lg border border-slate-600 bg-slate-800/70">
             <iframe
+              key={`${savedUrl}-${embedRemountKey}`}
               src={parsed.src}
               title={`Lecteur ${parsed.source}`}
               width="100%"
-              height={parsed.source === "spotify" ? 170 : 300}
-              allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
-              loading="lazy"
+              height={parsed.source === "spotify" ? 232 : 300}
+              allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture; web-share"
+              referrerPolicy="strict-origin-when-cross-origin"
+              loading="eager"
             />
           </div>
         ) : null}

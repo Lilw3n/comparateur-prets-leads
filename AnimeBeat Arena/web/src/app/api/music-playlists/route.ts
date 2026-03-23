@@ -3,6 +3,9 @@ import { z } from "zod";
 import { auth } from "@/auth";
 import { getPrisma } from "@/lib/prisma";
 
+/** Toujours lire la base : playlists admin visibles par tous les utilisateurs. */
+export const dynamic = "force-dynamic";
+
 const createSchema = z.object({
   label: z.string().min(1).max(120),
   url: z.string().url().max(500),
@@ -15,7 +18,14 @@ export async function GET() {
     take: 100,
     select: { id: true, label: true, url: true },
   });
-  return NextResponse.json({ playlists });
+  return NextResponse.json(
+    { playlists },
+    {
+      headers: {
+        "Cache-Control": "private, no-store, max-age=0, must-revalidate",
+      },
+    },
+  );
 }
 
 export async function POST(req: Request) {

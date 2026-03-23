@@ -32,7 +32,6 @@ yarn-error.log*
 
 # env files (can opt-in for committing if needed)
 .env*
-!.env.example
 
 # vercel
 .vercel
@@ -43,6 +42,6 @@ next-env.d.ts
 
 /src/generated/prisma
 
-# SQLite local
-/prisma/dev.db
-/prisma/dev.db-journal
+# base SQLite locale (Neon / Postgres en prod)
+prisma/dev.db
+prisma/*.db

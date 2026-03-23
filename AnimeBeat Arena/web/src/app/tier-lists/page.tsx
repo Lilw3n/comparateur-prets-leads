@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { auth } from "@/auth";
 import { getPrisma } from "@/lib/prisma";
+import { LinkSuggestionKind } from "@/generated/prisma";
 import { SiteHeader } from "@/components/site-header";
 import { PromoBanners } from "@/components/promo-banners";
 import { LinkSuggestionForm } from "@/components/link-suggestion-form";
@@ -44,37 +45,20 @@ export default async function TierListsPage() {
     },
   });
 
-  const suggestionModel = (
-    prisma as unknown as {
-      linkSuggestion?: {
-        findMany: (args: {
-          where: { status: "APPROVED" };
-          select: { tierListId: true; tierListItemId: true; url: true; title: true };
-          orderBy: { createdAt: "desc" };
-          take: number;
-        }) => Promise<
-          Array<{
-            tierListId: string;
-            tierListItemId: string | null;
-            url: string;
-            title: string | null;
-          }>
-        >;
-      };
-    }
-  ).linkSuggestion;
-  const approvedSuggestions = suggestionModel?.findMany
-    ? await suggestionModel.findMany({
-        where: { status: "APPROVED" },
-        select: { tierListId: true, tierListItemId: true, url: true, title: true },
-        orderBy: { createdAt: "desc" },
-        take: 300,
-      })
-    : [];
+  const approvedSuggestions = await prisma.linkSuggestion.findMany({
+    where: {
+      status: "APPROVED",
+      kind: { in: [LinkSuggestionKind.LIST_FULL, LinkSuggestionKind.LIST_ITEM] },
+    },
+    select: { tierListId: true, tierListItemId: true, url: true, title: true },
+    orderBy: { createdAt: "desc" },
+    take: 300,
+  });
 
   const listSuggestionMap = new Map<string, Array<{ url: string; title: string | null }>>();
   const itemSuggestionMap = new Map<string, Array<{ url: string; title: string | null }>>();
   for (const suggestion of approvedSuggestions) {
+    if (!suggestion.tierListId) continue;
     if (suggestion.tierListItemId) {
       const itemLinks = itemSuggestionMap.get(suggestion.tierListItemId) ?? [];
       itemLinks.push({ url: suggestion.url, title: suggestion.title });
@@ -86,14 +70,9 @@ export default async function TierListsPage() {
     listSuggestionMap.set(suggestion.tierListId, listLinks);
   }
 
-  const pendingModel = (
-    prisma as unknown as {
-      linkSuggestion?: { count: (args: { where: { status: "PENDING" } }) => Promise<number> };
-    }
-  ).linkSuggestion;
   const pendingSuggestionCount =
-    session?.user?.role === "ADMIN" && pendingModel?.count
-      ? await pendingModel.count({ where: { status: "PENDING" } })
+    session?.user?.role === "ADMIN"
+      ? await prisma.linkSuggestion.count({ where: { status: "PENDING" } })
       : 0;
 
   const listsToRender =
@@ -154,13 +133,14 @@ export default async function TierListsPage() {
 
         <div className="mt-6 rounded-xl border border-zinc-600/60 bg-zinc-900/50 px-4 py-3 text-sm text-zinc-300">
           <p>
-            Les liens <span className="text-indigo-200">Shorts / Reels / TikTok / X</span> proposés restent{" "}
-            <strong className="text-zinc-100">invisibles ici</strong> tant qu’un admin ne les a pas{" "}
-            <strong className="text-zinc-100">approuvés</strong> sur la page{" "}
+            Les liens <span className="text-indigo-200">Shorts / Reels / TikTok / X</span> pour une{" "}
+            <strong className="text-zinc-100">tier list</strong> ou un <strong className="text-zinc-100">element</strong>{" "}
+            restent cachés ici tant qu&apos;un admin ne les a pas approuvés sur{" "}
             <Link href="/admin" className="font-medium text-cyan-200 hover:text-cyan-100">
               Admin
             </Link>
-            . Une fois validés, ils s’affichent sous « Suggestion validee » sur cette page.
+            . Les <strong className="text-zinc-100">teasers accueil</strong> apparaissent sur la page d&apos;accueil une
+            fois valides.
           </p>
         </div>
 
@@ -210,7 +190,7 @@ export default async function TierListsPage() {
                       rel="noopener noreferrer"
                       className="block text-xs text-emerald-200 hover:text-emerald-100"
                     >
-                      Suggestion validee: {link.title || link.url}
+                      Liste : {link.title || link.url}
                     </a>
                   ))}
                 </div>
@@ -234,7 +214,7 @@ export default async function TierListsPage() {
                         </a>
                       ) : null}
                       {item.approvedLinks.length > 0 ? (
-                        <span className="inline-flex items-center gap-2">
+                        <span className="inline-flex flex-wrap items-center gap-2">
                           {item.approvedLinks.slice(0, 2).map((link, linkIdx) => (
                             <a
                               key={`${link.url}-${linkIdx}`}
@@ -243,7 +223,7 @@ export default async function TierListsPage() {
                               rel="noopener noreferrer"
                               className="text-[11px] font-medium text-emerald-200 hover:text-emerald-100"
                             >
-                              Suggestion: {link.title || "Lien"}
+                              Element : {link.title || "Lien"}
                             </a>
                           ))}
                         </span>

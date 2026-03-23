@@ -4,8 +4,10 @@ import { auth } from "@/auth";
 import { SignOutButton } from "@/components/sign-out-button";
 import { getPrisma } from "@/lib/prisma";
 import { getSiteConfig } from "@/lib/site-config";
+import { AdminSocialImportForm } from "@/components/admin-social-import-form";
 import {
-  importSocialSuggestionsAction,
+  createGlobalMusicPlaylistAction,
+  deleteGlobalMusicPlaylistAction,
   reviewSuggestionAction,
   seedDefaultTierListsAction,
   updateLiveTvAction,
@@ -22,48 +24,36 @@ export default async function AdminPage() {
   const user = session?.user;
   const config = await getSiteConfig();
   const prisma = getPrisma();
-  const suggestionModel = (
-    prisma as unknown as {
-      linkSuggestion?: {
-        findMany: (args: {
-          where: { status: "PENDING" };
-          orderBy: { createdAt: "asc" };
-          take: number;
-          include: {
-            submittedBy: { select: { email: true; name: true } };
-            tierList: { select: { title: true } };
-            tierListItem: { select: { label: true } };
-          };
-        }) => Promise<
-          Array<{
-            id: string;
-            title: string | null;
-            url: string;
-            note: string | null;
-            submittedBy: { email: string; name: string | null };
-            tierList: { title: string };
-            tierListItem: { label: string } | null;
-          }>
-        >;
-      };
-    }
-  ).linkSuggestion;
-  const pendingSuggestions = suggestionModel?.findMany
-    ? await suggestionModel.findMany({
-        where: { status: "PENDING" },
-        orderBy: { createdAt: "asc" },
-        take: 100,
-        include: {
-          submittedBy: { select: { email: true, name: true } },
-          tierList: { select: { title: true } },
-          tierListItem: { select: { label: true } },
-        },
-      })
-    : [];
+  const pendingSuggestions = await prisma.linkSuggestion.findMany({
+    where: { status: "PENDING" },
+    orderBy: { createdAt: "asc" },
+    take: 100,
+    include: {
+      submittedBy: { select: { email: true, name: true } },
+      tierList: { select: { title: true } },
+      tierListItem: { select: { label: true } },
+    },
+  });
   const tierLists = await prisma.tierList.findMany({
     orderBy: { createdAt: "desc" },
     take: 50,
-    select: { id: true, title: true, category: true },
+    select: {
+      id: true,
+      title: true,
+      category: true,
+      items: { orderBy: [{ rank: "asc" }, { sortOrder: "asc" }], select: { id: true, label: true } },
+    },
+  });
+  const globalMusicPlaylists = await prisma.musicPlaylist.findMany({
+    orderBy: { createdAt: "desc" },
+    take: 100,
+    select: {
+      id: true,
+      label: true,
+      url: true,
+      createdAt: true,
+      createdBy: { select: { email: true } },
+    },
   });
 
   return (
@@ -106,6 +96,78 @@ export default async function AdminPage() {
           </span>
         </form>
       </section>
+      <section className="glass-panel rounded-xl p-5">
+        <h2 className="text-lg font-semibold">Playlists musique (tous les utilisateurs)</h2>
+        <p className="muted mt-1 text-sm">
+          Chaque playlist est enregistrée en base et proposée dans le lecteur en bas de page à{" "}
+          <strong className="text-zinc-200">tous les visiteurs</strong> (connectés ou non). Les utilisateurs peuvent
+          toujours ajouter des playlists personnelles en session.
+        </p>
+        <form action={createGlobalMusicPlaylistAction} className="mt-4 flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:items-end">
+          <div className="min-w-[140px] flex-1">
+            <label htmlFor="pl-label" className="block text-xs text-zinc-400">
+              Nom affiché
+            </label>
+            <input
+              id="pl-label"
+              name="label"
+              required
+              maxLength={120}
+              placeholder="Ex. OST shonen"
+              className="mt-1 w-full rounded-lg border border-zinc-700 bg-zinc-950 px-3 py-2 text-sm text-zinc-100"
+            />
+          </div>
+          <div className="min-w-[200px] flex-[2]">
+            <label htmlFor="pl-url" className="block text-xs text-zinc-400">
+              Lien Spotify ou YouTube
+            </label>
+            <input
+              id="pl-url"
+              name="url"
+              type="url"
+              required
+              maxLength={500}
+              placeholder="https://open.spotify.com/playlist/..."
+              className="mt-1 w-full rounded-lg border border-zinc-700 bg-zinc-950 px-3 py-2 text-sm text-zinc-100"
+            />
+          </div>
+          <button
+            type="submit"
+            className="rounded-lg bg-emerald-600 px-4 py-2 text-sm font-medium text-white hover:bg-emerald-500"
+          >
+            Enregistrer en base
+          </button>
+        </form>
+        {globalMusicPlaylists.length === 0 ? (
+          <p className="mt-4 text-sm text-zinc-400">Aucune playlist globale pour le moment.</p>
+        ) : (
+          <ul className="mt-4 space-y-2">
+            {globalMusicPlaylists.map((pl) => (
+              <li
+                key={pl.id}
+                className="flex flex-col gap-2 rounded-lg border border-zinc-700 p-3 text-sm sm:flex-row sm:items-center sm:justify-between"
+              >
+                <div className="min-w-0">
+                  <p className="font-medium text-zinc-100">{pl.label}</p>
+                  <p className="mt-1 break-all text-xs text-zinc-400">{pl.url}</p>
+                  <p className="mt-1 text-[11px] text-zinc-500">
+                    Ajouté le {pl.createdAt.toLocaleDateString("fr-FR")} par {pl.createdBy.email}
+                  </p>
+                </div>
+                <form action={deleteGlobalMusicPlaylistAction}>
+                  <input type="hidden" name="playlistId" value={pl.id} />
+                  <button
+                    type="submit"
+                    className="rounded-md border border-rose-500/50 px-3 py-1.5 text-xs text-rose-200 hover:bg-rose-950/40"
+                  >
+                    Supprimer
+                  </button>
+                </form>
+              </li>
+            ))}
+          </ul>
+        )}
+      </section>
       {tierLists.length === 0 ? (
         <section className="glass-panel rounded-xl p-5 border-amber-500/40">
           <h2 className="text-lg font-semibold text-amber-100">Aucune tier list en base</h2>
@@ -129,44 +191,7 @@ export default async function AdminPage() {
           Les liens importés arrivent en <strong className="text-zinc-200">PENDING</strong> : tu les vois
           uniquement ici (section « Validation »), pas sur la page publique tant qu’ils ne sont pas approuvés.
         </p>
-        <form action={importSocialSuggestionsAction} className="mt-4 space-y-3">
-          <select
-            name="tierListId"
-            required
-            className="w-full rounded-lg border border-zinc-700 bg-zinc-950 px-3 py-2 text-sm text-zinc-100"
-          >
-            <option value="">Choisir une tier list cible</option>
-            {tierLists.map((list) => (
-              <option key={list.id} value={list.id}>
-                {list.title} ({list.category})
-              </option>
-            ))}
-          </select>
-          <textarea
-            name="rawUrls"
-            rows={4}
-            placeholder="Colle tes URLs ici (1 URL par ligne) puis choisis import perso."
-            className="w-full rounded-lg border border-zinc-700 bg-zinc-950 px-3 py-2 text-sm text-zinc-100"
-          />
-          <div className="flex flex-wrap gap-2">
-            <button
-              type="submit"
-              name="source"
-              value="seed"
-              className="rounded-md bg-indigo-600 px-3 py-1.5 text-xs font-medium text-white hover:bg-indigo-500"
-            >
-              Import examples social
-            </button>
-            <button
-              type="submit"
-              name="source"
-              value="custom"
-              className="rounded-md bg-zinc-800 px-3 py-1.5 text-xs font-medium text-white hover:bg-zinc-700"
-            >
-              Import mes URLs
-            </button>
-          </div>
-        </form>
+        <AdminSocialImportForm tierLists={tierLists} />
       </section>
       <section className="glass-panel rounded-xl p-5">
         <h2 className="text-lg font-semibold">Validation liens communautaires</h2>
@@ -187,8 +212,23 @@ export default async function AdminPage() {
                 </p>
                 <p className="mt-1 break-all text-xs text-zinc-300">{suggestion.url}</p>
                 <p className="mt-1 text-xs text-zinc-300">
-                  Tier list: {suggestion.tierList.title}
-                  {suggestion.tierListItem ? ` · Item: ${suggestion.tierListItem.label}` : " · Cible: liste complete"}
+                  {suggestion.kind === "HOME_TEASER"
+                    ? "Cible : teaser page d'accueil"
+                    : suggestion.tierList
+                      ? `Tier list : ${suggestion.tierList.title}${
+                          suggestion.tierListItem
+                            ? ` · Element : ${suggestion.tierListItem.label}`
+                            : " · Liste entiere"
+                        }`
+                      : "Cible inconnue"}
+                </p>
+                <p className="mt-0.5 text-[11px] uppercase tracking-wide text-zinc-500">
+                  Type :{" "}
+                  {suggestion.kind === "HOME_TEASER"
+                    ? "Teaser"
+                    : suggestion.kind === "LIST_ITEM"
+                      ? "Element"
+                      : "Tier list"}
                 </p>
                 <p className="mt-1 text-xs text-zinc-300">
                   Propose par {suggestion.submittedBy.name || suggestion.submittedBy.email}

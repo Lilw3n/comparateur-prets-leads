@@ -1,29 +1,24 @@
-# AnimeBeat Arena (web)
+This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
 
-## Démarrage simple (SQLite, sans PostgreSQL)
+## Getting Started
 
-1. `cp .env.example .env` puis renseigne au minimum `AUTH_SECRET` (chaîne longue aléatoire).
-2. `DATABASE_URL="file:./prisma/dev.db"` (déjà dans l’exemple).
-3. Créer la base + compte admin :
-   ```bash
-   npx prisma db push
-   npm run bootstrap-admin
-   ```
-   (Le script lit `BOOTSTRAP_ADMIN_EMAIL` / `BOOTSTRAP_ADMIN_PASSWORD` ou `ADMIN_EMAIL` / `ADMIN_PASSWORD` dans `.env`.)
-4. `AUTH_URL` doit être **exactement** l’URL du site (ex. `http://localhost:3000`).
-5. Lancer :
-   ```bash
-   npm run dev
-   ```
-6. Ouvre [http://localhost:3000/login](http://localhost:3000/login) avec l’email et le mot de passe du bootstrap.
+First, run the development server:
 
-**Un seul** `npm run dev` à la fois pour éviter le passage sur le port 3001.
+```bash
+npm run dev
+# or
+yarn dev
+# or
+pnpm dev
+# or
+bun dev
+```
 
-**Production (Vercel)** : utiliser PostgreSQL (Neon, etc.), remettre `provider = "postgresql"` dans `prisma/schema.prisma` et adapter la connexion selon la doc Prisma 7.
+Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
----
+You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
 
-Next.js + Auth.js + Prisma. Police : [Geist](https://vercel.com/font).
+This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
 
 ## Learn More
 

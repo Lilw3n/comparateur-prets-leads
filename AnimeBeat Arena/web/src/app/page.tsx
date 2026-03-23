@@ -1,7 +1,12 @@
 import Image from "next/image";
+import { auth } from "@/auth";
 import { SiteHeader } from "@/components/site-header";
 import { PromoBanners } from "@/components/promo-banners";
 import { LiveTvWall } from "@/components/live-tv-wall";
+import { HomeDecorGallery } from "@/components/home-decor-gallery";
+import { HomeTeaserSuggestionForm } from "@/components/home-teaser-suggestion-form";
+import { getPrisma } from "@/lib/prisma";
+import { LinkSuggestionKind } from "@/generated/prisma";
 import { getSiteConfig } from "@/lib/site-config";
 
 const decorImages = [
@@ -18,7 +23,15 @@ const decorImages = [
 ];
 
 export default async function Home() {
-  const siteConfig = await getSiteConfig();
+  const [siteConfig, session] = await Promise.all([getSiteConfig(), auth()]);
+  const prisma = getPrisma();
+  const approvedTeasers = await prisma.linkSuggestion.findMany({
+    where: { status: "APPROVED", kind: LinkSuggestionKind.HOME_TEASER },
+    orderBy: { createdAt: "desc" },
+    take: 16,
+    select: { url: true, title: true },
+  });
+
   return (
     <div className="relative flex min-h-full flex-1 flex-col">
       <div className="anime-grid pointer-events-none absolute inset-0" />
@@ -61,28 +74,51 @@ export default async function Home() {
 
         <PromoBanners />
 
+        {approvedTeasers.length > 0 ? (
+          <section className="glass-panel mt-6 rounded-xl p-5">
+            <h2 className="text-lg font-semibold text-zinc-50">
+              Teasers <span className="neon-text">communaute</span>
+            </h2>
+            <p className="muted mt-1 text-sm">
+              Shorts / Reels / TikTok validés par l&apos;équipe — hors tier lists.
+            </p>
+            <ul className="mt-4 flex flex-wrap gap-2">
+              {approvedTeasers.map((t, i) => (
+                <li key={`${t.url}-${i}`}>
+                  <a
+                    href={t.url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex rounded-full border border-cyan-400/30 bg-cyan-500/10 px-3 py-1.5 text-xs font-medium text-cyan-100 hover:bg-cyan-500/20"
+                  >
+                    {t.title || "Voir le teaser"}
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </section>
+        ) : null}
+
+        {session?.user ? (
+          <section className="glass-panel mt-6 rounded-xl p-5">
+            <h2 className="text-lg font-semibold text-zinc-50">Proposer un teaser</h2>
+            <p className="muted mt-1 text-sm">
+              Connecté en tant que {session.user.email}. Les liens restent en attente jusqu&apos;à validation admin.
+            </p>
+            <HomeTeaserSuggestionForm />
+          </section>
+        ) : null}
+
         {siteConfig.liveTvEnabled ? <LiveTvWall /> : null}
 
         <section className="glass-panel mt-6 rounded-xl p-4">
           <h2 className="text-xl font-semibold">
             Galerie <span className="neon-text">Anime</span>
           </h2>
-          <p className="muted mt-1 text-sm">Sélection visuelle de tes univers préférés.</p>
-          <div className="mt-4 grid gap-3 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5">
-            {decorImages.map((img) => (
-              <div key={img.src} className="overflow-hidden rounded-lg border border-indigo-300/20 bg-zinc-950/40">
-                <a href={img.src} target="_blank" rel="noopener noreferrer" title={`Voir ${img.alt} en taille réelle`}>
-                  <Image
-                    src={img.src}
-                    alt={img.alt}
-                    width={800}
-                    height={800}
-                    className="h-36 w-full object-cover transition hover:scale-105"
-                  />
-                </a>
-              </div>
-            ))}
-          </div>
+          <p className="muted mt-1 text-sm">
+            Sélection visuelle de tes univers préférés. Clique une vignette pour l&apos;ouvrir en grand sur le site.
+          </p>
+          <HomeDecorGallery images={decorImages} />
         </section>
 
         <section className="glass-panel mt-6 overflow-hidden rounded-xl p-3">
@@ -91,9 +127,9 @@ export default async function Home() {
             alt="Visuel communaute anime"
             width={972}
             height={1024}
-            quality={100}
-            unoptimized
-            className="mx-auto h-auto w-auto max-w-full rounded-lg object-contain"
+            sizes="(max-width: 1280px) 100vw, 1024px"
+            quality={92}
+            className="mx-auto h-auto w-full max-w-5xl rounded-lg object-contain"
           />
         </section>
       </main>

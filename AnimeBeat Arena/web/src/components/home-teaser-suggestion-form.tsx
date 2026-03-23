@@ -2,41 +2,26 @@
 
 import { useState } from "react";
 
-type ItemOption = {
-  id: string;
-  label: string;
-};
-
-type LinkSuggestionFormProps = {
-  tierListId: string;
-  items: ItemOption[];
-  disabled?: boolean;
-};
-
-export function LinkSuggestionForm({ tierListId, items, disabled }: LinkSuggestionFormProps) {
-  const [targetItemId, setTargetItemId] = useState<string>("");
+export function HomeTeaserSuggestionForm() {
   const [title, setTitle] = useState("");
   const [url, setUrl] = useState("");
   const [note, setNote] = useState("");
   const [loading, setLoading] = useState(false);
-  const [message, setMessage] = useState<string>("");
+  const [message, setMessage] = useState("");
   const [isError, setIsError] = useState(false);
 
   async function onSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
-    if (disabled || loading) return;
+    if (loading) return;
     setLoading(true);
     setMessage("");
     setIsError(false);
-
     try {
       const res = await fetch("/api/link-suggestions", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          tierListId,
-          tierListItemId: targetItemId || undefined,
-          kind: targetItemId ? "LIST_ITEM" : "LIST_FULL",
+          kind: "HOME_TEASER",
           title: title || undefined,
           note: note || undefined,
           url,
@@ -46,12 +31,10 @@ export function LinkSuggestionForm({ tierListId, items, disabled }: LinkSuggesti
         const payload = (await res.json().catch(() => null)) as { error?: string } | null;
         throw new Error(payload?.error ?? "Impossible d'envoyer la suggestion.");
       }
-
-      setTargetItemId("");
       setTitle("");
       setUrl("");
       setNote("");
-      setMessage("Suggestion envoyee. En attente de validation admin.");
+      setMessage("Teaser proposé. En attente de validation admin.");
     } catch (error) {
       setIsError(true);
       setMessage(error instanceof Error ? error.message : "Erreur inconnue.");
@@ -61,27 +44,20 @@ export function LinkSuggestionForm({ tierListId, items, disabled }: LinkSuggesti
   }
 
   return (
-    <form onSubmit={onSubmit} className="mt-4 rounded-lg border border-zinc-700/50 bg-zinc-900/50 p-3">
-      <p className="text-xs font-medium text-zinc-200">Proposer un lien (validation admin)</p>
-      <div className="mt-2 grid gap-2">
-        <select
-          value={targetItemId}
-          onChange={(e) => setTargetItemId(e.target.value)}
-          disabled={disabled || loading}
-          className="rounded-md border border-zinc-700 bg-zinc-950 px-2 py-1.5 text-xs text-zinc-200"
-        >
-          <option value="">Cible : tier list entiere</option>
-          {items.map((item) => (
-            <option key={item.id} value={item.id}>
-              Item: {item.label}
-            </option>
-          ))}
-        </select>
+    <form
+      onSubmit={onSubmit}
+      className="mt-3 rounded-lg border border-cyan-500/25 bg-zinc-950/50 p-3"
+    >
+      <p className="text-xs font-medium text-cyan-100/90">Proposer un teaser pour l&apos;accueil</p>
+      <p className="muted mt-1 text-[11px] text-zinc-400">
+        Shorts / Reels / TikTok — visibles sur la page d&apos;accueil une fois approuvés par un admin.
+      </p>
+      <div className="mt-2 grid gap-2 sm:grid-cols-2">
         <input
           type="text"
           value={title}
           onChange={(e) => setTitle(e.target.value)}
-          disabled={disabled || loading}
+          disabled={loading}
           placeholder="Titre (optionnel)"
           className="rounded-md border border-zinc-700 bg-zinc-950 px-2 py-1.5 text-xs text-zinc-100 placeholder-zinc-500"
         />
@@ -89,7 +65,7 @@ export function LinkSuggestionForm({ tierListId, items, disabled }: LinkSuggesti
           type="url"
           value={url}
           onChange={(e) => setUrl(e.target.value)}
-          disabled={disabled || loading}
+          disabled={loading}
           required
           placeholder="https://..."
           className="rounded-md border border-zinc-700 bg-zinc-950 px-2 py-1.5 text-xs text-zinc-100 placeholder-zinc-500"
@@ -98,16 +74,16 @@ export function LinkSuggestionForm({ tierListId, items, disabled }: LinkSuggesti
           type="text"
           value={note}
           onChange={(e) => setNote(e.target.value)}
-          disabled={disabled || loading}
+          disabled={loading}
           placeholder="Note (optionnel)"
-          className="rounded-md border border-zinc-700 bg-zinc-950 px-2 py-1.5 text-xs text-zinc-100 placeholder-zinc-500"
+          className="sm:col-span-2 rounded-md border border-zinc-700 bg-zinc-950 px-2 py-1.5 text-xs text-zinc-100 placeholder-zinc-500"
         />
       </div>
-      <div className="mt-2 flex items-center justify-between gap-2">
+      <div className="mt-2 flex flex-wrap items-center justify-between gap-2">
         <button
           type="submit"
-          disabled={disabled || loading}
-          className="rounded-md bg-indigo-600 px-2.5 py-1.5 text-xs font-medium text-white hover:bg-indigo-500 disabled:cursor-not-allowed disabled:opacity-60"
+          disabled={loading}
+          className="rounded-md bg-cyan-700 px-2.5 py-1.5 text-xs font-medium text-white hover:bg-cyan-600 disabled:opacity-60"
         >
           {loading ? "Envoi..." : "Envoyer"}
         </button>
@@ -118,4 +94,3 @@ export function LinkSuggestionForm({ tierListId, items, disabled }: LinkSuggesti
     </form>
   );
 }
-

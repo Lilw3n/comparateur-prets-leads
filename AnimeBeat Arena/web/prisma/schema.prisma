@@ -29,6 +29,12 @@ enum SuggestionStatus {
   REJECTED
 }
 
+enum LinkSuggestionKind {
+  LIST_FULL
+  LIST_ITEM
+  HOME_TEASER
+}
+
 model User {
   id                       String           @id @default(cuid())
   email                    String           @unique
@@ -93,26 +99,28 @@ model SiteConfig {
 }
 
 model LinkSuggestion {
-  id             String           @id @default(cuid())
-  tierListId     String
-  tierListItemId String?
-  url            String
-  title          String?
-  note           String?
-  status         SuggestionStatus @default(PENDING)
-  submittedById  String
-  reviewedById   String?
-  reviewedAt     DateTime?
-  createdAt      DateTime         @default(now())
+  id               String              @id @default(cuid())
+  kind             LinkSuggestionKind  @default(LIST_FULL)
+  tierListId       String?
+  tierListItemId   String?
+  url              String
+  title            String?
+  note             String?
+  status           SuggestionStatus    @default(PENDING)
+  submittedById    String
+  reviewedById     String?
+  reviewedAt       DateTime?
+  createdAt        DateTime            @default(now())
 
-  tierList     TierList     @relation(fields: [tierListId], references: [id], onDelete: Cascade)
+  tierList     TierList?     @relation(fields: [tierListId], references: [id], onDelete: Cascade)
   tierListItem TierListItem? @relation(fields: [tierListItemId], references: [id], onDelete: Cascade)
-  submittedBy  User         @relation("SubmittedSuggestions", fields: [submittedById], references: [id], onDelete: Cascade)
-  reviewedBy   User?        @relation("ReviewedSuggestions", fields: [reviewedById], references: [id], onDelete: SetNull)
+  submittedBy  User          @relation("SubmittedSuggestions", fields: [submittedById], references: [id], onDelete: Cascade)
+  reviewedBy   User?         @relation("ReviewedSuggestions", fields: [reviewedById], references: [id], onDelete: SetNull)
 
   @@index([status, createdAt])
   @@index([tierListId, status])
   @@index([tierListItemId, status])
+  @@index([kind, status])
 }
 
 model MusicPlaylist {
