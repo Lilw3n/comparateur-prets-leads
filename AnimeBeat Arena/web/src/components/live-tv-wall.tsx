@@ -117,7 +117,7 @@ export function LiveTvWall() {
   const splitChannels =
     layout === "split2" ? activeChannels.slice(0, 2) : layout === "split3" ? activeChannels.slice(0, 3) : [];
 
-  function renderChannelFrame(channel: TvChannel, height: number, titleSuffix: string) {
+  function renderChannelFrame(channel: TvChannel, titleSuffix: string) {
     if (!channel.embeddable) {
       return (
         <div className="flex h-full min-h-[220px] flex-col items-center justify-center gap-3 rounded-xl border border-zinc-700/70 bg-zinc-950/70 p-4 text-center">
@@ -150,8 +150,7 @@ export function LiveTvWall() {
       <iframe
         title={`${channel.name} ${titleSuffix}`}
         src={channel.buildSrc(host)}
-        width="100%"
-        height={height}
+        className="h-full w-full"
         allow="autoplay; fullscreen; encrypted-media; picture-in-picture"
       />
     );
@@ -205,8 +204,8 @@ export function LiveTvWall() {
       <div ref={containerRef} className="mt-4">
         {layout === "single" && primaryChannel ? (
           <div className="space-y-3">
-            <div className="overflow-hidden rounded-xl border border-zinc-700/70 bg-zinc-950/70">
-              {renderChannelFrame(primaryChannel, 520, "player")}
+            <div className="overflow-hidden rounded-xl border border-zinc-700/70 bg-zinc-950/70 min-h-[320px] md:h-[520px]">
+              {renderChannelFrame(primaryChannel, "player")}
             </div>
             <div className="flex flex-wrap items-center gap-2">
               <span className="muted text-xs">TV principale :</span>
@@ -226,8 +225,8 @@ export function LiveTvWall() {
             {secondaryChannels.length > 0 ? (
               <div className="grid gap-3 md:grid-cols-2">
                 {secondaryChannels.map((c) => (
-                  <div key={`mini-${c.id}`} className="overflow-hidden rounded-lg border border-zinc-700/70">
-                    {renderChannelFrame(c, 230, "mini player")}
+                  <div key={`mini-${c.id}`} className="overflow-hidden rounded-lg border border-zinc-700/70 min-h-[220px] md:h-[230px]">
+                    {renderChannelFrame(c, "mini player")}
                   </div>
                 ))}
               </div>
@@ -236,10 +235,17 @@ export function LiveTvWall() {
         ) : null}
 
         {(layout === "split2" || layout === "split3") && splitChannels.length > 0 ? (
-          <div className={`grid gap-3 ${layout === "split2" ? "md:grid-cols-2" : "md:grid-cols-3"}`}>
-            {splitChannels.map((channel) => (
-              <div key={`split-${channel.id}`} className="overflow-hidden rounded-xl border border-zinc-700/70 bg-zinc-950/70">
-                {renderChannelFrame(channel, 340, "split player")}
+          <div className={`grid gap-3 ${layout === "split2" ? "md:grid-cols-2" : "md:grid-cols-2"}`}>
+            {splitChannels.map((channel, index) => (
+              <div
+                key={`split-${channel.id}`}
+                className={`overflow-hidden rounded-xl border border-zinc-700/70 bg-zinc-950/70 ${
+                  layout === "split3" && index === 0 ? "md:col-span-2" : ""
+                } ${
+                  layout === "split3" && index === 0 ? "aspect-[21/9] min-h-[240px]" : "aspect-video min-h-[220px]"
+                }`}
+              >
+                {renderChannelFrame(channel, "split player")}
               </div>
             ))}
           </div>
