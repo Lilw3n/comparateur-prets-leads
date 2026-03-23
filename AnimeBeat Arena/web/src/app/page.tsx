@@ -4,6 +4,19 @@ import { PromoBanners } from "@/components/promo-banners";
 import { LiveTvWall } from "@/components/live-tv-wall";
 import { getSiteConfig } from "@/lib/site-config";
 
+const decorImages = [
+  { src: "/images/decor/hinata.png", alt: "Hinata" },
+  { src: "/images/decor/saber.png", alt: "Saber" },
+  { src: "/images/decor/goku-gohan.png", alt: "Goku et Gohan" },
+  { src: "/images/decor/one-piece.png", alt: "One Piece crew" },
+  { src: "/images/decor/naruto.png", alt: "Naruto" },
+  { src: "/images/decor/kuroko.png", alt: "Kuroko Basket" },
+  { src: "/images/decor/armin.png", alt: "Armin" },
+  { src: "/images/decor/kaneki.png", alt: "Kaneki" },
+  { src: "/images/decor/senku.png", alt: "Senku" },
+  { src: "/images/decor/mikey.png", alt: "Mikey Tokyo Revengers" },
+];
+
 export default async function Home() {
   const siteConfig = await getSiteConfig();
   return (
@@ -36,7 +49,7 @@ export default async function Home() {
               </div>
             </div>
             <Image
-              src="/images/anime-hero.svg"
+              src="/images/decor/saber.png"
               alt="Hero anime stylise"
               width={1400}
               height={900}
@@ -50,9 +63,23 @@ export default async function Home() {
 
         {siteConfig.liveTvEnabled ? <LiveTvWall /> : null}
 
+        <section className="glass-panel mt-6 rounded-xl p-4">
+          <h2 className="text-xl font-semibold">
+            Galerie <span className="neon-text">Anime</span>
+          </h2>
+          <p className="muted mt-1 text-sm">Sélection visuelle de tes univers préférés.</p>
+          <div className="mt-4 grid gap-3 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5">
+            {decorImages.map((img) => (
+              <div key={img.src} className="overflow-hidden rounded-lg border border-indigo-300/20 bg-zinc-950/40">
+                <Image src={img.src} alt={img.alt} width={800} height={800} className="h-36 w-full object-cover" />
+              </div>
+            ))}
+          </div>
+        </section>
+
         <section className="glass-panel mt-6 overflow-hidden rounded-xl p-3">
           <Image
-            src="/images/anime-community.svg"
+            src="/images/decor/one-piece.png"
             alt="Visuel communaute anime"
             width={1400}
             height={900}

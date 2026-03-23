@@ -67,11 +67,11 @@ export default function CommunityPage() {
         </section>
         <section className="glass-panel mt-6 overflow-hidden rounded-xl p-3">
           <Image
-            src="/images/anime-community.svg"
+            src="/images/decor/hinata.png"
             alt="Groupe de fans en soirée anime"
             width={1400}
             height={900}
-            className="h-auto w-full rounded-lg"
+            className="h-auto w-full rounded-lg object-cover"
           />
         </section>
         <PromoBanners />
