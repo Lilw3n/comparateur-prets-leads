@@ -1,0 +1,46 @@
+{
+  "name": "animebeat-live-hub",
+  "version": "1.0.0",
+  "description": "Client desktop AnimeBeat pour les lives TikTok",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron .",
+    "dev": "electron .",
+    "dist": "electron-builder --win nsis --publish never"
+  },
+  "keywords": [
+    "electron",
+    "tiktok",
+    "animebeat"
+  ],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "devDependencies": {
+    "electron": "^41.0.3",
+    "electron-builder": "^26.8.1"
+  },
+  "build": {
+    "appId": "com.animebeat.livehub",
+    "productName": "AnimeBeat Live Hub",
+    "directories": {
+      "output": "release"
+    },
+    "files": [
+      "main.js",
+      "preload.js",
+      "toolbar.html",
+      "package.json"
+    ],
+    "win": {
+      "signAndEditExecutable": false,
+      "target": [
+        "nsis"
+      ]
+    },
+    "nsis": {
+      "oneClick": false,
+      "allowToChangeInstallationDirectory": true
+    }
+  }
+}

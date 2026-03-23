@@ -1,7 +1,12 @@
 "use client";
 
 import { useEffect, useMemo, useRef, useState } from "react";
-import { KICK_URL, TIKTOK_ALT_URL, TIKTOK_URL } from "@/lib/constants";
+import {
+  DESKTOP_APP_DOWNLOAD_URL,
+  KICK_URL,
+  TIKTOK_ALT_URL,
+  TIKTOK_URL,
+} from "@/lib/constants";
 
 const TWITCH_CHANNEL = "lilwen54";
 const KICK_CHANNEL = "lilwen54";
@@ -185,7 +190,17 @@ export function LiveTvWall() {
         <button type="button" onClick={toggleFullscreen} className="btn-secondary rounded-md px-3 py-1.5 text-xs font-medium">
           Plein écran
         </button>
+        <a
+          href={DESKTOP_APP_DOWNLOAD_URL}
+          className="btn-primary rounded-md px-3 py-1.5 text-xs font-medium"
+          download
+        >
+          Télécharger l'app PC (.exe)
+        </a>
       </div>
+      <p className="muted mt-2 text-[11px]">
+        Astuce: si le téléchargement ne démarre pas, configure NEXT_PUBLIC_DESKTOP_APP_URL vers ton release .exe.
+      </p>
 
       <div ref={containerRef} className="mt-4">
         {layout === "single" && primaryChannel ? (

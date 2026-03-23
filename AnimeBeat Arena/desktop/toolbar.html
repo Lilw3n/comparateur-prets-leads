@@ -1,0 +1,88 @@
+<!doctype html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>AnimeBeat Live Hub</title>
+    <style>
+      :root {
+        --bg: #070b19;
+        --panel: #0d1430;
+        --border: rgba(130, 154, 255, 0.32);
+        --text: #f3f6ff;
+        --muted: #b6c0db;
+      }
+      html, body {
+        margin: 0;
+        padding: 0;
+        background: var(--bg);
+        color: var(--text);
+        font-family: Segoe UI, sans-serif;
+      }
+      .toolbar {
+        height: 56px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 12px;
+        padding: 0 12px;
+        background: linear-gradient(180deg, #101a3b 0%, #0a122d 100%);
+        border-bottom: 1px solid var(--border);
+        box-sizing: border-box;
+      }
+      .title {
+        font-size: 13px;
+        font-weight: 600;
+      }
+      .hint {
+        font-size: 11px;
+        color: var(--muted);
+      }
+      .actions {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
+      button {
+        border: 1px solid var(--border);
+        background: var(--panel);
+        color: var(--text);
+        border-radius: 8px;
+        padding: 7px 12px;
+        font-size: 12px;
+        cursor: pointer;
+      }
+      button:hover {
+        background: #18234d;
+      }
+      .primary {
+        border: none;
+        background: linear-gradient(120deg, #6e46ff, #14b8ff);
+      }
+    </style>
+  </head>
+  <body>
+    <div class="toolbar">
+      <div>
+        <div class="title">AnimeBeat Live Hub</div>
+        <div class="hint">Ctrl+1..4: vues · Ctrl+5: split · Ctrl+6: 4 ecrans</div>
+      </div>
+      <div class="actions">
+        <button class="primary" data-mode="tab-1">Live 1</button>
+        <button data-mode="tab-2">Live 2</button>
+        <button data-mode="tab-3">Kick</button>
+        <button data-mode="tab-4">Twitch</button>
+        <button data-mode="split">Split</button>
+        <button data-mode="quad">4 ecrans</button>
+      </div>
+    </div>
+    <script>
+      document.querySelectorAll("[data-mode]").forEach((btn) => {
+        btn.addEventListener("click", () => {
+          window.liveHub.setMode(btn.getAttribute("data-mode"));
+        });
+      });
+    </script>
+  </body>
+</html>
+

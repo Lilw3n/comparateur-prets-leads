@@ -59,6 +59,7 @@ export function MusicBanner() {
   const { data: session } = useSession();
   const isConnected = Boolean(session?.user);
   const isAdmin = session?.user?.role === "ADMIN";
+  const [mounted, setMounted] = useState(false);
   const [urlInput, setUrlInput] = useState("");
   const [nameInput, setNameInput] = useState("");
   const [savedUrl, setSavedUrl] = useState(presets[0].url);
@@ -72,6 +73,10 @@ export function MusicBanner() {
     () => [...presets, ...dbPlaylists, ...customPlaylists],
     [customPlaylists, dbPlaylists],
   );
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   useEffect(() => {
     const storedDock = window.localStorage.getItem("music-banner-dock-low");
@@ -224,6 +229,10 @@ export function MusicBanner() {
     window.sessionStorage.setItem(SESSION_PLAYLISTS_KEY, JSON.stringify(next));
     setSelectedPreset(presets[0].id);
     applyUrl(presets[0].url);
+  }
+
+  if (!mounted) {
+    return null;
   }
 
   return (
