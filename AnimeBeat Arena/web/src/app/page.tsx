@@ -5,9 +5,9 @@ import { PromoBanners } from "@/components/promo-banners";
 import { LiveTvWall } from "@/components/live-tv-wall";
 import { HomeDecorGallery } from "@/components/home-decor-gallery";
 import { HomeTeaserSuggestionForm } from "@/components/home-teaser-suggestion-form";
-import { getPrisma } from "@/lib/prisma";
-import { LinkSuggestionKind } from "@/generated/prisma";
+import { findApprovedHomeTeasers } from "@/lib/link-suggestion-queries";
 import { getSiteConfig } from "@/lib/site-config";
+import { getPrisma } from "@/lib/prisma";
 
 const decorImages = [
   { src: "/images/decor/hinata.png", alt: "Hinata" },
@@ -25,12 +25,7 @@ const decorImages = [
 export default async function Home() {
   const [siteConfig, session] = await Promise.all([getSiteConfig(), auth()]);
   const prisma = getPrisma();
-  const approvedTeasers = await prisma.linkSuggestion.findMany({
-    where: { status: "APPROVED", kind: LinkSuggestionKind.HOME_TEASER },
-    orderBy: { createdAt: "desc" },
-    take: 16,
-    select: { url: true, title: true },
-  });
+  const approvedTeasers = await findApprovedHomeTeasers(prisma);
 
   return (
     <div className="relative flex min-h-full flex-1 flex-col">

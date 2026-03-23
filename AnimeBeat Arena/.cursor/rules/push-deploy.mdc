@@ -1,15 +1,15 @@
 ---
-description: Après modifications sur AnimeBeat Arena, pousser Git et viser le déploiement
+description: Git / déploiement AnimeBeat Arena — seulement si l’utilisateur le demande
 globs: AnimeBeat Arena/web/**/*
 alwaysApply: false
 ---
 
 # Push et déploiement (AnimeBeat Arena)
 
-Après avoir terminé une demande utilisateur sur ce projet :
+**Ne pas** pousser ni déployer automatiquement après chaque tâche, sauf demande **explicite** de l’utilisateur.
 
-1. **Commit** : n’inclure que le dossier `AnimeBeat Arena/web/` (pas le reste du dépôt `F:/`). Ne jamais committer `prisma/dev.db`.
-2. **Push** : `git push origin main` (ou la branche courante) depuis la racine du dépôt Git.
-3. **Déploiement** : si Vercel (ou autre CI) est branché sur ce dépôt, le push déclenche le déploiement. Sinon, lancer la commande de déploiement documentée par le projet (`vercel --prod`, pipeline CI, etc.).
+Quand il le demande :
 
-Si le push échoue (conflits, auth), résoudre avant de conclure la tâche.
+1. **Commit** : n’inclure que `AnimeBeat Arena/web/` (pas le reste du dépôt `F:/`). Ne jamais committer `prisma/dev.db`.
+2. **Push** : `git push` depuis la racine du dépôt Git.
+3. **Déploiement** : selon ce que l’utilisateur utilise (Vercel, CI, etc.).

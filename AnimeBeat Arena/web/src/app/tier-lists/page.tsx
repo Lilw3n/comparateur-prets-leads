@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { auth } from "@/auth";
+import { findApprovedTierListSuggestions } from "@/lib/link-suggestion-queries";
 import { getPrisma } from "@/lib/prisma";
-import { LinkSuggestionKind } from "@/generated/prisma";
 import { SiteHeader } from "@/components/site-header";
 import { PromoBanners } from "@/components/promo-banners";
 import { LinkSuggestionForm } from "@/components/link-suggestion-form";
@@ -45,15 +45,7 @@ export default async function TierListsPage() {
     },
   });
 
-  const approvedSuggestions = await prisma.linkSuggestion.findMany({
-    where: {
-      status: "APPROVED",
-      kind: { in: [LinkSuggestionKind.LIST_FULL, LinkSuggestionKind.LIST_ITEM] },
-    },
-    select: { tierListId: true, tierListItemId: true, url: true, title: true },
-    orderBy: { createdAt: "desc" },
-    take: 300,
-  });
+  const approvedSuggestions = await findApprovedTierListSuggestions(prisma);
 
   const listSuggestionMap = new Map<string, Array<{ url: string; title: string | null }>>();
   const itemSuggestionMap = new Map<string, Array<{ url: string; title: string | null }>>();
