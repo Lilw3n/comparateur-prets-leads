@@ -1,0 +1,37 @@
+<svg width="1400" height="900" viewBox="0 0 1400 900" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="bg2" x1="0" y1="0" x2="1400" y2="900" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#111827"/>
+      <stop offset="0.5" stop-color="#1E1B4B"/>
+      <stop offset="1" stop-color="#0B1020"/>
+    </linearGradient>
+    <radialGradient id="lamp" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(700 290) rotate(90) scale(230)">
+      <stop stop-color="#FDE68A"/>
+      <stop offset="1" stop-color="#FDE68A" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+  <rect width="1400" height="900" fill="url(#bg2)"/>
+  <rect x="0" y="600" width="1400" height="300" fill="#080C17"/>
+  <circle cx="700" cy="290" r="230" fill="url(#lamp)"/>
+  <rect x="420" y="180" width="560" height="320" rx="18" fill="#0B1224" stroke="#334155"/>
+  <rect x="450" y="210" width="500" height="260" rx="10" fill="#1D4ED8" fill-opacity="0.3"/>
+  <rect x="450" y="210" width="500" height="260" rx="10" stroke="#93C5FD" stroke-opacity="0.6"/>
+  <g opacity="0.75">
+    <path d="M520 620C520 583.549 549.549 554 586 554H632C668.451 554 698 583.549 698 620V630H520V620Z" fill="#0F172A"/>
+    <circle cx="609" cy="535" r="34" fill="#0F172A"/>
+    <path d="M650 620C650 583.549 679.549 554 716 554H762C798.451 554 828 583.549 828 620V630H650V620Z" fill="#111827"/>
+    <circle cx="739" cy="535" r="34" fill="#111827"/>
+    <path d="M780 620C780 583.549 809.549 554 846 554H892C928.451 554 958 583.549 958 620V630H780V620Z" fill="#0B1220"/>
+    <circle cx="869" cy="535" r="34" fill="#0B1220"/>
+  </g>
+  <rect x="480" y="630" width="440" height="18" rx="9" fill="#111827"/>
+  <g opacity="0.85">
+    <circle cx="250" cy="200" r="4" fill="#E2E8F0"/>
+    <circle cx="320" cy="280" r="3" fill="#CBD5E1"/>
+    <circle cx="1080" cy="180" r="3" fill="#E2E8F0"/>
+    <circle cx="1160" cy="250" r="4" fill="#CBD5E1"/>
+  </g>
+  <path d="M90 700C240 660 320 740 480 700C620 666 720 760 860 720C980 686 1100 746 1290 700" stroke="#60A5FA" stroke-opacity="0.55" stroke-width="4"/>
+  <path d="M80 740C230 700 330 775 480 740C630 705 710 800 870 760C1010 725 1120 780 1300 740" stroke="#A78BFA" stroke-opacity="0.45" stroke-width="3"/>
+</svg>
+
