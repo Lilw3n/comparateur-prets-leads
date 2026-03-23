@@ -1,18 +1,20 @@
 "use client";
 
 import { useEffect, useMemo, useRef, useState } from "react";
-import { KICK_URL, TIKTOK_URL } from "@/lib/constants";
+import { KICK_URL, TIKTOK_ALT_URL, TIKTOK_URL } from "@/lib/constants";
 
 const TWITCH_CHANNEL = "lilwen54";
 const KICK_CHANNEL = "lilwen54";
-const TIKTOK_HANDLE = "@idonlikeuspam";
+const TIKTOK_HANDLE = "@idontlikeuspam";
+const TIKTOK_ALT_HANDLE = "@kanekiakadiddy";
 
 type TvChannel = {
-  id: "kick" | "twitch" | "tiktok";
+  id: "kick" | "twitch" | "tiktok" | "tiktok-alt";
   name: string;
   note: string;
   buildSrc: (host: string) => string;
   profileUrl: string;
+  embeddable: boolean;
 };
 
 function normalizeHost(host: string): string {
@@ -41,6 +43,7 @@ export function LiveTvWall() {
         note: "Live principal",
         buildSrc: () => `https://player.kick.com/${KICK_CHANNEL}`,
         profileUrl: KICK_URL,
+        embeddable: true,
       },
       {
         id: "twitch",
@@ -49,13 +52,23 @@ export function LiveTvWall() {
         buildSrc: (currentHost: string) =>
           `https://player.twitch.tv/?channel=${TWITCH_CHANNEL}&parent=${encodeURIComponent(currentHost)}&muted=true`,
         profileUrl: `https://www.twitch.tv/${TWITCH_CHANNEL}`,
+        embeddable: true,
       },
       {
         id: "tiktok",
-        name: "TikTok Live",
-        note: "Intégration parfois bloquée",
+        name: "TikTok Live 1",
+        note: "Lecture directe sur TikTok (embed souvent bloqué)",
         buildSrc: () => `https://www.tiktok.com/${TIKTOK_HANDLE}/live`,
         profileUrl: TIKTOK_URL,
+        embeddable: false,
+      },
+      {
+        id: "tiktok-alt",
+        name: "TikTok Live 2",
+        note: "Lecture directe sur TikTok (embed souvent bloqué)",
+        buildSrc: () => `https://www.tiktok.com/${TIKTOK_ALT_HANDLE}/live`,
+        profileUrl: TIKTOK_ALT_URL,
+        embeddable: false,
       },
     ];
   }, [host]);
@@ -79,6 +92,18 @@ export function LiveTvWall() {
     }
   }
 
+  function openFloatingWindow(channel: TvChannel) {
+    const width = 460;
+    const height = 860;
+    const left = Math.max(0, Math.round((window.screen.width - width) / 2));
+    const top = Math.max(0, Math.round((window.screen.height - height) / 2));
+    window.open(
+      channel.profileUrl,
+      `tiktok-live-${channel.id}`,
+      `popup=yes,width=${width},height=${height},left=${left},top=${top},resizable=yes,scrollbars=yes`,
+    );
+  }
+
   const activeChannels = channels.filter((c) => active.has(c.id));
   const effectiveMain =
     activeChannels.find((c) => c.id === mainChannel)?.id ?? activeChannels[0]?.id ?? null;
@@ -87,11 +112,51 @@ export function LiveTvWall() {
   const splitChannels =
     layout === "split2" ? activeChannels.slice(0, 2) : layout === "split3" ? activeChannels.slice(0, 3) : [];
 
+  function renderChannelFrame(channel: TvChannel, height: number, titleSuffix: string) {
+    if (!channel.embeddable) {
+      return (
+        <div className="flex h-full min-h-[220px] flex-col items-center justify-center gap-3 rounded-xl border border-zinc-700/70 bg-zinc-950/70 p-4 text-center">
+          <p className="text-sm font-medium text-zinc-100">{channel.name}</p>
+          <p className="muted max-w-md text-xs">
+            Cette plateforme bloque l'iframe live. Ouvre le flux directement dans un nouvel onglet.
+          </p>
+          <div className="flex flex-wrap items-center justify-center gap-2">
+            <a
+              href={channel.profileUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="btn-primary rounded-md px-3 py-1.5 text-xs font-medium"
+            >
+              Ouvrir le live {channel.name}
+            </a>
+            <button
+              type="button"
+              onClick={() => openFloatingWindow(channel)}
+              className="btn-secondary rounded-md px-3 py-1.5 text-xs font-medium"
+            >
+              Ouvrir en fenêtre flottante
+            </button>
+          </div>
+        </div>
+      );
+    }
+
+    return (
+      <iframe
+        title={`${channel.name} ${titleSuffix}`}
+        src={channel.buildSrc(host)}
+        width="100%"
+        height={height}
+        allow="autoplay; fullscreen; encrypted-media; picture-in-picture"
+      />
+    );
+  }
+
   return (
     <section className="glass-panel mt-6 rounded-xl p-5">
       <div className="flex flex-wrap items-center justify-between gap-3">
         <h2 className="text-xl font-semibold">TV Live</h2>
-        <p className="muted text-xs">Allume/éteins Kick, Twitch, TikTok directement depuis le site.</p>
+        <p className="muted text-xs">Allume/éteins Kick, Twitch, TikTok 1 et TikTok 2 directement depuis le site.</p>
       </div>
 
       <div className="mt-3 flex flex-wrap items-center gap-2">
@@ -126,13 +191,7 @@ export function LiveTvWall() {
         {layout === "single" && primaryChannel ? (
           <div className="space-y-3">
             <div className="overflow-hidden rounded-xl border border-zinc-700/70 bg-zinc-950/70">
-              <iframe
-                title={`${primaryChannel.name} player`}
-                src={primaryChannel.buildSrc(host)}
-                width="100%"
-                height={520}
-                allow="autoplay; fullscreen; encrypted-media; picture-in-picture"
-              />
+              {renderChannelFrame(primaryChannel, 520, "player")}
             </div>
             <div className="flex flex-wrap items-center gap-2">
               <span className="muted text-xs">TV principale :</span>
@@ -153,13 +212,7 @@ export function LiveTvWall() {
               <div className="grid gap-3 md:grid-cols-2">
                 {secondaryChannels.map((c) => (
                   <div key={`mini-${c.id}`} className="overflow-hidden rounded-lg border border-zinc-700/70">
-                    <iframe
-                      title={`${c.name} mini player`}
-                      src={c.buildSrc(host)}
-                      width="100%"
-                      height={230}
-                      allow="autoplay; fullscreen; encrypted-media; picture-in-picture"
-                    />
+                    {renderChannelFrame(c, 230, "mini player")}
                   </div>
                 ))}
               </div>
@@ -171,13 +224,7 @@ export function LiveTvWall() {
           <div className={`grid gap-3 ${layout === "split2" ? "md:grid-cols-2" : "md:grid-cols-3"}`}>
             {splitChannels.map((channel) => (
               <div key={`split-${channel.id}`} className="overflow-hidden rounded-xl border border-zinc-700/70 bg-zinc-950/70">
-                <iframe
-                  title={`${channel.name} split player`}
-                  src={channel.buildSrc(host)}
-                  width="100%"
-                  height={340}
-                  allow="autoplay; fullscreen; encrypted-media; picture-in-picture"
-                />
+                {renderChannelFrame(channel, 340, "split player")}
               </div>
             ))}
           </div>
@@ -223,6 +270,15 @@ export function LiveTvWall() {
               >
                 Ouvrir {channel.name} dans un onglet →
               </a>
+              {!channel.embeddable ? (
+                <button
+                  type="button"
+                  onClick={() => openFloatingWindow(channel)}
+                  className="btn-secondary mt-2 inline-flex rounded-md px-3 py-1.5 text-xs font-medium"
+                >
+                  Ouvrir {channel.name} en fenêtre flottante
+                </button>
+              ) : null}
             </article>
           );
         })}

@@ -64,24 +64,24 @@ export default async function AdminPage() {
   return (
     <div className="mx-auto flex min-h-full max-w-2xl flex-1 flex-col gap-8 px-4 py-16">
       <div>
-        <p className="text-sm font-medium text-violet-600 dark:text-violet-400">Admin</p>
-        <h1 className="mt-1 text-2xl font-semibold tracking-tight text-zinc-900 dark:text-zinc-50">
+        <p className="text-sm font-medium text-violet-300">Admin</p>
+        <h1 className="mt-1 text-2xl font-semibold tracking-tight text-zinc-50">
           Espace administrateur
         </h1>
-        <p className="mt-2 text-zinc-600 dark:text-zinc-400">
+        <p className="mt-2 text-zinc-300">
           Connecté en tant que {user?.email} ({user?.role})
         </p>
       </div>
-      <p className="text-sm text-zinc-600 dark:text-zinc-400">
+      <p className="text-sm text-zinc-300">
         Tu pourras ajouter ici modération, contenus, stats, etc.
       </p>
-      <section className="rounded-xl border border-zinc-200 bg-white p-5 dark:border-zinc-800 dark:bg-zinc-900">
+      <section className="glass-panel rounded-xl p-5">
         <h2 className="text-lg font-semibold">Panneau diffusion</h2>
-        <p className="mt-1 text-sm text-zinc-600 dark:text-zinc-400">
+        <p className="muted mt-1 text-sm">
           Active ou coupe globalement la TV Live (Kick / Twitch / TikTok) sur le site.
         </p>
         <form action={updateLiveTvAction} className="mt-4 flex flex-wrap items-center gap-3">
-          <label className="inline-flex items-center gap-2 rounded-lg border border-zinc-300 px-3 py-2 text-sm dark:border-zinc-700">
+          <label className="inline-flex items-center gap-2 rounded-lg border border-zinc-700 px-3 py-2 text-sm">
             <input
               type="checkbox"
               name="liveTvEnabled"
@@ -96,21 +96,21 @@ export default async function AdminPage() {
           >
             Enregistrer
           </button>
-          <span className="text-xs text-zinc-500">
+          <span className="text-xs text-zinc-300">
             Etat actuel : {config.liveTvEnabled ? "ON" : "OFF"}
           </span>
         </form>
       </section>
-      <section className="rounded-xl border border-zinc-200 bg-white p-5 dark:border-zinc-800 dark:bg-zinc-900">
+      <section className="glass-panel rounded-xl p-5">
         <h2 className="text-lg font-semibold">Import social edits en suggestions</h2>
-        <p className="mt-1 text-sm text-zinc-600 dark:text-zinc-400">
+        <p className="muted mt-1 text-sm">
           Importe des liens TikTok, YouTube Shorts, Instagram Reels, X en attente de validation.
         </p>
         <form action={importSocialSuggestionsAction} className="mt-4 space-y-3">
           <select
             name="tierListId"
             required
-            className="w-full rounded-lg border border-zinc-300 bg-white px-3 py-2 text-sm dark:border-zinc-700 dark:bg-zinc-950"
+            className="w-full rounded-lg border border-zinc-700 bg-zinc-950 px-3 py-2 text-sm text-zinc-100"
           >
             <option value="">Choisir une tier list cible</option>
             {tierLists.map((list) => (
@@ -123,7 +123,7 @@ export default async function AdminPage() {
             name="rawUrls"
             rows={4}
             placeholder="Colle tes URLs ici (1 URL par ligne) puis choisis import perso."
-            className="w-full rounded-lg border border-zinc-300 bg-white px-3 py-2 text-sm dark:border-zinc-700 dark:bg-zinc-950"
+            className="w-full rounded-lg border border-zinc-700 bg-zinc-950 px-3 py-2 text-sm text-zinc-100"
           />
           <div className="flex flex-wrap gap-2">
             <button
@@ -145,33 +145,33 @@ export default async function AdminPage() {
           </div>
         </form>
       </section>
-      <section className="rounded-xl border border-zinc-200 bg-white p-5 dark:border-zinc-800 dark:bg-zinc-900">
+      <section className="glass-panel rounded-xl p-5">
         <h2 className="text-lg font-semibold">Validation liens communautaires</h2>
-        <p className="mt-1 text-sm text-zinc-600 dark:text-zinc-400">
+        <p className="muted mt-1 text-sm">
           Les utilisateurs peuvent proposer des liens. Ils restent caches tant qu'ils ne sont pas valides ici.
         </p>
         {pendingSuggestions.length === 0 ? (
-          <p className="mt-3 text-sm text-zinc-500">Aucune suggestion en attente.</p>
+          <p className="mt-3 text-sm text-zinc-300">Aucune suggestion en attente.</p>
         ) : (
           <ul className="mt-4 space-y-3">
             {pendingSuggestions.map((suggestion) => (
               <li
                 key={suggestion.id}
-                className="rounded-lg border border-zinc-200 p-3 text-sm dark:border-zinc-700"
+                className="rounded-lg border border-zinc-700 p-3 text-sm"
               >
-                <p className="font-medium text-zinc-900 dark:text-zinc-100">
+                <p className="font-medium text-zinc-100">
                   {suggestion.title || "Lien sans titre"}
                 </p>
-                <p className="mt-1 break-all text-xs text-zinc-600 dark:text-zinc-400">{suggestion.url}</p>
-                <p className="mt-1 text-xs text-zinc-600 dark:text-zinc-400">
+                <p className="mt-1 break-all text-xs text-zinc-300">{suggestion.url}</p>
+                <p className="mt-1 text-xs text-zinc-300">
                   Tier list: {suggestion.tierList.title}
                   {suggestion.tierListItem ? ` · Item: ${suggestion.tierListItem.label}` : " · Cible: liste complete"}
                 </p>
-                <p className="mt-1 text-xs text-zinc-600 dark:text-zinc-400">
+                <p className="mt-1 text-xs text-zinc-300">
                   Propose par {suggestion.submittedBy.name || suggestion.submittedBy.email}
                 </p>
                 {suggestion.note ? (
-                  <p className="mt-1 text-xs italic text-zinc-500 dark:text-zinc-400">Note: {suggestion.note}</p>
+                  <p className="mt-1 text-xs italic text-zinc-400">Note: {suggestion.note}</p>
                 ) : null}
                 <form action={reviewSuggestionAction} className="mt-3 flex flex-wrap gap-2">
                   <input type="hidden" name="suggestionId" value={suggestion.id} />
@@ -200,7 +200,7 @@ export default async function AdminPage() {
       <div className="flex flex-wrap gap-3">
         <Link
           href="/dashboard"
-          className="rounded-lg border border-zinc-300 px-4 py-2 text-sm font-medium text-zinc-800 hover:bg-zinc-50 dark:border-zinc-600 dark:text-zinc-200 dark:hover:bg-zinc-800"
+          className="rounded-lg border border-zinc-600 px-4 py-2 text-sm font-medium text-zinc-100 hover:bg-zinc-800/60"
         >
           Tableau de bord
         </Link>
