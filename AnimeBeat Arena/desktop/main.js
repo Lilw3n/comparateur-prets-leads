@@ -14,6 +14,8 @@ let chatView = null;
 let slotLoadedUrls = [];
 let slotSourceIds = ["live-1", "live-2", "kick", "twitch"];
 let slotLastLiveIds = ["live-1", "live-2", "kick", "twitch"];
+/** @type {("live" | "live-fs" | "site")[]} */
+let slotDisplayMode = ["live", "live", "live", "live"];
 let sourcePower = {
   "live-1": true,
   "live-2": true,
@@ -92,8 +94,41 @@ function ensureChatLoaded() {
   chatView.webContents.loadURL(dataUrl);
 }
 
+function tryExitContentFullscreen(view) {
+  if (!view) return;
+  view.webContents
+    .executeJavaScript(
+      `(function(){try{if(document.fullscreenElement)document.exitFullscreen();}catch(e){}})();`,
+      true,
+    )
+    .catch(() => {});
+}
+
+function tryEnterLiveFullscreen(view) {
+  if (!view) return;
+  const script = `(function(){
+    function tryOne(el){try{if(el&&el.requestFullscreen)return el.requestFullscreen();}catch(e){}}
+    var v=document.querySelector('video');
+    if(v)return tryOne(v);
+    var ifr=document.querySelector('iframe');
+    if(ifr)return tryOne(ifr);
+    return tryOne(document.documentElement);
+  })();`;
+  const run = () => view.webContents.executeJavaScript(script, true).catch(() => {});
+  setTimeout(run, 400);
+  setTimeout(run, 1500);
+  setTimeout(run, 3200);
+}
+
 function ensureSlotLoaded(slotIndex) {
   let sourceId = slotSourceIds[slotIndex];
+  if (slotDisplayMode[slotIndex] === "site") {
+    sourceId = "site";
+    slotSourceIds[slotIndex] = "site";
+  } else if (sourceId === "site") {
+    sourceId = slotLastLiveIds[slotIndex] || LIVE_SOURCES[0].id;
+    slotSourceIds[slotIndex] = sourceId;
+  }
   if (sourceId !== "site" && !sourcePower[sourceId]) {
     sourceId = getFirstPoweredLiveId();
     slotSourceIds[slotIndex] = sourceId;
@@ -103,9 +138,26 @@ function ensureSlotLoaded(slotIndex) {
   if (!view) return;
   const targetUrl =
     source.id !== "site" && !sourcePower[source.id] ? getOffPlaceholderUrl(source.title) : source.url;
-  if (slotLoadedUrls[slotIndex] !== targetUrl) {
+  const mode = slotDisplayMode[slotIndex];
+  const urlChanged = slotLoadedUrls[slotIndex] !== targetUrl;
+
+  const afterLoad = () => {
+    if (mode === "live-fs" && source.id !== "site" && sourcePower[source.id]) {
+      tryEnterLiveFullscreen(view);
+    }
+  };
+
+  if (urlChanged) {
+    if (mode === "live") {
+      tryExitContentFullscreen(view);
+    }
+    view.webContents.once("did-finish-load", afterLoad);
     view.webContents.loadURL(targetUrl);
     slotLoadedUrls[slotIndex] = targetUrl;
+  } else if (mode === "live-fs" && source.id !== "site" && sourcePower[source.id]) {
+    afterLoad();
+  } else if (mode === "live") {
+    tryExitContentFullscreen(view);
   }
 }
 
@@ -173,10 +225,11 @@ function applyLayout() {
     }
   }
 
-  const labels = slotSourceIds
-    .slice(0, activeCount)
-    .map((id, idx) => `E${idx + 1}: ${getSourceById(id).title}`)
-    .join(" | ");
+  const labels = slotSourceIds.slice(0, activeCount).map((id, idx) => {
+    const m = slotDisplayMode[idx];
+    const suffix = m === "site" ? " [Site]" : m === "live-fs" ? " [Live plein écran]" : "";
+    return `E${idx + 1}: ${getSourceById(id).title}${suffix}`;
+  }).join(" | ");
   mainWindow.setTitle(`AnimeBeat Live Hub - ${activeCount} ecran(s) - ${labels}`);
 
   if (chatVisible && chatView) {
@@ -280,11 +333,15 @@ ipcMain.on("set-slot-source", (_, payload) => {
 
   if (sourceId === "site") {
     slotSourceIds[slotIndex] = "site";
+    slotDisplayMode[slotIndex] = "site";
   } else {
     const validLive = LIVE_SOURCES.some((source) => source.id === sourceId);
     if (!validLive) return;
     slotSourceIds[slotIndex] = sourceId;
     slotLastLiveIds[slotIndex] = sourceId;
+    if (slotDisplayMode[slotIndex] === "site") {
+      slotDisplayMode[slotIndex] = "live";
+    }
   }
   applyLayout();
 });
@@ -329,11 +386,19 @@ ipcMain.on("set-slot-mode", (_, payload) => {
 
   if (mode === "site") {
     slotSourceIds[slotIndex] = "site";
-  } else if (mode === "full") {
-    slotSourceIds[slotIndex] = slotLastLiveIds[slotIndex] || LIVE_SOURCES[0].id;
+    slotDisplayMode[slotIndex] = "site";
+  } else if (mode === "live") {
+    const liveId = slotLastLiveIds[slotIndex] || LIVE_SOURCES[0].id;
+    slotSourceIds[slotIndex] = liveId;
+    slotDisplayMode[slotIndex] = "live";
+  } else if (mode === "live-fs") {
+    const liveId = slotLastLiveIds[slotIndex] || LIVE_SOURCES[0].id;
+    slotSourceIds[slotIndex] = liveId;
+    slotDisplayMode[slotIndex] = "live-fs";
   } else {
     return;
   }
+  slotLoadedUrls[slotIndex] = "";
   applyLayout();
 });
 
