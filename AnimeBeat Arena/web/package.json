@@ -4,11 +4,12 @@
   "private": true,
   "scripts": {
     "dev": "next dev --webpack",
-    "predev": "prisma generate",
-    "postinstall": "prisma generate",
-    "build": "prisma generate && next build",
+    "predev": "node scripts/sync-prisma-schema.cjs && prisma generate",
+    "postinstall": "node scripts/sync-prisma-schema.cjs && prisma generate",
+    "build": "node scripts/sync-prisma-schema.cjs && prisma generate && next build",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "prisma:sync": "node scripts/sync-prisma-schema.cjs && prisma generate"
   },
   "dependencies": {
     "@prisma/adapter-better-sqlite3": "^7.5.0",

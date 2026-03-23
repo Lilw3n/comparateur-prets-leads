@@ -5,9 +5,8 @@ function isPostgresUrl(url: string): boolean {
 }
 
 /**
- * Teasers accueil : évite `findMany({ where: { kind } })` car certains bundles
- * exécutent encore un validateur Prisma sans le champ `kind`.
- * Passe par le SQL brut (colonne `kind` côté base).
+ * SQL brut : évite le validateur Prisma sur `kind` dans findMany.
+ * Deux dialectes selon DATABASE_URL (aligné avec getPrisma).
  */
 export async function findApprovedHomeTeasers(
   prisma: PrismaClient,
@@ -44,9 +43,6 @@ export type TierListSuggestionRow = {
   title: string | null;
 };
 
-/**
- * Suggestions affichées sur /tier-lists (LIST_FULL + LIST_ITEM uniquement).
- */
 export async function findApprovedTierListSuggestions(prisma: PrismaClient): Promise<TierListSuggestionRow[]> {
   const dbUrl = process.env.DATABASE_URL?.trim() ?? "";
   try {

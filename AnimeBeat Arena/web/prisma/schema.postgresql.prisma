@@ -1,4 +1,4 @@
-// Copie « locale » : SQLite (fichier). Synchroniser les modèles avec schema.postgresql.prisma.
+// Copie « Vercel / Neon » : PostgreSQL. Synchroniser les modèles avec schema.sqlite.prisma.
 
 generator client {
   provider = "prisma-client-js"
@@ -6,7 +6,7 @@ generator client {
 }
 
 datasource db {
-  provider = "sqlite"
+  provider = "postgresql"
 }
 
 enum Role {

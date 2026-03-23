@@ -1,5 +1,4 @@
-// AnimeBeat Arena — SQLite en local (fichier, pas de serveur PostgreSQL à lancer).
-// Pour la prod (Vercel + Neon), repasse provider postgresql et DATABASE_URL cloud.
+// Copie « locale » : SQLite (fichier). Synchroniser les modèles avec schema.postgresql.prisma.
 
 generator client {
   provider = "prisma-client-js"
