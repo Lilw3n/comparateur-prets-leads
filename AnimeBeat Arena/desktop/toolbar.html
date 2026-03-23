@@ -41,21 +41,42 @@
       .actions {
         display: flex;
         align-items: center;
-        gap: 8px;
+        gap: 10px;
         flex-wrap: wrap;
       }
-      .selectors {
+      .screen-count {
         display: flex;
         align-items: center;
         gap: 6px;
-        margin-right: 6px;
       }
-      .selectors label {
+      .slot-configs {
+        display: flex;
+        gap: 8px;
+        flex-wrap: wrap;
+      }
+      .slot {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        border: 1px solid var(--border);
+        border-radius: 8px;
+        padding: 4px 6px;
+        background: #0d1430;
+      }
+      .slot label {
         display: inline-flex;
         align-items: center;
         gap: 4px;
         font-size: 11px;
         color: var(--muted);
+      }
+      select {
+        border: 1px solid var(--border);
+        background: #111a3d;
+        color: var(--text);
+        border-radius: 6px;
+        padding: 5px 6px;
+        font-size: 12px;
       }
       button {
         border: 1px solid var(--border);
@@ -79,46 +100,91 @@
     <div class="toolbar">
       <div>
         <div class="title">AnimeBeat Live Hub</div>
-        <div class="hint">Ctrl+1..4: vues · Ctrl+5: split · Ctrl+6: 4 ecrans · Ctrl+7: ecrans choisis · Ctrl+8: site · Ctrl+F: plein ecran</div>
+        <div class="hint">Ctrl+1..4: nombre d'ecrans · Ctrl+F: plein ecran</div>
       </div>
       <div class="actions">
-        <div class="selectors">
-          <label><input type="checkbox" value="0" checked /> Live 1</label>
-          <label><input type="checkbox" value="1" checked /> Live 2</label>
-          <label><input type="checkbox" value="2" checked /> Kick</label>
-          <label><input type="checkbox" value="3" checked /> Twitch</label>
+        <div class="screen-count">
+          <button data-count="1">1 ecran</button>
+          <button data-count="2">2 ecrans</button>
+          <button data-count="3">3 ecrans</button>
+          <button data-count="4">4 ecrans</button>
         </div>
-        <button data-action="apply-selection">Appliquer ecrans</button>
-        <button data-action="toggle-fullscreen">Plein ecran</button>
-        <button data-mode="site">Site complet</button>
-        <button class="primary" data-mode="tab-1">Live 1</button>
-        <button data-mode="tab-2">Live 2</button>
-        <button data-mode="tab-3">Kick</button>
-        <button data-mode="tab-4">Twitch</button>
-        <button data-mode="split">Split</button>
-        <button data-mode="quad">4 ecrans</button>
-        <button data-mode="custom-grid">Ecrans choisis</button>
+        <div class="slot-configs">
+          <div class="slot" data-slot="0">
+            <label>E1</label>
+            <select data-slot-source="0">
+              <option value="live-1">Live 1</option>
+              <option value="live-2">Live 2</option>
+              <option value="kick">Kick</option>
+              <option value="twitch">Twitch</option>
+              <option value="site">Site</option>
+            </select>
+            <button data-slot-mode="full" data-slot-index="0">Full</button>
+            <button data-slot-mode="site" data-slot-index="0">Site</button>
+          </div>
+          <div class="slot" data-slot="1">
+            <label>E2</label>
+            <select data-slot-source="1">
+              <option value="live-1">Live 1</option>
+              <option value="live-2">Live 2</option>
+              <option value="kick">Kick</option>
+              <option value="twitch">Twitch</option>
+              <option value="site">Site</option>
+            </select>
+            <button data-slot-mode="full" data-slot-index="1">Full</button>
+            <button data-slot-mode="site" data-slot-index="1">Site</button>
+          </div>
+          <div class="slot" data-slot="2">
+            <label>E3</label>
+            <select data-slot-source="2">
+              <option value="live-1">Live 1</option>
+              <option value="live-2">Live 2</option>
+              <option value="kick">Kick</option>
+              <option value="twitch">Twitch</option>
+              <option value="site">Site</option>
+            </select>
+            <button data-slot-mode="full" data-slot-index="2">Full</button>
+            <button data-slot-mode="site" data-slot-index="2">Site</button>
+          </div>
+          <div class="slot" data-slot="3">
+            <label>E4</label>
+            <select data-slot-source="3">
+              <option value="live-1">Live 1</option>
+              <option value="live-2">Live 2</option>
+              <option value="kick">Kick</option>
+              <option value="twitch">Twitch</option>
+              <option value="site">Site</option>
+            </select>
+            <button data-slot-mode="full" data-slot-index="3">Full</button>
+            <button data-slot-mode="site" data-slot-index="3">Site</button>
+          </div>
+        </div>
+        <button class="primary" data-action="toggle-fullscreen">Plein ecran</button>
       </div>
     </div>
     <script>
-      function getSelectedIndexes() {
-        const selected = Array.from(document.querySelectorAll(".selectors input:checked")).map((el) =>
-          Number(el.value),
-        );
-        return selected.length > 0 ? selected : [0];
-      }
-
-      document.querySelectorAll("[data-mode]").forEach((btn) => {
+      document.querySelectorAll("[data-count]").forEach((btn) => {
         btn.addEventListener("click", () => {
-          window.liveHub.setMode(btn.getAttribute("data-mode"));
+          window.liveHub.setScreenCount(Number(btn.getAttribute("data-count")));
         });
       });
 
-      document.querySelector('[data-action="apply-selection"]').addEventListener("click", () => {
-        window.liveHub.setSelection(getSelectedIndexes());
+      document.querySelectorAll("[data-slot-source]").forEach((select) => {
+        select.addEventListener("change", (event) => {
+          const slotIndex = Number(event.currentTarget.getAttribute("data-slot-source"));
+          window.liveHub.setSlotSource(slotIndex, event.currentTarget.value);
+        });
       });
 
-      document.querySelector('[data-action="toggle-fullscreen"]').addEventListener("click", () => {
+      document.querySelectorAll("[data-slot-mode]").forEach((btn) => {
+        btn.addEventListener("click", () => {
+          const slotIndex = Number(btn.getAttribute("data-slot-index"));
+          const mode = btn.getAttribute("data-slot-mode");
+          window.liveHub.setSlotMode(slotIndex, mode);
+        });
+      });
+
+      document.querySelector("[data-action='toggle-fullscreen']").addEventListener("click", () => {
         window.liveHub.toggleFullScreen();
       });
     </script>

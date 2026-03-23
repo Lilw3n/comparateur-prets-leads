@@ -71,7 +71,15 @@ export default async function Home() {
           <div className="mt-4 grid gap-3 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5">
             {decorImages.map((img) => (
               <div key={img.src} className="overflow-hidden rounded-lg border border-indigo-300/20 bg-zinc-950/40">
-                <Image src={img.src} alt={img.alt} width={800} height={800} className="h-36 w-full object-cover" />
+                <a href={img.src} target="_blank" rel="noopener noreferrer" title={`Voir ${img.alt} en taille réelle`}>
+                  <Image
+                    src={img.src}
+                    alt={img.alt}
+                    width={800}
+                    height={800}
+                    className="h-36 w-full object-cover transition hover:scale-105"
+                  />
+                </a>
               </div>
             ))}
           </div>
@@ -83,7 +91,9 @@ export default async function Home() {
             alt="Visuel communaute anime"
             width={972}
             height={1024}
-            className="mx-auto h-auto w-full max-w-3xl rounded-lg"
+            quality={100}
+            unoptimized
+            className="mx-auto h-auto w-auto max-w-full rounded-lg object-contain"
           />
         </section>
       </main>
