@@ -1,0 +1,32 @@
+{
+  "appTitle": "Live Hub Perso",
+  "siteUrl": "https://animebeat-arena.vercel.app",
+  "lives": [
+    {
+      "id": "live-1",
+      "title": "TikTok Live 1",
+      "url": "https://www.tiktok.com/@idontlikeuspam/live"
+    },
+    {
+      "id": "live-2",
+      "title": "TikTok Live 2",
+      "url": "https://www.tiktok.com/@kanekiakadiddy/live"
+    },
+    {
+      "id": "kick",
+      "title": "Kick Live",
+      "url": "https://kick.com/lilwen54"
+    },
+    {
+      "id": "twitch",
+      "title": "Twitch Live",
+      "url": "https://www.twitch.tv/lilwen54"
+    }
+  ],
+  "chat": {
+    "twitchPopout": "https://www.twitch.tv/popout/lilwen54/chat",
+    "kickPage": "https://kick.com/lilwen54",
+    "tiktokPrimary": "https://www.tiktok.com/@idontlikeuspam/live",
+    "tiktokSecondary": "https://www.tiktok.com/@kanekiakadiddy/live"
+  }
+}

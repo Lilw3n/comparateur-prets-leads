@@ -1,0 +1,41 @@
+{
+  "name": "live-hub-personal",
+  "version": "1.0.0",
+  "description": "Hub multi-écrans avec URLs personnalisables (fichier hub.config.json)",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron .",
+    "dev": "electron .",
+    "dist": "electron-builder --win nsis --publish never"
+  },
+  "keywords": ["electron", "live", "custom"],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "devDependencies": {
+    "electron": "^41.0.3",
+    "electron-builder": "^26.8.1"
+  },
+  "build": {
+    "appId": "com.animebeat.livehub.personal",
+    "productName": "Live Hub Perso",
+    "directories": {
+      "output": "release"
+    },
+    "files": [
+      "main.js",
+      "preload.js",
+      "toolbar.html",
+      "hub.config.default.json",
+      "package.json"
+    ],
+    "win": {
+      "signAndEditExecutable": false,
+      "target": ["nsis"]
+    },
+    "nsis": {
+      "oneClick": false,
+      "allowToChangeInstallationDirectory": true
+    }
+  }
+}

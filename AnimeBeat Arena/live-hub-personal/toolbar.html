@@ -1,0 +1,274 @@
+<!doctype html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Live Hub Perso</title>
+    <style>
+      :root {
+        --bg: #070b19;
+        --panel: #0d1430;
+        --border: rgba(130, 154, 255, 0.32);
+        --text: #f3f6ff;
+        --muted: #b6c0db;
+      }
+      html,
+      body {
+        margin: 0;
+        padding: 0;
+        background: var(--bg);
+        color: var(--text);
+        font-family: Segoe UI, sans-serif;
+      }
+      .toolbar {
+        min-height: 56px;
+        display: flex;
+        align-items: flex-start;
+        justify-content: space-between;
+        gap: 12px;
+        padding: 8px 12px;
+        background: linear-gradient(180deg, #101a3b 0%, #0a122d 100%);
+        border-bottom: 1px solid var(--border);
+        box-sizing: border-box;
+      }
+      .title {
+        font-size: 13px;
+        font-weight: 600;
+      }
+      .hint {
+        font-size: 10px;
+        color: var(--muted);
+        max-width: 420px;
+        word-break: break-all;
+      }
+      .actions {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        flex-wrap: wrap;
+      }
+      .screen-count {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+      }
+      .slot-configs {
+        display: flex;
+        gap: 8px;
+        flex-wrap: wrap;
+      }
+      .slot {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        border: 1px solid var(--border);
+        border-radius: 8px;
+        padding: 4px 6px;
+        background: #0d1430;
+      }
+      .source-powers {
+        display: flex;
+        gap: 8px;
+        flex-wrap: wrap;
+      }
+      .source-power {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        border: 1px solid var(--border);
+        border-radius: 8px;
+        padding: 4px 6px;
+        background: #0d1430;
+      }
+      .slot label {
+        display: inline-flex;
+        align-items: center;
+        gap: 4px;
+        font-size: 11px;
+        color: var(--muted);
+      }
+      .source-power .name {
+        font-size: 11px;
+        color: var(--muted);
+      }
+      .chat-controls {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        border: 1px solid var(--border);
+        border-radius: 8px;
+        padding: 4px 6px;
+        background: #0d1430;
+      }
+      select {
+        border: 1px solid var(--border);
+        background: #111a3d;
+        color: var(--text);
+        border-radius: 6px;
+        padding: 5px 6px;
+        font-size: 12px;
+      }
+      button {
+        border: 1px solid var(--border);
+        background: var(--panel);
+        color: var(--text);
+        border-radius: 8px;
+        padding: 7px 12px;
+        font-size: 12px;
+        cursor: pointer;
+      }
+      button:hover {
+        background: #18234d;
+      }
+      .primary {
+        border: none;
+        background: linear-gradient(120deg, #6e46ff, #14b8ff);
+      }
+    </style>
+  </head>
+  <body>
+    <div class="toolbar">
+      <div>
+        <div class="title" id="app-title">Live Hub Perso</div>
+        <div class="hint" id="config-hint">Chargement…</div>
+      </div>
+      <div class="actions" id="actions-root">
+        <span class="muted" style="font-size: 11px">Chargement des flux…</span>
+      </div>
+    </div>
+    <script>
+      function updatePowerButton(button, isOn) {
+        button.setAttribute("data-source-power", isOn ? "on" : "off");
+        button.textContent = isOn ? "Éteindre" : "Allumer";
+        button.classList.toggle("primary", isOn);
+      }
+
+      async function buildToolbar() {
+        const meta = await window.liveHub.getHubMeta();
+        document.getElementById("app-title").textContent = meta.appTitle;
+        document.getElementById("config-hint").textContent =
+          "Config : " + meta.configPath + " · Ctrl+2..4 écrans · Ctrl+C chat · Ctrl+F fenêtre";
+
+        const root = document.getElementById("actions-root");
+        root.innerHTML = "";
+
+        const screenWrap = document.createElement("div");
+        screenWrap.className = "screen-count";
+        [2, 3, 4].forEach((n) => {
+          const b = document.createElement("button");
+          b.textContent = n + " écrans";
+          b.addEventListener("click", () => window.liveHub.setScreenCount(n));
+          screenWrap.appendChild(b);
+        });
+        root.appendChild(screenWrap);
+
+        const powers = document.createElement("div");
+        powers.className = "source-powers";
+        meta.sources.forEach((s) => {
+          const wrap = document.createElement("div");
+          wrap.className = "source-power";
+          const name = document.createElement("span");
+          name.className = "name";
+          name.textContent = s.title;
+          const btn = document.createElement("button");
+          btn.setAttribute("data-source-id", s.id);
+          updatePowerButton(btn, true);
+          btn.addEventListener("click", () => {
+            const on = btn.getAttribute("data-source-power") === "on";
+            window.liveHub.setSourcePower(s.id, !on);
+            updatePowerButton(btn, !on);
+          });
+          wrap.appendChild(name);
+          wrap.appendChild(btn);
+          powers.appendChild(wrap);
+        });
+        root.appendChild(powers);
+
+        const slots = document.createElement("div");
+        slots.className = "slot-configs";
+        for (let slot = 0; slot < 4; slot += 1) {
+          const slotEl = document.createElement("div");
+          slotEl.className = "slot";
+          const lab = document.createElement("label");
+          lab.textContent = "E" + (slot + 1);
+          const sel = document.createElement("select");
+          sel.setAttribute("data-slot-source", String(slot));
+          const optSite = document.createElement("option");
+          optSite.value = "site";
+          optSite.textContent = "Site";
+          sel.appendChild(optSite);
+          meta.sources.forEach((s) => {
+            const o = document.createElement("option");
+            o.value = s.id;
+            o.textContent = s.title;
+            sel.appendChild(o);
+          });
+          const cur = meta.slotSourceIds[slot];
+          sel.value = meta.sources.some((s) => s.id === cur) || cur === "site" ? cur : meta.sources[0].id;
+          sel.addEventListener("change", (e) => {
+            window.liveHub.setSlotSource(slot, e.currentTarget.value);
+          });
+
+          function modeBtn(label, mode) {
+            const b = document.createElement("button");
+            b.textContent = label;
+            b.addEventListener("click", () => window.liveHub.setSlotMode(slot, mode));
+            return b;
+          }
+
+          slotEl.appendChild(lab);
+          slotEl.appendChild(sel);
+          slotEl.appendChild(modeBtn("Live", "live"));
+          slotEl.appendChild(modeBtn("Live plein écran", "live-fs"));
+          slotEl.appendChild(modeBtn("Site", "site"));
+          slots.appendChild(slotEl);
+        }
+        root.appendChild(slots);
+
+        const chat = document.createElement("div");
+        chat.className = "chat-controls";
+        const chatToggle = document.createElement("button");
+        chatToggle.className = "primary";
+        chatToggle.textContent = "Chat ON";
+        let chatOn = true;
+        chatToggle.addEventListener("click", () => {
+          chatOn = !chatOn;
+          window.liveHub.setChatVisible(chatOn);
+          chatToggle.textContent = chatOn ? "Chat ON" : "Chat OFF";
+          chatToggle.classList.toggle("primary", chatOn);
+        });
+        const chatSel = document.createElement("select");
+        [
+          ["mix", "Chat Mix"],
+          ["kick", "Chat Kick"],
+          ["twitch", "Chat Twitch"],
+          ["tiktok", "Chat TikTok"],
+        ].forEach(([v, t]) => {
+          const o = document.createElement("option");
+          o.value = v;
+          o.textContent = t;
+          chatSel.appendChild(o);
+        });
+        chatSel.addEventListener("change", (e) => window.liveHub.setChatMode(e.currentTarget.value));
+        chat.appendChild(chatToggle);
+        chat.appendChild(chatSel);
+        root.appendChild(chat);
+
+        const reloadBtn = document.createElement("button");
+        reloadBtn.textContent = "Recharger config";
+        reloadBtn.addEventListener("click", () => window.liveHub.reloadHubConfig());
+        root.appendChild(reloadBtn);
+
+        const fsBtn = document.createElement("button");
+        fsBtn.className = "primary";
+        fsBtn.textContent = "Plein écran";
+        fsBtn.addEventListener("click", () => window.liveHub.toggleFullScreen());
+        root.appendChild(fsBtn);
+      }
+
+      buildToolbar().catch(() => {
+        document.getElementById("config-hint").textContent = "Erreur de chargement (voir console).";
+      });
+    </script>
+  </body>
+</html>
