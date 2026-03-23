@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { redirect } from "next/navigation";
 import { auth } from "@/auth";
 import { SignOutButton } from "@/components/sign-out-button";
 import { getPrisma } from "@/lib/prisma";
@@ -7,6 +8,12 @@ import { importSocialSuggestionsAction, reviewSuggestionAction, updateLiveTvActi
 
 export default async function AdminPage() {
   const session = await auth();
+  if (!session?.user) {
+    redirect("/login?callbackUrl=/admin");
+  }
+  if (session.user.role !== "ADMIN") {
+    redirect("/dashboard");
+  }
   const user = session?.user;
   const config = await getSiteConfig();
   const prisma = getPrisma();

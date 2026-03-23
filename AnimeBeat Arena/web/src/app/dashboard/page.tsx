@@ -1,9 +1,13 @@
 import Link from "next/link";
+import { redirect } from "next/navigation";
 import { auth } from "@/auth";
 import { SignOutButton } from "@/components/sign-out-button";
 
 export default async function DashboardPage() {
   const session = await auth();
+  if (!session?.user) {
+    redirect("/login?callbackUrl=/dashboard");
+  }
   const user = session?.user;
   const isAdmin = user?.role === "ADMIN";
 
