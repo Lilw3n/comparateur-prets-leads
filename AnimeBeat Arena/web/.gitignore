@@ -40,7 +40,8 @@ yarn-error.log*
 *.tsbuildinfo
 next-env.d.ts
 
-/src/generated/prisma
+# Client Prisma versionné pour éviter un runtime sans le schéma actuel (kind, etc.)
+# Régénérer après changement de schéma : npx prisma generate
 
 # base SQLite locale (Neon / Postgres en prod)
 prisma/dev.db
