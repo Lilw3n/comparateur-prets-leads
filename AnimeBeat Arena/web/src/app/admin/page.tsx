@@ -4,7 +4,12 @@ import { auth } from "@/auth";
 import { SignOutButton } from "@/components/sign-out-button";
 import { getPrisma } from "@/lib/prisma";
 import { getSiteConfig } from "@/lib/site-config";
-import { importSocialSuggestionsAction, reviewSuggestionAction, updateLiveTvAction } from "./actions";
+import {
+  importSocialSuggestionsAction,
+  reviewSuggestionAction,
+  seedDefaultTierListsAction,
+  updateLiveTvAction,
+} from "./actions";
 
 export default async function AdminPage() {
   const session = await auth();
@@ -101,10 +106,28 @@ export default async function AdminPage() {
           </span>
         </form>
       </section>
+      {tierLists.length === 0 ? (
+        <section className="glass-panel rounded-xl p-5 border-amber-500/40">
+          <h2 className="text-lg font-semibold text-amber-100">Aucune tier list en base</h2>
+          <p className="muted mt-1 text-sm">
+            Sans tier list, tu ne peux pas importer de suggestions (Shorts / Reels / TikTok). Crée d’abord des
+            listes d’exemple, puis reviens importer ci-dessous.
+          </p>
+          <form action={seedDefaultTierListsAction} className="mt-4">
+            <button
+              type="submit"
+              className="rounded-lg bg-amber-600 px-4 py-2 text-sm font-medium text-white hover:bg-amber-500"
+            >
+              Créer 2 tier lists d’exemple (DB vide)
+            </button>
+          </form>
+        </section>
+      ) : null}
       <section className="glass-panel rounded-xl p-5">
         <h2 className="text-lg font-semibold">Import social edits en suggestions</h2>
         <p className="muted mt-1 text-sm">
-          Importe des liens TikTok, YouTube Shorts, Instagram Reels, X en attente de validation.
+          Les liens importés arrivent en <strong className="text-zinc-200">PENDING</strong> : tu les vois
+          uniquement ici (section « Validation »), pas sur la page publique tant qu’ils ne sont pas approuvés.
         </p>
         <form action={importSocialSuggestionsAction} className="mt-4 space-y-3">
           <select

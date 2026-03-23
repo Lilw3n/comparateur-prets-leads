@@ -1,5 +1,4 @@
 import Link from "next/link";
-import Image from "next/image";
 import { auth } from "@/auth";
 import { getPrisma } from "@/lib/prisma";
 import { SiteHeader } from "@/components/site-header";
@@ -87,6 +86,16 @@ export default async function TierListsPage() {
     listSuggestionMap.set(suggestion.tierListId, listLinks);
   }
 
+  const pendingModel = (
+    prisma as unknown as {
+      linkSuggestion?: { count: (args: { where: { status: "PENDING" } }) => Promise<number> };
+    }
+  ).linkSuggestion;
+  const pendingSuggestionCount =
+    session?.user?.role === "ADMIN" && pendingModel?.count
+      ? await pendingModel.count({ where: { status: "PENDING" } })
+      : 0;
+
   const listsToRender =
     tierLists.length > 0
       ? tierLists.map((list) => ({
@@ -142,6 +151,32 @@ export default async function TierListsPage() {
             </Link>
           )}
         </div>
+
+        <div className="mt-6 rounded-xl border border-zinc-600/60 bg-zinc-900/50 px-4 py-3 text-sm text-zinc-300">
+          <p>
+            Les liens <span className="text-indigo-200">Shorts / Reels / TikTok / X</span> proposés restent{" "}
+            <strong className="text-zinc-100">invisibles ici</strong> tant qu’un admin ne les a pas{" "}
+            <strong className="text-zinc-100">approuvés</strong> sur la page{" "}
+            <Link href="/admin" className="font-medium text-cyan-200 hover:text-cyan-100">
+              Admin
+            </Link>
+            . Une fois validés, ils s’affichent sous « Suggestion validee » sur cette page.
+          </p>
+        </div>
+
+        {session?.user?.role === "ADMIN" ? (
+          <div className="mt-4 rounded-xl border border-emerald-500/35 bg-emerald-950/30 px-4 py-3 text-sm">
+            <p className="font-medium text-emerald-100">
+              Admin : {pendingSuggestionCount} suggestion(s) en attente de validation.
+            </p>
+            <Link
+              href="/admin"
+              className="mt-2 inline-flex text-xs font-medium text-emerald-200 underline hover:text-emerald-100"
+            >
+              Ouvrir la validation des liens →
+            </Link>
+          </div>
+        ) : null}
 
         <div className="mt-8 grid gap-4 md:grid-cols-2">
           {listsToRender.map((list) => (
@@ -229,14 +264,11 @@ export default async function TierListsPage() {
             </article>
           ))}
         </div>
-        <section className="glass-panel mt-6 overflow-hidden rounded-xl p-3">
-          <Image
-            src="/images/anime-tierlist.svg"
-            alt="Visuel anime pour la zone tier list"
-            width={1400}
-            height={900}
-            className="h-auto w-full rounded-lg"
-          />
+        <section className="glass-panel mt-6 overflow-hidden rounded-xl p-6">
+          <div className="flex min-h-[180px] items-center justify-center rounded-lg border border-dashed border-indigo-400/25 bg-zinc-950/50 text-center text-sm text-zinc-400">
+            Zone visuelle tier list — ajoute une image dans <code className="text-zinc-300">public/images/</code> si
+            besoin.
+          </div>
         </section>
         <PromoBanners />
       </main>
