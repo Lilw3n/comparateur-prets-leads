@@ -42,6 +42,20 @@
         display: flex;
         align-items: center;
         gap: 8px;
+        flex-wrap: wrap;
+      }
+      .selectors {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        margin-right: 6px;
+      }
+      .selectors label {
+        display: inline-flex;
+        align-items: center;
+        gap: 4px;
+        font-size: 11px;
+        color: var(--muted);
       }
       button {
         border: 1px solid var(--border);
@@ -65,22 +79,47 @@
     <div class="toolbar">
       <div>
         <div class="title">AnimeBeat Live Hub</div>
-        <div class="hint">Ctrl+1..4: vues · Ctrl+5: split · Ctrl+6: 4 ecrans</div>
+        <div class="hint">Ctrl+1..4: vues · Ctrl+5: split · Ctrl+6: 4 ecrans · Ctrl+7: ecrans choisis · Ctrl+8: site · Ctrl+F: plein ecran</div>
       </div>
       <div class="actions">
+        <div class="selectors">
+          <label><input type="checkbox" value="0" checked /> Live 1</label>
+          <label><input type="checkbox" value="1" checked /> Live 2</label>
+          <label><input type="checkbox" value="2" checked /> Kick</label>
+          <label><input type="checkbox" value="3" checked /> Twitch</label>
+        </div>
+        <button data-action="apply-selection">Appliquer ecrans</button>
+        <button data-action="toggle-fullscreen">Plein ecran</button>
+        <button data-mode="site">Site complet</button>
         <button class="primary" data-mode="tab-1">Live 1</button>
         <button data-mode="tab-2">Live 2</button>
         <button data-mode="tab-3">Kick</button>
         <button data-mode="tab-4">Twitch</button>
         <button data-mode="split">Split</button>
         <button data-mode="quad">4 ecrans</button>
+        <button data-mode="custom-grid">Ecrans choisis</button>
       </div>
     </div>
     <script>
+      function getSelectedIndexes() {
+        const selected = Array.from(document.querySelectorAll(".selectors input:checked")).map((el) =>
+          Number(el.value),
+        );
+        return selected.length > 0 ? selected : [0];
+      }
+
       document.querySelectorAll("[data-mode]").forEach((btn) => {
         btn.addEventListener("click", () => {
           window.liveHub.setMode(btn.getAttribute("data-mode"));
         });
+      });
+
+      document.querySelector('[data-action="apply-selection"]').addEventListener("click", () => {
+        window.liveHub.setSelection(getSelectedIndexes());
+      });
+
+      document.querySelector('[data-action="toggle-fullscreen"]').addEventListener("click", () => {
+        window.liveHub.toggleFullScreen();
       });
     </script>
   </body>

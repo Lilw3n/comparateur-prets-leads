@@ -22,9 +22,12 @@ const LIVE_URLS = [
 
 let mainWindow = null;
 let liveViews = [];
+let siteView = null;
 let mode = "tabs";
 let activeIndex = 0;
 let splitSecondaryIndex = 1;
+let selectedIndexes = [0, 1, 2, 3];
+const APP_SITE_URL = "https://animebeat-arena.vercel.app";
 const TOOLBAR_HEIGHT = 56;
 
 function ensureAttached(view) {
@@ -43,6 +46,53 @@ function applyLayout() {
   if (!mainWindow) return;
   const [width, height] = mainWindow.getContentSize();
   detachAllViews();
+
+  if (mode === "site") {
+    if (!siteView) return;
+    ensureAttached(siteView);
+    siteView.setBounds({ x: 0, y: TOOLBAR_HEIGHT, width, height: height - TOOLBAR_HEIGHT });
+    siteView.setAutoResize({ width: true, height: true });
+    mainWindow.setTitle("AnimeBeat Live Hub - Site complet");
+    return;
+  }
+
+  if (mode === "custom-grid") {
+    const validIndexes = selectedIndexes.filter((i) => i >= 0 && i < liveViews.length);
+    const views = validIndexes.map((i) => liveViews[i]).filter(Boolean);
+    if (views.length === 0) {
+      const fallback = liveViews[activeIndex] || liveViews[0];
+      if (!fallback) return;
+      ensureAttached(fallback);
+      fallback.setBounds({ x: 0, y: TOOLBAR_HEIGHT, width, height: height - TOOLBAR_HEIGHT });
+      fallback.setAutoResize({ width: true, height: true });
+      mainWindow.setTitle("AnimeBeat Live Hub - Aucun ecran selectionne");
+      return;
+    }
+
+    const availableHeight = height - TOOLBAR_HEIGHT;
+    const columns = Math.ceil(Math.sqrt(views.length));
+    const rows = Math.ceil(views.length / columns);
+    const baseCellWidth = Math.floor(width / columns);
+    const baseCellHeight = Math.floor(availableHeight / rows);
+
+    views.forEach((view, idx) => {
+      const row = Math.floor(idx / columns);
+      const col = idx % columns;
+      const x = col * baseCellWidth;
+      const y = TOOLBAR_HEIGHT + row * baseCellHeight;
+      const isLastCol = col === columns - 1;
+      const isLastRow = row === rows - 1;
+      const cellWidth = isLastCol ? width - x : baseCellWidth;
+      const cellHeight = isLastRow ? height - y : baseCellHeight;
+      ensureAttached(view);
+      view.setBounds({ x, y, width: cellWidth, height: cellHeight });
+      view.setAutoResize({ width: true, height: true });
+    });
+
+    const labels = validIndexes.map((i) => LIVE_URLS[i].title).join(" + ");
+    mainWindow.setTitle(`AnimeBeat Live Hub - Ecrans choisis: ${labels}`);
+    return;
+  }
 
   if (mode === "split") {
     const left = liveViews[activeIndex];
@@ -119,6 +169,23 @@ function switchToQuad() {
   applyLayout();
 }
 
+function switchToCustomGrid(indexes) {
+  const unique = Array.from(new Set(indexes))
+    .map((i) => Number(i))
+    .filter((i) => Number.isInteger(i) && i >= 0 && i < LIVE_URLS.length);
+  selectedIndexes = unique.length > 0 ? unique : [activeIndex];
+  mode = "custom-grid";
+  applyLayout();
+}
+
+function switchToSite() {
+  mode = "site";
+  if (siteView && siteView.webContents.getURL() !== APP_SITE_URL) {
+    siteView.webContents.loadURL(APP_SITE_URL);
+  }
+  applyLayout();
+}
+
 function createMainWindow() {
   mainWindow = new BrowserWindow({
     width: 1500,
@@ -152,6 +219,18 @@ function createMainWindow() {
     return view;
   });
 
+  siteView = new BrowserView({
+    webPreferences: {
+      contextIsolation: true,
+      sandbox: true,
+    },
+  });
+  siteView.webContents.setWindowOpenHandler(({ url: nextUrl }) => {
+    shell.openExternal(nextUrl);
+    return { action: "deny" };
+  });
+  siteView.webContents.loadURL(APP_SITE_URL);
+
   applyLayout();
 
   mainWindow.on("resize", applyLayout);
@@ -174,6 +253,12 @@ function createMainWindow() {
       switchToSplit();
     } else if (input.key === "6") {
       switchToQuad();
+    } else if (input.key === "7") {
+      switchToCustomGrid(selectedIndexes);
+    } else if (input.key === "8") {
+      switchToSite();
+    } else if (input.key.toLowerCase() === "f") {
+      mainWindow.setFullScreen(!mainWindow.isFullScreen());
     }
   });
 }
@@ -191,9 +276,23 @@ ipcMain.on("set-mode", (_, nextMode) => {
     switchToSplit();
   } else if (nextMode === "quad") {
     switchToQuad();
+  } else if (nextMode === "custom-grid") {
+    switchToCustomGrid(selectedIndexes);
+  } else if (nextMode === "site") {
+    switchToSite();
   } else {
     return;
   }
+});
+
+ipcMain.on("set-selection", (_, indexes) => {
+  if (!Array.isArray(indexes)) return;
+  switchToCustomGrid(indexes);
+});
+
+ipcMain.on("toggle-fullscreen", () => {
+  if (!mainWindow) return;
+  mainWindow.setFullScreen(!mainWindow.isFullScreen());
 });
 
 app.whenReady().then(() => {

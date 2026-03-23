@@ -81,9 +81,9 @@ export default async function Home() {
           <Image
             src="/images/decor/one-piece.png"
             alt="Visuel communaute anime"
-            width={1400}
-            height={900}
-            className="h-auto w-full rounded-lg"
+            width={972}
+            height={1024}
+            className="mx-auto h-auto w-full max-w-3xl rounded-lg"
           />
         </section>
       </main>
